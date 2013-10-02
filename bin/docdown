@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+unless File.respond_to? :realpath
+  class File #:nodoc:
+    def self.realpath path
+      return realpath(File.readlink(path)) if symlink?(path)
+      path
+    end
+  end
+end
+$: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+
+require 'docdown'
+require 'thor'
+
+class DocdownCLI < Thor
+
+  def initialize(*args)
+    super
+  end
+
+  desc "build", "turns docdown file into docs and a project"
+  argument :path, banner: "path/to/file.md"
+  def build
+    raise "#{@path} does not exist" unless File.exist?(@path)
+    contents = File.read(@path)
+    DocDown::Parser.new(contents)
+  end
+end
+
+DocdownCLI.start(ARGV)
