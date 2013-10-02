@@ -21,18 +21,12 @@ module Docdown
       end
 
       def call
-        lines   = contents.lines
-        results = []
-        ReplRunner.new(:"#{keyword}", @command).run do |repl|
-          lines.each do |line|
-            repl.run(line) {|result| results << result }
-          end
-        end
-        @result = lines.zip(results).flatten.join("\n")
+        zip = ReplRunner.new(:"#{keyword}", @command).zip(contents.strip)
+        @result = zip.flatten.join("\n")
       end
 
       def to_md
-        "#{@command} #{@result}"
+        "$ #{@command}"
       end
     end
   end

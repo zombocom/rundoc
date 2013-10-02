@@ -35,7 +35,9 @@ gem 'docdown`
 
 Run the docdown command on any makdown file
 
+```sh
   $ docdown build my_file.md
+```
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs.
 

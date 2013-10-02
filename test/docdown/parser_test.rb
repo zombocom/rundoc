@@ -83,7 +83,7 @@ RUBY
 
     contents =  <<-RUBY
 ```
-:::= irb
+:::= irb --simple-prompt
 a = 3
 b = "foo" * a
 puts b
@@ -94,9 +94,9 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        expected = "\n```\nIn file `foo/newb.rb` add:\nputs 'hello world'\n\n$ cat foo/newb.rb \nputs 'hello world'\n```\n"
         parsed = Docdown::Parser.new(contents)
         actual = parsed.to_md
+        expected = "```\n$ irb --simple-prompt\na = 3\n=> 3\r\nb = \"foo\" * a\n=> \"foofoofoo\"\r\nputs b\nfoofoofoo\r\n=> nil\r```\n"
         assert_equal expected, actual
       end
     end
