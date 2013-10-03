@@ -5,6 +5,10 @@ module Docdown
     alias :hidden? :hidden
     alias :render_result? :render_result
 
+    def initialize(arg)
+
+    end
+
     # returns the markedup command
     # do not over-write unless you call super
     def render
@@ -30,3 +34,4 @@ end
 require 'docdown/code_commands/bash'
 require 'docdown/code_commands/write'
 require 'docdown/code_commands/repl'
+require 'docdown/code_commands/no_such_command'

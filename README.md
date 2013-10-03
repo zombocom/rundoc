@@ -117,3 +117,10 @@ To delete files use bash `$` command.
 
 
 
+## TODO
+
+- Debug output
+- Fail and exit on non zero exit code
+- Breakpoints?
+- Bash commands with side effects (cd; pwd; on different lines should actually change working directory)
+- Better line matching for backtrace

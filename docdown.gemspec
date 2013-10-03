@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'docdown/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "heroku_docdown"
+  gem.name          = "docdown"
   gem.version       = Docdown::VERSION
   gem.authors       = ["Richard Schneeman"]
   gem.email         = ["richard.schneeman+rubygems@gmail.com"]

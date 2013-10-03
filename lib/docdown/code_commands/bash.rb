@@ -7,7 +7,8 @@ module Docdown
       end
 
       def call
-        `#{@command + contents}`
+        puts "Executing: #{to_md.inspect}"
+        `#{@command} #{contents} 2>&1`
       end
 
       def to_md

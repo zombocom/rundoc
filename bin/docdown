@@ -17,15 +17,31 @@ class DocdownCLI < Thor
 
   def initialize(*args)
     super
+    @config = options[:config]
+    @path   = options[:path]
+    load("./#{@config}") if @config && File.exist?(@config)
   end
 
+  default_task :help
+
   desc "build", "turns docdown file into docs and a project"
-  argument :path, banner: "path/to/file.md"
+  class_option  :path,   banner: "path/to/file.md",           optional: true, default: 'docdown.md'
+  class_option  :config, banner: "path/to/docdown_config.rb", default: 'docdown.rb'
   def build
-    raise "#{@path} does not exist" unless File.exist?(@path)
+
+    raise "#{@path} does not exist"   unless File.exist?(@path)
     contents = File.read(@path)
-    DocDown::Parser.new(contents)
+    dir      = File.expand_path("../project", @path)
+
+    FileUtils.remove_entry_secure(dir) if Dir.exist?(dir)
+    FileUtils.mkdir_p(dir)
+
+    Dir.chdir(dir) do
+      @output = Docdown::Parser.new(contents).to_md
+    end
+    File.open("README.md", "w") {|f| f.write @output }
   end
+
 end
 
 DocdownCLI.start(ARGV)

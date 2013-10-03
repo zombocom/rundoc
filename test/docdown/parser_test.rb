@@ -35,8 +35,6 @@ RUBY
 
 
   def test_parse_write_commands
-    puts "====================="
-
     contents =  <<-RUBY
 sup
 
