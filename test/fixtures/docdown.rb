@@ -1,4 +1,3 @@
-puts "========================"
 
 ReplRunner.register_commands(:play)  do |config|
   config.terminate_command "exit"          # the command you use to end the 'rails console'

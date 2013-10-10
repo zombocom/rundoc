@@ -1,21 +1,10 @@
 module Docdown
   class CodeCommand
     attr_accessor :hidden, :render_result, :command, :contents, :keyword
-
     alias :hidden? :hidden
     alias :render_result? :render_result
 
     def initialize(arg)
-
-    end
-
-    # returns the markedup command
-    # do not over-write unless you call super
-    def render
-      result = self.call
-      return [to_md, result].join("\n")  if render_result?
-      return "" if hidden?
-      to_md
     end
 
     def push(contents)
@@ -25,13 +14,14 @@ module Docdown
     alias :<< :push
 
     # executes command to build project
-    def call
+    def call(env = {})
       raise "not implemented"
     end
   end
 end
 
 require 'docdown/code_commands/bash'
+require 'docdown/code_commands/pipe'
 require 'docdown/code_commands/write'
 require 'docdown/code_commands/repl'
 require 'docdown/code_commands/no_such_command'

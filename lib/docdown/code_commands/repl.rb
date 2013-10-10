@@ -10,23 +10,21 @@ module Docdown
 
       def keyword=(keyword)
         @keyword = keyword
-        puts keyword
         if keyword.to_s == "repl"
           command_array = @command.split(" ")
-          puts command_array.inspect
           @keyword      = command_array.first
         else
           @command = "#{keyword} #{@command}"
         end
       end
 
-      def call
-        puts @contents.inspect
+      def call(env = {})
+        puts "Running #{@command} with repl: #{keyword}"
         zip = ReplRunner.new(:"#{keyword}", @command).zip(contents.strip)
         @result = zip.flatten.join("\n")
       end
 
-      def to_md
+      def to_md(env = {})
         "$ #{@command}"
       end
     end

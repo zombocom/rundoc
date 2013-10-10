@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    heroku_docdown (0.0.1)
+    docdown (0.0.1)
       repl_runner
       thor
 
@@ -33,6 +33,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  heroku_docdown!
+  docdown!
   mocha
   rake

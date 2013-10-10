@@ -20,14 +20,14 @@ RUBY
 
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-        expected = "sup\n\n```\n$ mkdir foo \n$ ls \nfoo\n```\n\nyo\n"
+        expected = "sup\n\n```\n$ mkdir foo\n$ ls\nfoo\n```\n\nyo\n"
         parsed = Docdown::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
 
         parsed = Docdown::Parser.new("\n```\n:::= $ ls\n```\n")
         actual = parsed.to_md
-        expected = "\n```\n$ ls \nfoo\n```\n"
+        expected = "\n```\n$ ls\nfoo\n```\n"
         assert_equal expected, actual
       end
     end
@@ -39,7 +39,7 @@ RUBY
 sup
 
 ```
-:::  write foo/code.rb
+:::= write foo/code.rb
 a = 1 + 1
 b = a * 2
 ```
@@ -49,7 +49,7 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        expected = "sup\n\n```\nIn file `foo/code.rb` add:\na = 1 + 1\nb = a * 2\n```\nyo\n"
+        expected = "sup\n\nIn file `foo/code.rb`:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
         parsed = Docdown::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
@@ -60,7 +60,7 @@ RUBY
     contents =  <<-RUBY
 
 ```
-::: write foo/newb.rb
+:::= write foo/newb.rb
 puts 'hello world'
 :::= $ cat foo/newb.rb
 ```
@@ -69,7 +69,7 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        expected = "\n```\nIn file `foo/newb.rb` add:\nputs 'hello world'\n\n$ cat foo/newb.rb \nputs 'hello world'\n```\n"
+        expected = "\nIn file `foo/newb.rb`:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
         parsed = Docdown::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
@@ -94,7 +94,7 @@ RUBY
 
         parsed = Docdown::Parser.new(contents)
         actual = parsed.to_md
-        expected = "```\n$ irb --simple-prompt\na = 3\n=> 3\r\nb = \"foo\" * a\n=> \"foofoofoo\"\r\nputs b\nfoofoofoo\r\n=> nil\r```\n"
+        expected = "```\n$ irb --simple-prompt\na = 3\n=> 3\r\nb = \"foo\" * a\n=> \"foofoofoo\"\r\nputs b\nfoofoofoo\r\n=> nil\n```\n"
         assert_equal expected, actual
       end
     end

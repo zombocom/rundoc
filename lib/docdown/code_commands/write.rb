@@ -3,17 +3,20 @@ module Docdown
     class Write < Docdown::CodeCommand
       def initialize(filename)
         @filename = filename
-        @dir      = File.expand_path("../", @filename)
       end
 
-      # todo diff file if it already exists
-      def to_md
-        "In file `#{@filename}` add:\n#{contents}"
+      def to_md(env)
+        raise "must call write in its own code section" unless env[:commands].empty?
+        before = env[:before]
+        env[:before] = "In file `#{@filename}`:\n\n#{before}"
+        nil
       end
 
-      def call
-        puts "writing to : #{@filename}"
-        FileUtils.mkdir_p(@dir)
+      def call(env = {})
+        puts "writing to: #{@filename}"
+
+        dir = File.expand_path("../", @filename)
+        FileUtils.mkdir_p(dir)
         File.open(@filename, "w") do |f|
           f.write(contents)
         end
