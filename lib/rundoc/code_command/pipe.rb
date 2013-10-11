@@ -1,14 +1,14 @@
-module Docdown
-  module CodeCommands
-    class Pipe < Docdown::CodeCommand
+module Rundoc
+  class CodeCommand
+    class Pipe < Rundoc::CodeCommand
 
       # ::: ls
       # ::: | tail -n 2
       # => "test\ntmp.file\n"
       def initialize(line)
         @first    = line.split(" ").first.strip
-        klass     = Docdown.code_command(@first)
-        klass     ||= Docdown::CodeCommands::Bash
+        klass     = Rundoc.code_command(@first)
+        klass     ||= Rundoc::CodeCommand::Bash
         @delegate = klass.new(line)
       end
 
@@ -17,8 +17,8 @@ module Docdown
       # commands:
       #   [[cmd, output], [cmd, output]]
       def call(env = {})
-        cmd, output = env[:commands].last
-        @delegate.push(output)
+        last_command = env[:commands].last
+        @delegate.push(last_command[:output])
         @delegate.call(env)
       end
 
@@ -30,6 +30,6 @@ module Docdown
 end
 
 
-Docdown.register_code_command(:pipe, Docdown::CodeCommands::Pipe)
-Docdown.register_code_command(:|,    Docdown::CodeCommands::Pipe)
+Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::Pipe)
+Rundoc.register_code_command(:|,    Rundoc::CodeCommand::Pipe)
 

@@ -1,10 +1,14 @@
-module Docdown
+module Rundoc
   class CodeCommand
     attr_accessor :hidden, :render_result, :command, :contents, :keyword
     alias :hidden? :hidden
     alias :render_result? :render_result
 
     def initialize(arg)
+    end
+
+    def not_hidden?
+      !hidden?
     end
 
     def push(contents)
@@ -20,8 +24,8 @@ module Docdown
   end
 end
 
-require 'docdown/code_commands/bash'
-require 'docdown/code_commands/pipe'
-require 'docdown/code_commands/write'
-require 'docdown/code_commands/repl'
-require 'docdown/code_commands/no_such_command'
+require 'rundoc/code_command/bash'
+require 'rundoc/code_command/pipe'
+require 'rundoc/code_command/write'
+require 'rundoc/code_command/repl'
+require 'rundoc/code_command/no_such_command'

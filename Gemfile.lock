@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docdown (0.0.1)
+    rundoc (0.0.1)
       repl_runner
       thor
 
@@ -33,6 +33,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  docdown!
   mocha
   rake
+  rundoc!

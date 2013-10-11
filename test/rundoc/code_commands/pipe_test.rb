@@ -6,8 +6,8 @@ class PipeTest < Test::Unit::TestCase
     pipe_cmd = "tail -n 2"
     cmd      = "ls"
     out      = `#{cmd}`
-    pipe     = Docdown::CodeCommands::Pipe.new(pipe_cmd)
-    actual   = pipe.call(commands: [[cmd, out]])
+    pipe     = Rundoc::CodeCommand::Pipe.new(pipe_cmd)
+    actual   = pipe.call(commands: [{command: cmd, output: out}])
 
     expected = `#{cmd} | #{pipe_cmd}`
     assert_equal expected, actual

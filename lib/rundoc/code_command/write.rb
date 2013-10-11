@@ -1,6 +1,6 @@
-module Docdown
-  module CodeCommands
-    class Write < Docdown::CodeCommand
+module Rundoc
+  class CodeCommand
+    class Write < Rundoc::CodeCommand
       def initialize(filename)
         @filename = filename
       end
@@ -27,4 +27,4 @@ module Docdown
 end
 
 
-Docdown.register_code_command(:write, Docdown::CodeCommands::Write)
+Rundoc.register_code_command(:write, Rundoc::CodeCommand::Write)

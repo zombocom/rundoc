@@ -1,3 +1,4 @@
-test/fixtures/project/
+test/fixtures/*/project/
+test/fixtures/*/tmp/
 *.gem
 

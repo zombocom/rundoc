@@ -1,4 +1,4 @@
-module Docdown
+module Rundoc
   # holds code, parses and creates CodeCommand
   class CodeSection
     class ParseError < StandardError
@@ -17,14 +17,14 @@ module Docdown
         msg =  "Error parsing (line:#{line_number}):\n"
         msg << ">  '#{command.strip}'\n"
         msg << "No such registered command: '#{keyword}'\n"
-        msg << "registered commands: #{Docdown.known_commands.inspect}\n\n"
+        msg << "registered commands: #{Rundoc.known_commands.inspect}\n\n"
         msg << block
         msg << "\n"
         super msg
       end
     end
 
-    COMMAND_REGEX   = Docdown::Parser::COMMAND_REGEX # todo: move whole thing
+    COMMAND_REGEX   = Rundoc::Parser::COMMAND_REGEX # todo: move whole thing
     attr_accessor :original, :fence, :lang, :code, :commands, :keyword
 
     def initialize(match, options = {})
@@ -35,7 +35,7 @@ module Docdown
       @fence    = match[:fence]
       @lang     = match[:lang]
       @code     = match[:contents]
-      parse_code_commands
+      parse_code_command
     end
 
     def render
@@ -64,8 +64,20 @@ module Docdown
         end
       end
 
+      return "" if hidden?
+
       array = [env[:before], result, env[:after]]
       return array.flatten.compact.map(&:rstrip).reject(&:empty?).join("\n") << "\n"
+    end
+
+    # all of the commands are hidden
+    def hidden?
+      !not_hidden?
+    end
+
+    # one or more of the commands are not hidden
+    def not_hidden?
+      commands.map(&:not_hidden?).detect {|c| c }
     end
 
     def command_regex
@@ -73,7 +85,7 @@ module Docdown
     end
 
     def add_code(match, line)
-      add_match_to_code_commands(match, commands)
+      add_match_to_code_command(match, commands)
       check_parse_error(line, code)
     end
 
@@ -85,7 +97,7 @@ module Docdown
       @stack << line
     end
 
-    def parse_code_commands
+    def parse_code_command
       code.lines.each do |line|
         if match = line.match(command_regex)
           add_code(match, line)
@@ -95,12 +107,12 @@ module Docdown
       end
     end
 
-    def add_match_to_code_commands(match, commands)
+    def add_match_to_code_command(match, commands)
       command      = match[:command]
       tag          = match[:tag]
       statement    = match[:statement]
 
-      code_command = Docdown.code_command_from_keyword(command, statement)
+      code_command = Rundoc.code_command_from_keyword(command, statement)
 
       case tag
       when /\-/
@@ -111,7 +123,7 @@ module Docdown
         # default do nothing
       end
 
-      @stack   << "\n" if commands.last.is_a?(Docdown::CodeCommand)
+      @stack   << "\n" if commands.last.is_a?(Rundoc::CodeCommand)
       @stack   << code_command
       commands << code_command
       code_command
@@ -119,7 +131,7 @@ module Docdown
 
     def check_parse_error(command, code_block)
       return unless code_command = @stack.last
-      return unless code_command.is_a?(Docdown::CodeCommands::NoSuchCommand)
+      return unless code_command.is_a?(Rundoc::CodeCommand::NoSuchCommand)
       @original.lines.each_with_index do |line, index|
         next unless line == command
         raise ParseError.new(keyword:     code_command.keyword,

@@ -1,8 +1,8 @@
 require 'repl_runner'
 
-module Docdown
-  module CodeCommands
-    class Repl < Docdown::CodeCommand
+module Rundoc
+  class CodeCommand
+    class Repl < Rundoc::CodeCommand
       def initialize(command)
         @command     = command
         @contents = ""
@@ -20,17 +20,18 @@ module Docdown
 
       def call(env = {})
         puts "Running #{@command} with repl: #{keyword}"
-        zip = ReplRunner.new(:"#{keyword}", @command).zip(contents.strip)
-        @result = zip.flatten.join("\n")
+        repl    = ReplRunner.new(:"#{keyword}", @command)
+        @result = repl.zip(contents.strip).flatten.join("\n")
+        return @result
       end
 
       def to_md(env = {})
-        "$ #{@command}"
+        return "$ #{@command}"
       end
     end
   end
 end
 
 
-Docdown.register_code_command(:repl, Docdown::CodeCommands::Repl)
-Docdown.register_code_command(:irb,  Docdown::CodeCommands::Repl)
+Rundoc.register_code_command(:repl, Rundoc::CodeCommand::Repl)
+Rundoc.register_code_command(:irb,  Rundoc::CodeCommand::Repl)

@@ -1,3 +1,3 @@
-module Docdown
+module Rundoc
   VERSION = "0.0.1"
 end

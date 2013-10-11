@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+
+unless File.respond_to? :realpath
+  class File #:nodoc:
+    def self.realpath path
+      return realpath(File.readlink(path)) if symlink?(path)
+      path
+    end
+  end
+end
+$: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+
+require 'rundoc'
+require 'thor'
+
+class RundocCLI < Thor
+
+  def initialize(*args)
+    super
+    @config = options[:config]
+    @path   = options[:path]
+    @working_dir = File.expand_path("../", @path)
+    unless File.exist?(@config)
+      @config = File.join(@working_dir, "rundoc.rb")
+    end
+    load(@config) if @config && File.exist?(@config)
+  end
+
+  default_task :help
+
+  desc "build", "turns rundoc file into docs and a project"
+  class_option  :path,   banner: "path/to/file.md",          optional: true, default: 'source.md'
+  class_option  :config, banner: "path/to/rundoc_config.rb", default: './rundoc.rb'
+  def build
+
+    raise "#{@path} does not exist"   unless File.exist?(@path)
+    source_contents = File.read(@path)
+    dir             = File.join(@working_dir, "tmp")
+
+    FileUtils.remove_entry_secure(dir) if Dir.exist?(dir)
+    FileUtils.mkdir_p(dir)
+
+    puts "Running your docs"
+    Dir.chdir(dir) do
+      @output = Rundoc::Parser.new(source_contents).to_md
+    end
+
+    puts "Done, publishing to `/project` folder"
+    project_dir = File.join(@working_dir, "project")
+
+    FileUtils.remove_entry_secure(project_dir) if Dir.exist?(dir)
+    FileUtils.mkdir_p(project_dir)
+    FileUtils.cp_r(dir + "/.", project_dir + "/")
+
+    puts "Done, outputting resultant docs to project/README.md"
+    readme_path = File.join(@working_dir, 'project', "README.md")
+    File.open(readme_path, "w") { |f| f.write @output }
+
+    puts "Done, writing original source to project/source.md"
+    source_path = File.join(@working_dir, 'project', "source.md")
+    File.open(source_path, "w") { |f| f.write source_contents }
+
+    Rundoc.run_after_build
+  end
+end
+
+RundocCLI.start(ARGV)

@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'docdown/version'
+require 'rundoc/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "docdown"
-  gem.version       = Docdown::VERSION
+  gem.name          = "rundoc"
+  gem.version       = Rundoc::VERSION
   gem.authors       = ["Richard Schneeman"]
   gem.email         = ["richard.schneeman+rubygems@gmail.com"]
-  gem.description   = %q{docdown turns docs to runable code}
-  gem.summary       = %q{docdown generates runable code from docs}
-  gem.homepage      = "https://github.com/schneems/docdown"
+  gem.description   = %q{rundoc turns docs to runable code}
+  gem.summary       = %q{rundoc generates runable code from docs}
+  gem.homepage      = "https://github.com/schneems/rundoc"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)

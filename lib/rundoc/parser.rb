@@ -1,4 +1,4 @@
-module Docdown
+module Rundoc
   class Parser
     DEFAULT_KEYWORD    = ":::"
     INDENT_BLOCK       = '(?<before_indent>(^\s*$\n|\A)(^(?:[ ]{4}|\t))(?<indent_contents>.*)(?<after_indent>[^\s].*$\n?(?:(?:^\s*$\n?)*^(?:[ ]{4}|\t).*[^\s].*$\n?)*))'
@@ -43,4 +43,4 @@ module Docdown
   end
 end
 
-# convert string of markdown to array of strings and code_commands
+# convert string of markdown to array of strings and code_command

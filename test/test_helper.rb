@@ -3,7 +3,7 @@ require 'bundler'
 Bundler.require
 
 
-require 'docdown'
+require 'rundoc'
 require 'test/unit'
 require "mocha/setup"
 require 'tmpdir'

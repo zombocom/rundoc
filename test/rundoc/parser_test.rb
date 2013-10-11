@@ -21,11 +21,11 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         expected = "sup\n\n```\n$ mkdir foo\n$ ls\nfoo\n```\n\nyo\n"
-        parsed = Docdown::Parser.new(contents)
+        parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
 
-        parsed = Docdown::Parser.new("\n```\n:::= $ ls\n```\n")
+        parsed = Rundoc::Parser.new("\n```\n:::= $ ls\n```\n")
         actual = parsed.to_md
         expected = "\n```\n$ ls\nfoo\n```\n"
         assert_equal expected, actual
@@ -50,7 +50,7 @@ RUBY
       Dir.chdir(dir) do
 
         expected = "sup\n\nIn file `foo/code.rb`:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
-        parsed = Docdown::Parser.new(contents)
+        parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
       end
@@ -70,7 +70,7 @@ RUBY
       Dir.chdir(dir) do
 
         expected = "\nIn file `foo/newb.rb`:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
-        parsed = Docdown::Parser.new(contents)
+        parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
       end
@@ -92,7 +92,7 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        parsed = Docdown::Parser.new(contents)
+        parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         expected = "```\n$ irb --simple-prompt\na = 3\n=> 3\r\nb = \"foo\" * a\n=> \"foofoofoo\"\r\nputs b\nfoofoofoo\r\n=> nil\n```\n"
         assert_equal expected, actual

@@ -29,12 +29,41 @@ Checking connectivity... done
 ### Option 2. Create a new Play app
 
 ```term
-:::- $ play help
-:::= repl play new play22test
-mywebsocketapp
-2
+$ irb
+a = 1+1
+=> 2
+b = a * 3
+=> 6
+puts b
+6
+=> nil
+```
 
-:::= $ cd play22test
+```term
+$ play new play22test
+[33m       _
+ _ __ | | __ _ _  _
+| '_ \| |/ _' | || |
+|  __/|_|\____|\__ /
+|_|            |__/
+
+[0mplay 2.2.0 built with Scala 2.10.2 (running Java 1.7.0_40), http://www.playframework.com
+
+[32mThe new application will be created in /Users/schneems/Documents/projects/rundoc/test/fixtures/play/tmp/play22test[0m
+
+What is the application name? [play22test]
+[36m> [0mmywebsocketapp
+
+Which template do you want to use for this new application? 
+
+  1             - Create a simple Scala application
+  2             - Create a simple Java application
+
+[36m> [0m2
+OK, application mywebsocketapp is created.
+
+Have fun!
+$ cd play22test
 ```
 
 Choose an application name and Java as the language.
@@ -51,8 +80,9 @@ You can [return a WebSocket](http://www.playframework.com/documentation/2.2.x/Ja
 
 There is an example in `Application.java` in the sample application:
 
+In file `app/controllers/Application.java`:
+
 ```java
-:::= write app/controllers/Application.java
 package controllers;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -109,8 +139,9 @@ The other methods will render our `js` and `html` templates.
 
 We'll also need a route to be set up for these methods in our `routes` file:
 
+In file `conf/routes`:
+
 ```
-:::= write conf/routes
 # Home page
 GET     /                           controllers.Application.index()
 GET     /pingWs                     controllers.Application.pingWs()
@@ -124,8 +155,9 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 In the controller example you'll notice that we pass around the `in` and `out` streams of the WebSocket. In our actor we're able to read from and write to these streams just like any other IO stream. Here's the code for the `Pinger` actor:
 
+In file `app/models/Pinger.java`:
+
 ```java
-:::= write app/models/Pinger.java
 package models;
 
 import play.*;
@@ -168,8 +200,9 @@ The final piece is the client code that will call the WebSocket. For this our sa
 
 `index.scala.js` provides a `div` to display the data in and references the JavaScript:
 
+In file `app/views/index.scala.html`:
+
 ```java
-:::= write app/views/index.scala.html
 @main("Welcome to Play") {
 
     <strong>Stats</strong><br>
@@ -181,8 +214,9 @@ The final piece is the client code that will call the WebSocket. For this our sa
 
 `ping.scala.js` connects to our WebSocket and defines the `receiveEvent` method to populate the dates into the displayed `div` as they come across:
 
+In file `app/views/ping.scala.js`:
+
 ```javascript
-:::= write app/views/ping.scala.js
 $(function() {
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
     var dateSocket = new WS("@routes.Application.pingWs().webSocketURL(request)")
@@ -202,9 +236,29 @@ $(function() {
 If you haven't done so already put your application into a git repository:
 
 ```term
-:::= $ git init
-:::= $ git add .
-:::= $ git commit -m "Ready to deploy"
+$ git init
+Initialized empty Git repository in /Users/schneems/Documents/projects/rundoc/test/fixtures/play/tmp/play22test/.git/
+$ git add .
+$ git commit -m "Ready to deploy"
+[master (root-commit) abe6e92] Ready to deploy
+ 17 files changed, 302 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README
+ create mode 100644 app/controllers/Application.java
+ create mode 100644 app/models/Pinger.java
+ create mode 100644 app/views/index.scala.html
+ create mode 100644 app/views/main.scala.html
+ create mode 100644 app/views/ping.scala.js
+ create mode 100644 build.sbt
+ create mode 100644 conf/application.conf
+ create mode 100644 conf/routes
+ create mode 100644 project/build.properties
+ create mode 100644 project/plugins.sbt
+ create mode 100644 public/images/favicon.png
+ create mode 100644 public/javascripts/jquery-1.9.0.min.js
+ create mode 100644 public/stylesheets/main.css
+ create mode 100644 test/ApplicationTest.java
+ create mode 100644 test/IntegrationTest.java
 ```
 
 ### Create the app

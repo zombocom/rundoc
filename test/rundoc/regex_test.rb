@@ -17,7 +17,7 @@ foo
 bar
 RUBY
 
-    regex  = Docdown::Parser::INDENT_BLOCK
+    regex  = Rundoc::Parser::INDENT_BLOCK
     parsed = contents.match(/#{regex}/).to_s
     assert_equal "\n    $ cd\n    yo\n    sup\n", parsed
   end
@@ -36,7 +36,7 @@ sup
 bar
 RUBY
 
-    regex  = Docdown::Parser::GITHUB_BLOCK
+    regex  = Rundoc::Parser::GITHUB_BLOCK
     parsed = contents.match(/#{regex}/m).to_s
     assert_equal "```\n$ cd\nyo\nsup\n```\n", parsed
   end
@@ -54,13 +54,13 @@ sup
 bar
 RUBY
 
-    regex  = Docdown::Parser::GITHUB_BLOCK
+    regex  = Rundoc::Parser::GITHUB_BLOCK
     parsed = contents.match(/#{regex}/m).to_s
     assert_equal "```ruby\n$ cd\nyo\nsup\n```\n", parsed
   end
 
   def test_command_regex
-    regex    = Docdown::Parser::COMMAND_REGEX.call(":::")
+    regex    = Rundoc::Parser::COMMAND_REGEX.call(":::")
 
     contents = ":::$ mkdir schneems"
     match    = contents.match(regex)
@@ -113,7 +113,7 @@ something
 bar
 RUBY
 
-    regex    = Docdown::Parser::CODEBLOCK_REGEX
+    regex    = Rundoc::Parser::CODEBLOCK_REGEX
 
     actual   = contents.partition(regex)
     expected = ["foo\n\n",
@@ -188,7 +188,7 @@ public class Application extends Controller {
 ```
 RUBY
 
-    regex = Docdown::Parser::CODEBLOCK_REGEX
+    regex = Rundoc::Parser::CODEBLOCK_REGEX
     match = contents.match(regex)
     assert_equal 'java', match[:lang]
     assert_equal '```', match[:fence]

@@ -1,17 +1,17 @@
-## Docdown
+## Rundoc
 
 ## What
 
-Write your code/docs once, don't repeat yourself. Changes/updates to docs are guaranteed to match your project
+Don't just write your docs, run them. Add dynamic content to your docs and build projects all from one source.
 
 ## Why
 
 I wrote a Rails course, that required I build an app and write
-documentation for building said app. Wouldn't it be cool if instead
-while I write the documentation I could automate the building of my
-app?
+documentation for building said app. I dreamed of a system where the docs and the
+code could automatically stay in sync. One where if I had a typo in my tutorials, I could get a computer
+to tell me about it. One where I couldn't accidentally cheat or skip over critical sections.
 
-Totally! That's this, this is that thing.
+This is that project.
 
 Write docs that build software.
 
@@ -22,33 +22,33 @@ Why docs to code and not code to docs? Code is hard, cold and machine runnable. 
 For now this software is distributed as a rubygem. Install it manually:
 
 ```
-$ gem install docdown
+$ gem install rundoc
 ```
 
 or add it to your Gemfile:
 
 ```
-gem 'docdown`
+gem 'rundoc`
 ```
 
 ## Use It
 
-Run the docdown command on any makdown file
+Run the `rundoc build` command on any makdown file
 
 ```sh
-  $ docdown build my_file.md
+  $ rundoc build my_file.md
 ```
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs.
 
 ## Write it
 
-Docdown uses github flavored markdown and the html-pipeline behind
+Rundoc uses github flavored markdown and the html-pipeline behind
 the scenes. This means you write like normal but in your code sections
-you can add special annotations that when run through docdown can
+you can add special annotations that when run through rundoc can
 generate a project.
 
-All docdown commands are prefixed with three colons `:::` and are inclosed in a code block a
+All rundoc commands are prefixed with three colons `:::` and are inclosed in a code block a
 command such as `$` which is an alias for `bash` commands like this:
 
     ```
@@ -81,7 +81,7 @@ Might generate an output something like this to your markdown doc:
         Gemfile.lock  Rakefile  config    db    lib   public    test    vendor
     ```
 
-That's how you manipulate the shell with docdown, let's take a look at manipulating code.
+That's how you manipulate the shell with rundoc, let's take a look at manipulating code.
 
 
 ## Files
@@ -124,3 +124,4 @@ To delete files use bash `$` command.
 - Breakpoints?
 - Bash commands with side effects (cd; pwd; on different lines should actually change working directory)
 - Better line matching for backtrace
+- `-=` command (only shows output)
