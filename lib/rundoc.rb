@@ -1,5 +1,5 @@
 require 'fileutils'
-
+require 'pathname'
 require 'rundoc/version'
 
 module Rundoc
@@ -33,11 +33,13 @@ module Rundoc
   end
 
   def run_after_build
-    @after_build_block.call if @after_build_block
+    @after_build_block ||= []
+    @after_build_block.each(&:call)
   end
 
   def after_build(&block)
-    @after_build_block = block
+    @after_build_block ||= []
+    @after_build_block << block
   end
 
   def config
@@ -47,6 +49,9 @@ module Rundoc
   def register_repl(*args, &block)
     ReplRunner.register_commands(*args, &block)
   end
+
+
+  attr_accessor :project_root
 end
 
 require 'rundoc/parser'

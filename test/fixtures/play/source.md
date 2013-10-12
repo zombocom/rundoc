@@ -1,3 +1,10 @@
+```
+:::- rundoc
+Rundoc.configure do |config|
+  config.project_root = "play22test"
+end
+```
+
 This quickstart will get you going with a Java and Play Framework application that uses a WebSocket, deployed to Heroku. For general information on how to develop and architect apps for use on Heroku, see [Architecting Applications for Heroku](https://devcenter.heroku.com/articles/architecting-apps).
 
 >note

@@ -66,6 +66,8 @@ rendered.
     :::- $ git init .
     ```
 
+Note: If all commands inside of a code block are hidden, the entire codeblock will not be rendered.
+
 If you want the output of the actual command to be rendered to
 the screen you can use an equal sign so that
 
@@ -73,7 +75,7 @@ the screen you can use an equal sign so that
     :::= $ ls
     ```
 
-Might generate an output something like this to your markdown doc:
+This code block might generate an output something like this to your markdown doc:
 
     ```
     $ ls
@@ -81,7 +83,7 @@ Might generate an output something like this to your markdown doc:
         Gemfile.lock  Rakefile  config    db    lib   public    test    vendor
     ```
 
-That's how you manipulate the shell with rundoc, let's take a look at manipulating code.
+That's how you manipulate the shell with rundoc, let's take a look at manipulating files.
 
 
 ## Files
@@ -116,6 +118,42 @@ If you wanted to change `users` to `products` you would write to the same file a
 To delete files use bash `$` command.
 
 
+## Configure
+
+You can configure your docs in your docs use the `rundoc` command
+
+    ```
+    :::- rundoc
+
+    ```
+
+Note: Make sure you run this as a hidden command (with `-`).
+
+This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
+
+
+    ```
+    :::- rundoc
+    Rundoc.configure do |config|
+      config.after_build do
+        puts "you could push to github here"
+        puts "You could do anything here"
+        puts "This code will run after the docs are done building"
+      end
+    end
+    ```
+
+To set the root of your project (defaults to './project') to something else like `./project/myapp` you can use `config.project_root`.
+
+
+    ```
+    :::- rundoc
+    Rundoc.configure do |config|
+      config.project_root = "myapp"
+    end
+    ```
+
+Now when your `README.md` and `source.md` get written they will go into `project/myapp/README.md` and `project/myapp/source.md`. This will also be the root directory that the `after_build` is executed in.
 
 ## TODO
 
