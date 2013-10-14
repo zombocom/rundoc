@@ -37,7 +37,9 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
       io.close_write
       result = io.read
     end
-    raise "Command #{@line} exited with non zero status" unless $?.success?
+    unless $?.success?
+      raise "Command #{@line} exited with non zero status" unless keyword.include?("fail")
+    end
     return result
   end
 end
@@ -45,5 +47,6 @@ end
 
 Rundoc.register_code_command(:bash, Rundoc::CodeCommand::Bash)
 Rundoc.register_code_command(:'$',  Rundoc::CodeCommand::Bash)
+Rundoc.register_code_command(:'fail.$',  Rundoc::CodeCommand::Bash)
 
 require 'rundoc/code_command/bash/cd'
