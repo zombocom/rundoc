@@ -1,7 +1,7 @@
 ```
 :::- rundoc
 Rundoc.configure do |config|
-  config.project_root = "play22test"
+  config.project_root = "myapp"
 end
 ```
 
@@ -37,11 +37,11 @@ Checking connectivity... done
 
 ```term
 :::- $ play help
-:::= $ play new play22test
+:::= $ play new myapp
 mywebsocketapp
 2
 
-:::= $ cd play22test
+:::= $ cd myapp
 ```
 
 Choose an application name and Java as the language.

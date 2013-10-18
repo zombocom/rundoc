@@ -8,15 +8,15 @@ class Rundoc::CodeCommand::FileCommand
     def to_md(env)
       raise "must call write in its own code section" unless env[:commands].empty?
       before = env[:before]
-      env[:before] = "In file `#{@filename}` remove:\n\n#{before}#{contents}\n\n"
+      env[:before] = "In file `#{@filename}` remove:\n\n#{before}"
       nil
     end
 
     def call(env = {})
-      puts "deleting #{contents} from #{@filename}"
+      puts "Deleting '#{contents.strip}' from #{@filename}"
       raise "#{@filename} does not exist" unless File.exist?(@filename)
 
-      regex = /#{Regexp.quote(contents)}/
+      regex = /^\s*#{Regexp.quote(contents)}/
       doc   = File.read(@filename)
       doc.sub!(regex, '')
 
@@ -29,4 +29,4 @@ class Rundoc::CodeCommand::FileCommand
 end
 
 
-Rundoc.register_code_command(:'file.append',  Rundoc::CodeCommand::FileCommand::Remove)
+Rundoc.register_code_command(:'file.remove',  Rundoc::CodeCommand::FileCommand::Remove)

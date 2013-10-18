@@ -26,19 +26,24 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
     shell(@line, @contents)
   end
 
+  # markdown doesn't understand bash color codes
+  def sanitize_escape_chars(input)
+    input.gsub(/\e\[(\d+)m/, '')
+  end
+
   def shell(cmd, stdin = nil)
-    msg  = "running: $ '#{cmd}'"
-    msg  << " with stdin: #{stdin}" if stdin && !stdin.empty?
+    msg  = "Running: $ '#{cmd}'"
+    msg  << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
     puts msg
 
     result = ""
     IO.popen("#{cmd} 2>&1", "w+") do |io|
       io << stdin if stdin
       io.close_write
-      result = io.read
+      result = sanitize_escape_chars io.read
     end
     unless $?.success?
-      raise "Command #{@line} exited with non zero status" unless keyword.include?("fail")
+      raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.include?("fail")
     end
     return result
   end

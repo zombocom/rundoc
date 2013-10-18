@@ -77,6 +77,7 @@ module Rundoc
 
     # one or more of the commands are not hidden
     def not_hidden?
+      return true if commands.empty?
       commands.map(&:not_hidden?).detect {|c| c }
     end
 
@@ -90,11 +91,11 @@ module Rundoc
     end
 
     def add_contents(line)
-      unless commands.empty?
+      if commands.empty?
+        @stack << line
+      else
         commands.last << line
-        return
       end
-      @stack << line
     end
 
     def parse_code_command

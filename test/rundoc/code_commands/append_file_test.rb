@@ -29,4 +29,27 @@ class AppendFileTest < Test::Unit::TestCase
     end
   end
 
+    def test_appends_to_a_file_at_line_number
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+
+contents = <<-CONTENTS
+source 'https://rubygems.org'
+gem 'rails', '4.0.0'
+CONTENTS
+
+        file = "foo.rb"
+        line = 2
+        `echo '#{contents}' >> #{file}`
+
+        cc = Rundoc::CodeCommand::FileCommand::Append.new("#{file}##{line}")
+        cc << "gem 'pg'"
+        cc.call
+
+        expected = "source https://rubygems.org\ngem 'pg'\ngem rails, 4.0.0\n\n"
+        assert_equal expected, File.read(file)
+      end
+    end
+  end
+
 end

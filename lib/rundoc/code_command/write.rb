@@ -8,12 +8,12 @@ module Rundoc
       def to_md(env)
         raise "must call write in its own code section" unless env[:commands].empty?
         before = env[:before]
-        env[:before] = "In file `#{@filename}`:\n\n#{before}"
+        env[:before] = "In file `#{@filename}` write:\n\n#{before}"
         nil
       end
 
       def call(env = {})
-        puts "writing to: #{@filename}"
+        puts "Writing to: '#{@filename}'"
 
         dir = File.expand_path("../", @filename)
         FileUtils.mkdir_p(dir)

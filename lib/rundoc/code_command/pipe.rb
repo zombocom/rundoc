@@ -6,10 +6,10 @@ module Rundoc
       # ::: | tail -n 2
       # => "test\ntmp.file\n"
       def initialize(line)
-        @first    = line.split(" ").first.strip
-        klass     = Rundoc.code_command(@first)
-        klass     ||= Rundoc::CodeCommand::Bash
-        @delegate = klass.new(line)
+        line_array = line.split(" ")
+        @first     = line_array.shift.strip
+        @delegate  = Rundoc.code_command_from_keyword(@first, line_array.join(" "))
+        @delegate  = Rundoc::CodeCommand::Bash.new(line) if @delegate.kind_of?(Rundoc::CodeCommand::NoSuchCommand)
       end
 
       # before: "",
@@ -18,6 +18,8 @@ module Rundoc
       #   [[cmd, output], [cmd, output]]
       def call(env = {})
         last_command = env[:commands].last
+        puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
+
         @delegate.push(last_command[:output])
         @delegate.call(env)
       end

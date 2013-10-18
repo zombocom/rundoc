@@ -11,6 +11,6 @@ task :default => [:test]
 test_task = Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
+  t.pattern = 'test/rundoc/**/*_test.rb'
   t.verbose = false
 end

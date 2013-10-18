@@ -19,4 +19,11 @@ class BashTest < Test::Unit::TestCase
       assert_equal `#{command}`,   bash.call
     end
   end
+
+  def test_stdin
+    command = "tail -n 2"
+    bash  = Rundoc::CodeCommand::Bash.new(command)
+    bash << "foo\nbar\nbaz\n"
+    assert_equal "bar\nbaz\n",   bash.call
+  end
 end

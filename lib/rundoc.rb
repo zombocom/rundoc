@@ -12,6 +12,10 @@ module Rundoc
     cc
   end
 
+  def parser_options
+    @parser_options ||= {}
+  end
+
   def code_lookup
     @code_lookup ||= {}
   end
@@ -50,6 +54,19 @@ module Rundoc
     ReplRunner.register_commands(*args, &block)
   end
 
+  def filter_sensitive(sensitive)
+    raise "Expecting #{sensitive} to be a hash" unless sensitive.is_a?(Hash)
+    @sensitive ||= {}
+    @sensitive.merge!(sensitive)
+  end
+
+  def sanitize(doc)
+    return doc if @sensitive.nil?
+    @sensitive.each do |sensitive, replace|
+      doc.gsub!(sensitive.to_s, replace)
+    end
+    return doc
+  end
 
   attr_accessor :project_root
 end

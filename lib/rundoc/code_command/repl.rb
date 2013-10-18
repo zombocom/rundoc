@@ -19,7 +19,7 @@ module Rundoc
       end
 
       def call(env = {})
-        puts "Running #{@command} with repl: #{keyword}"
+        puts "Running '#{@command}'' with repl: #{keyword}"
         repl    = ReplRunner.new(:"#{keyword}", @command)
         @result = repl.zip(contents.strip).flatten.join("\n")
         return @result

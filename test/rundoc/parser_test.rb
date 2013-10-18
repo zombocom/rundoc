@@ -49,7 +49,7 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        expected = "sup\n\nIn file `foo/code.rb`:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
+        expected = "sup\n\nIn file `foo/code.rb` write:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
         parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual
@@ -69,7 +69,7 @@ RUBY
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-        expected = "\nIn file `foo/newb.rb`:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
+        expected = "\nIn file `foo/newb.rb` write:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
         parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md
         assert_equal expected, actual

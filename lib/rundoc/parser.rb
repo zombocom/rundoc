@@ -19,13 +19,20 @@ module Rundoc
     end
 
     def to_md
-      @stack.map do |s|
+      result = []
+      @stack.each do |s|
         if s.respond_to?(:render)
-          s.render
+          result << s.render
         else
-          s
+          result << s
         end
-      end.join("")
+      end
+      return result.join("")
+    rescue Exception => e
+      File.open("README.md", "w") do |f|
+        f.write(result.join(""))
+      end
+      raise e
     end
 
     # split into [before_code, code, after_code], process code, and re-run until tail is empty

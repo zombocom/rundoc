@@ -26,4 +26,17 @@ RUBY
     end
   end
 
+
+  def test_no_code
+    contents = <<-RUBY
+```ruby
+gem 'sqlite3'
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    result = Rundoc::CodeSection.new(match, keyword: ":::").render
+    assert_equal contents, result
+  end
+
 end
