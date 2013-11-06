@@ -19,6 +19,9 @@ For this guide you will need:
 - Basic Git knowledge
 - A Heroku user account: [Signup is free and instant](https://api.heroku.com/signup/devcenter)
 
+> note
+> If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/ruby).
+
 ## Local Workstation Setup
 
 Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Foreman, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install/).
