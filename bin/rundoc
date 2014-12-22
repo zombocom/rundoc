@@ -28,7 +28,8 @@ class RundocCLI < Thor
   desc "build", "turns rundoc file into docs and a project"
   class_option  :path,   banner: "path/to/file.md",          optional: true, default: 'rundoc.md'
   def build
-    raise "#{@path} does not exist"   unless File.exist?(@path)
+    raise "#{@path} does not exist" unless File.exist?(@path)
+    raise "Expecting #{@path} to be a rundoc markdown file" unless File.file?(@path)
     source_contents = File.read(@path)
     tmp_dir         = @working_dir.join("tmp")
 

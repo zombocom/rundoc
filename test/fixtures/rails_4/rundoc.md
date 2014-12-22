@@ -61,7 +61,7 @@ Then create a new app:
 ::: $ rails new myapp --database=postgresql
 ```
 
-Once finished change your directory to the newly created Rails app
+Then move into your application directory.
 
 ```sh
 ::: $ cd myapp
@@ -69,11 +69,46 @@ Once finished change your directory to the newly created Rails app
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
 
-Rails 4 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
+If already have an app that was created without specifying `--database=postgresql` you will need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
+
+```ruby
+gem 'sqlite3'
+```
+
+To this:
+
+```ruby
+gem 'pg'
+```
+
+> callout We highly recommend using PostgreSQL during development. Maintaining [parity between your development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of differences between your environments. [Install Postgres locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup) now if it is not allready on your system.
+
+Now re-install your dependencies (to generate a new `Gemfile.lock`):
+
+```ruby
+$ bundle install
+```
+
+You can get more information on why this change is needed and how to configure your app to run postgres locally see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
+
+In addition to using the `pg` gem, you'll also need to ensure the `config/database.yml` is using the `postgresql` adapter.
+
+The development section of your `config/database.yml` file should look something like this:
+
+```sh
+:::  $ cat config/database.yml
+:::= | $ head -n 23
+```
+
+Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapter` section your application will not work.
 
 ```sh
 ::: $ rails generate controller welcome
 ```
+
+## Welcome page
+
+Rails 4 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
 
 Next we'll add an index page.
 
@@ -98,7 +133,7 @@ You can verify that the page is there by running your server:
 $ rails server
 ```
 
-And visiting [http://localhost:3000](http://localhost:3000) in your browser. If you do not see the page, use the logs that are output to your server to debug.
+And visiting [http://localhost:3000](http://localhost:3000) in your browser. If you do not see the page, [use the logs](#view-the-logs) that are output to your server to debug.
 
 ## Heroku gems
 
@@ -117,58 +152,14 @@ Then run:
 
 We talk more about Rails integration on our [Ruby Support page](https://devcenter.heroku.com/articles/ruby-support#injected-plugins).
 
-## Use Postgres
-
-> callout We highly recommend using PostgreSQL during development. Maintaining [parity between your development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of differences between your environments. [Install Postgres locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup) now if it is not allready on your system.
-
-If you did not specify `postgresql` while creating your app (using `--database=postgresql`) you will need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
-
-```ruby
-gem 'sqlite3'
-```
-
-To this:
-
-```ruby
-gem 'pg'
-```
-
-You can get more information on why this change is needed and how to configure your app to run postgres locally see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
-
-In addition to using the `pg` gem, you'll also need to ensure the `config/database.yml` is using the `postgresql` adapter.
-
-You will also need to remove the `username` field in your `database.yml` if there is one so:
-
-```
-:::= file.remove config/database.yml
-username: myapp
-```
-
-This line tells rails that the database `myapp_development` should be run under a role of `myapp`. Since you likely don't have this role in your database we will remove it. With the line remove Rails will try to access the database as user who is currently logged into the computer.
-
-The development section of your `config/database.yml` file should look something like this:
-
-```sh
-:::  $ cat config/database.yml
-:::= | $ head -n 23
-```
-
-Be careful here, if you omit the `sql` at the end of `postgresql` your application will not work.
-
-Now re-install your dependencies (to generate a new `Gemfile.lock`):
-
-```ruby
-$ bundle install
-```
-
 ## Specify Ruby version in app
 
 
-Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.0.0 so add this to your `Gemfile`:
+Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.0.0"
+ruby "2.1.5"
 ```
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -179,16 +170,12 @@ Heroku relies on [git](http://git-scm.com/), a distributed source control managm
 
 ```sh
 ::: $ git --help
-:::= | $ head -n 10
+:::= | $ head -n 5
 ```
 
 If you don't see any output or get `command not found` you will need to install it on your system, verify that the [Heroku toolbelt](https://toolbelt.heroku.com/) is installed.
 
-Once you've verified that git works, first make sure you are in your Rails app directory by running:
-
-```sh
-$ ls
-```
+Once you've verified that git works, first make sure you are in your Rails app directory by running `$ ls`:
 
 The output should look like this:
 
@@ -223,10 +210,10 @@ Make sure you are in the directory that contains your Rails app, then create an 
 You can verify that the remote was added to your project by running
 
 ```sh
-$ git config -e
+:::= $ git config --list | grep heroku
 ```
 
-If you see `fatal: not in a git directory` then you are likely not in the corect directory. Otherwise you may deploy your code. After you deploy your code, you will need to migrate your database, make sure it is properly scaled and use logs to debug any issues that come up.
+If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you may deploy your code. After you deploy your code, you will need to migrate your database, make sure it is properly scaled and use logs to debug any issues that come up.
 
 Deploy your code:
 
@@ -244,8 +231,7 @@ If you are using the database in your application you need to manually migrate t
 $ heroku run rake db:migrate
 ```
 
-Any commands after the `heroku run` will be executed on a Heroku [dyno](dynos).
-
+Any commands after the `heroku run` will be executed on a Heroku [dyno](dynos). You can obtain an interactive shell session by running `$ heroku run bash`.
 
 ## Visit your application
 
