@@ -8,7 +8,7 @@ Rundoc.configure do |config|
 end
 ```
 
-Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku, running previous versions of Rails on Heroku see [Getting Started with Rails 3.x on Heroku](https://devcenter.heroku.com/articles/rails3).
+Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku, running previous versions of Rails on Heroku see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
 > callout If you are already familiar with Heroku and Rails, reference the [simplifed Rails 4 on Heroku guide](https://devcenter.heroku.com/articles/rails4) instead. For general information on how to develop and architect apps for use on Heroku, see [Architecting Applications for Heroku](https://devcenter.heroku.com/articles/architecting-apps).
 
@@ -31,7 +31,7 @@ Once installed, you'll have access to the `$ heroku` command from your command s
 
 > callout Note that `$` symbol before commands indicates they should be run on the command line, prompt, or terminal with appropriate permissions. Do not copy the `$` symbol.
 
-```sh
+```term
 $ heroku login
 Enter your Heroku credentials.
 Email: schneems@example.com
@@ -51,19 +51,19 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 
 You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
 
-```sh
+```term
 :::= $ gem install rails --no-ri --no-rdoc
 ```
 
 Then create a new app:
 
-```sh
+```term
 ::: $ rails new myapp --database=postgresql
 ```
 
 Then move into your application directory.
 
-```sh
+```term
 ::: $ cd myapp
 ```
 
@@ -95,14 +95,14 @@ In addition to using the `pg` gem, you'll also need to ensure the `config/databa
 
 The development section of your `config/database.yml` file should look something like this:
 
-```sh
+```term
 :::  $ cat config/database.yml
 :::= | $ head -n 23
 ```
 
 Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapter` section your application will not work.
 
-```sh
+```term
 ::: $ rails generate controller welcome
 ```
 
@@ -112,7 +112,7 @@ Rails 4 no longer has a static index page in production. When you're using a new
 
 Next we'll add an index page.
 
-```sh
+```html
 :::= file.write app/views/welcome/index.html.erb
 <h2>Hello World</h2>
 <p>
@@ -129,7 +129,7 @@ Now we need to have Rails route to this action. We'll edit `config/routes.rb` to
 
 You can verify that the page is there by running your server:
 
-```sh
+```term
 $ rails server
 ```
 
@@ -146,7 +146,7 @@ gem 'rails_12factor', group: :production
 
 Then run:
 
-```sh
+```term
 ::: $ bundle install
 ```
 
@@ -159,7 +159,7 @@ Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby instal
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.1.5"
+ruby "2.2.0"
 ```
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -168,7 +168,7 @@ You should also be running the same version of Ruby locally. You can verify by r
 
 Heroku relies on [git](http://git-scm.com/), a distributed source control managment tool, for deploying your project. If your project is not already in git first verify that `git` is on your system:
 
-```sh
+```term
 ::: $ git --help
 :::= | $ head -n 5
 ```
@@ -179,13 +179,13 @@ Once you've verified that git works, first make sure you are in your Rails app d
 
 The output should look like this:
 
-```sh
+```term
 :::= $ ls
 ```
 
 Now run these commands in your Rails app directory to initialize and commit your code to git:
 
-```sh
+```term
 ::: $ git init
 ::: $ git add .
 ::: $ git commit -m "init"
@@ -193,7 +193,7 @@ Now run these commands in your Rails app directory to initialize and commit your
 
 You can verify everything was committed correctly by running:
 
-```sh
+```term
 :::= $ git status
 ```
 
@@ -203,13 +203,13 @@ Now that your application is committed to git you can deploy to Heroku.
 
 Make sure you are in the directory that contains your Rails app, then create an app on Heroku:
 
-```sh
+```term
 :::= $ heroku create
 ```
 
 You can verify that the remote was added to your project by running
 
-```sh
+```term
 :::= $ git config --list | grep heroku
 ```
 
@@ -217,7 +217,7 @@ If you see `fatal: not in a git directory` then you are likely not in the correc
 
 Deploy your code:
 
-```sh
+```term
 :::= $ git push heroku master
 ```
 
@@ -227,7 +227,7 @@ It is always a good idea to check to see if there are any warnings or errors in 
 
 If you are using the database in your application you need to manually migrate the database by running:
 
-```sh
+```term
 $ heroku run rake db:migrate
 ```
 
@@ -240,13 +240,13 @@ You've deployed your code to Heroku. You can now instruct Heroku to execute a pr
 
 Let's ensure we have one dyno running the `web` process type:
 
-```sh
+```term
 ::: $ heroku ps:scale web=1
 ```
 
 You can check the state of the app's dynos. The `heroku ps` command lists the running dynos of your application:
 
-```sh
+```term
 :::= $ heroku ps
 ```
 
@@ -254,7 +254,7 @@ Here, one dyno is running.
 
 We can now visit the app in our browser with `heroku open`.
 
-```sh
+```term
 :::= $ heroku open
 ```
 
@@ -268,13 +268,13 @@ If you run into any problems getting your app to perform properly, you will need
 
 You can view information about your running app using one of the [logging commands](logging), `heroku logs`:
 
-```sh
+```term
 :::= $ heroku logs
 ```
 
 You can also get the full stream of logs by running the logs command with the `--tail` flag option like this:
 
-```sh
+```term
 $ heroku logs --tail
 ```
 
@@ -284,21 +284,21 @@ Having only a single web dyno running will result in the dyno [going to sleep](d
 
 To avoid this, you can scale to more than one web dyno. For example:
 
-```sh
+```term
 $ heroku ps:scale web=2
 ```
 
 For each application, Heroku provides [750 free dyno-hours](usage-and-billing#750-free-dyno-hours-per-app).  Running your app at 2 dynos would exceed this free, monthly allowance, so let's scale back:
 
-```sh
+```term
 $ heroku ps:scale web=1
 ```
 
 ## Console
 
-Heroku allows you to run commands in a [one-off dyno](oneoff-admin-ps) - scripts and applications that only need to be executed when needed - using the `heroku run` command. Use this to launch a Rails console process attached to your local terminal for experimenting in your app's environment:
+Heroku allows you to run commands in a [one-off dyno](one-off-dynos) - scripts and applications that only need to be executed when needed - using the `heroku run` command. Use this to launch a Rails console process attached to your local terminal for experimenting in your app's environment:
 
-```sh
+```term
 $ heroku run rails console
 irb(main):001:0> puts 1+1
 2
@@ -308,65 +308,28 @@ irb(main):001:0> puts 1+1
 
 Rake can be run as an attached process exactly like the console:
 
-```sh
+```term
 $ heroku run rake db:migrate
 ```
 
 ## Webserver
 
-By default, your app's web process runs `rails server`, which uses Webrick. This is fine for testing, but for production apps you'll want to switch to a more robust webserver. On Cedar, [we recommend Unicorn as the webserver](ruby-production-web-server). Regardless of the webserver you choose, production apps should always specify the webserver explicitly in the `Procfile`.
+By default, your app's web process runs `rails server`, which uses Webrick. This is fine for testing, but for production apps you'll want to switch to a more robust webserver. On Cedar, [we recommend Puma as the webserver](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server). Regardless of the webserver you choose, production apps should always specify the webserver explicitly in the `Procfile`.
 
-First, add Unicorn to your application `Gemfile`:
+First, add Puma to your application `Gemfile`:
 
 ```ruby
 :::= file.append Gemfile
-gem 'unicorn'
+gem 'puma'
 ```
 
 Then run
 
-```sh
+```term
 ::: $ bundle install
 ```
 
-Now you are ready to configure your app to use Unicorn.
-
-Create a configuration file for Unicorn at `config/unicorn.rb`:
-
-```sh
-::: $ touch config/unicorn.rb
-```
-
-Now we're going to add Unicorn specific configuration options, that we explain in detail in [Heroku's Unicorn documentation](https://devcenter.heroku.com/articles/rails-unicorn):
-
-```ruby
-:::= file.write config/unicorn.rb
-
-worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
-timeout 15
-preload_app true
-
-before_fork do |server, worker|
-  Signal.trap 'TERM' do
-    puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
-    Process.kill 'QUIT', Process.pid
-  end
-
-  defined?(ActiveRecord::Base) and
-    ActiveRecord::Base.connection.disconnect!
-end
-
-after_fork do |server, worker|
-  Signal.trap 'TERM' do
-    puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to send QUIT'
-  end
-
-  defined?(ActiveRecord::Base) and
-    ActiveRecord::Base.establish_connection
-end
-```
-
-This default configuration assumes a standard Rails app with Active Record. You should get acquainted with the different options in [the official Unicorn documentation](http://unicorn.bogomips.org/Unicorn/Configurator.html).
+Now you are ready to configure your app to use Puma. For this tutorial we will use the default settings of Puma, but we recommend generating a `config/puma.rb` file and reading more about configuring your application for maximum performance by [reading the Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server)
 
 Finally you will need to tell Heroku how to run your Rails app by creating a `Procfile` in the root of your application directory.
 
@@ -376,21 +339,25 @@ Change the command used to launch your web process by creating a file called [Pr
 
 ```
 :::= file.write Procfile
-web: bundle exec unicorn -p $PORT -c ./config/unicorn.rb
+web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
 ```
 
 Note: The case of `Procfile` matters, the first letter must be uppercase.
 
+
+We recommend generating a puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
+
+
 Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the enviroment your Heroku app will run in.
 
-```sh
+```term
 :::= $ echo "RACK_ENV=development" >>.env
 :::= $ echo "PORT=3000" >> .env
 ```
 
 You'll also want to add `.env` to your `.gitignore` since this is for local enviroment setup.
 
-```sh
+```term
 ::: $ echo ".env" >> .gitignore
 ::: $ git add .gitignore
 ::: $ git commit -m "add .env to .gitignore"
@@ -398,13 +365,13 @@ You'll also want to add `.env` to your `.gitignore` since this is for local envi
 
 Test your Procfile locally using Foreman:
 
-```sh
+```term
 ::: $ gem install foreman
 ```
 
 You can now start your web server by running
 
-```sh
+```term
 $ foreman start
 18:24:56 web.1  | I, [2013-03-13T18:24:56.885046 #18793]  INFO -- : listening on addr=0.0.0.0:5000 fd=7
 18:24:56 web.1  | I, [2013-03-13T18:24:56.885140 #18793]  INFO -- : worker=0 spawning...
@@ -416,27 +383,27 @@ $ foreman start
 
 Looks good, so press Ctrl-C to exit and you can deploy your changes to Heroku:
 
-```sh
+```term
 ::: $ git add .
-::: $ git commit -m "use unicorn via procfile"
+::: $ git commit -m "use puma via procfile"
 ::: $ git push heroku master
 ```
 
-Check `ps`, you'll see the web process uses your new command specifying Unicorn as the web server
+Check `ps`, you'll see the web process uses your new command specifying Puma as the web server
 
-```sh
+```term
 :::= $ heroku ps
 ```
 
-The logs also reflect that we are now using Unicorn:
+The logs also reflect that we are now using Puma:
 
-```sh
+```term
 $ heroku logs
 ```
 
 ## Rails Asset Pipeline
 
-There are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) when deploying to Heroku. For general information on the asset pipeline please see the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails3x-asset-pipeline-cedar) article.
+There are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) when deploying to Heroku. For general information on the asset pipeline please see the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails-asset-pipeline) article.
 
 The `config.assets.initialize_on_precompile` option has been removed is and not needed for Rails 4. Also, any failure in asset compilation will now cause the push to fail. For Rails 4 asset pipeline support see the [Ruby Support](https://devcenter.heroku.com/articles/ruby-support#rails-4-x-applications) page.
 
@@ -450,7 +417,7 @@ If you're missing a gem when you deploy, check your Bundler groups. Heroku build
 
 One common example using the RSpec tasks in your `Rakefile`. If you see this in your Heroku deploy:
 
-```sh
+```term
 $ heroku run rake -T
 Running `bundle exec rake -T` attached to terminal... up, ps.3
 rake aborted!
@@ -459,7 +426,7 @@ no such file to load -- rspec/core/rake_task
 
 Then you've hit this problem. First, duplicate the problem locally:
 
-```sh
+```term
 $ bundle install --without development:test
 …
 $ bundle exec rake -T
@@ -486,7 +453,6 @@ end
 ```
 
 Confirm it works locally, then push to Heroku.
-
 
 ## Done
 
