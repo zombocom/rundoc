@@ -8,7 +8,7 @@ Rundoc.configure do |config|
 end
 ```
 
-Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku, running previous versions of Rails on Heroku see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
+Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
 > callout If you are already familiar with Heroku and Rails, reference the [simplifed Rails 4 on Heroku guide](https://devcenter.heroku.com/articles/rails4) instead. For general information on how to develop and architect apps for use on Heroku, see [Architecting Applications for Heroku](https://devcenter.heroku.com/articles/architecting-apps).
 
