@@ -15,12 +15,12 @@ Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.
 For this guide you will need:
 
 - Basic Ruby/Rails knowledge
-- Locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 4+
+- Locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 5+
 - Basic Git knowledge
 - A Heroku user account: [Signup is free and instant](https://api.heroku.com/signup/devcenter)
 
 > note
-> If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/ruby).
+> If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/upgrading_ruby_on_railsuby).
 
 ## Local Workstation Setup
 
@@ -52,7 +52,7 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
-:::= $ gem install rails --no-ri --no-rdoc
+:::= $ gem install rails --pre --no-ri --no-rdoc
 ```
 
 Then create a new app:
@@ -68,6 +68,18 @@ Then move into your application directory.
 ```
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
+
+## Rails 5 Beta Known Issues
+
+Rails 5 is still in beta, The first version 5.0.0.beta1 has a [known issue](https://github.com/rails/rails/issues/22917) that will not work on Heroku. A [fix has been merged into master](https://github.com/rails/rails/pull/22933). You can run master by editing your Gemfile and replacing the Rails line with:
+
+```ruby
+gem 'rails', github: "rails/rails"
+```
+
+Then run `$ bundle install`. When released 5.0.0.beta2 and beyond will have this fix. During the beta Rails 5's API is not stable and may change.
+
+## Database
 
 If already have an app that was created without specifying `--database=postgresql` you will need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
 
@@ -159,7 +171,7 @@ Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby instal
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.2.0"
+ruby "2.3.0"
 ```
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -280,8 +292,6 @@ $ heroku logs --tail
 
 ## Dyno sleeping and scaling
 
-## Dyno sleeping and scaling
-
 By default, your app is deployed on a free dyno. Free dynos will sleep after a half hour of inactivity and they can be active (receiving traffic) for no more than 18 hours a day before [going to sleep](dynos#dyno-sleeping).  If a free dyno is sleeping, and it hasn't exceeded the 18 hours, any web request will wake it. This causes a delay of a few seconds for the first request upon waking. Subsequent requests will perform normally.
 
 ```term
@@ -312,10 +322,9 @@ $ heroku run rake db:migrate
 
 By default, your app's web process runs `rails server`, which uses Webrick. This is fine for testing, but for production apps you'll want to switch to a more robust webserver. On Cedar, [we recommend Puma as the webserver](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server). Regardless of the webserver you choose, production apps should always specify the webserver explicitly in the `Procfile`.
 
-First, add Puma to your application `Gemfile`:
+First, if not already specified, add `puma` to your application `Gemfile`:
 
 ```ruby
-:::= file.append Gemfile
 gem 'puma'
 ```
 
