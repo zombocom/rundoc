@@ -11,21 +11,21 @@ end
 > warning
 > Rails 5 is in beta and will likely change. This article will not be stable until Rails 5 is released.
 
-Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
+Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 4.x on Heroku](getting-started-with-rails4) or [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
 For this guide you will need:
 
-- Basic Ruby/Rails knowledge
-- Locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 5+
-- Basic Git knowledge
-- A Heroku user account: [Signup is free and instant](https://api.heroku.com/signup/devcenter)
+- Basic Ruby/Rails knowledge.
+- A locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 5+.
+- Basic Git knowledge.
+- A Heroku user account: [Signup is free and instant](https://api.heroku.com/signup/devcenter).
 
 > note
 > If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/upgrading_ruby_on_railsuby).
 
 ## Local workstation setup
 
-Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Foreman, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install/).
+Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Heroku Local, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install/).
 
 Once installed, you'll have access to the `$ heroku` command from your command shell. Log in using the email address and password you used when creating your Heroku account:
 
@@ -47,10 +47,10 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 
 ## Write your app
 
-> callout To run on Heroku your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`, and have the `rails_12factor` gem in the production group of your `Gemfile`
+> callout To run on Heroku, your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`, and have the `rails_12factor` gem in the production group of your `Gemfile`.
 
 
-You may be starting from an existing app, if so [upgrade to Rails 5](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0) before continuing. If not, a vanilla Rails 5 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 5.x using `$ rails -v`. You can get the new version of rails by running,
+If you are starting from an existing app, [upgrade to Rails 5](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0) before continuing. If not, a vanilla Rails 5 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 5.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
 :::= $ gem install rails --pre --no-ri --no-rdoc
@@ -68,21 +68,21 @@ Then move into your application directory.
 ::: $ cd myapp
 ```
 
-> callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
+> callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. If  you experience a problem, try reading through the entire document and then go back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
 
 ## Rails 5 Beta known issues
 
-Rails 5 is still in beta, The first version 5.0.0.beta1 has a [known issue](https://github.com/rails/rails/issues/22917) that will not work on Heroku. A [fix has been merged into master](https://github.com/rails/rails/pull/22933). You can run master by editing your Gemfile and replacing the Rails line with:
+Rails 5 is still in beta. The first version, 5.0.0.beta1 has a [known issue](https://github.com/rails/rails/issues/22917) that will not work on Heroku. A [fix has been merged into master](https://github.com/rails/rails/pull/22933). You can run master by editing your Gemfile and replacing the Rails line with:
 
 ```ruby
 gem 'rails', github: "rails/rails"
 ```
 
-Then run `$ bundle install`. When released 5.0.0.beta2 and beyond will have this fix. During the beta Rails 5's API is not stable and may change.
+Then run `$ bundle install`. When released, 5.0.0.beta2 and beyond will have this fix. During the beta Rails 5's API is not stable and may change.
 
 ## Database
 
-If already have an app that was created without specifying `--database=postgresql` you will need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
+If you already have an app that was created without specifying `--database=postgresql` you will need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
 
 ```ruby
 gem 'sqlite3'
@@ -102,7 +102,7 @@ Now re-install your dependencies (to generate a new `Gemfile.lock`):
 $ bundle install
 ```
 
-You can get more information on why this change is needed and how to configure your app to run Postgres locally see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
+To get more information on why this change is needed and how to configure your app to run Postgres locally, see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
 
 In addition to using the `pg` gem, you'll also need to ensure the `config/database.yml` is using the `postgresql` adapter.
 
@@ -113,7 +113,7 @@ The development section of your `config/database.yml` file should look something
 :::= | $ head -n 23
 ```
 
-Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapter` section your application will not work.
+Be careful here. If you omit the `sql` at the end of `postgresql` in the `adapter` section, your application will not work.
 
 ```term
 ::: $ rails generate controller welcome
@@ -133,7 +133,7 @@ Next we'll add an index page.
 </p>
 ```
 
-Now we need to have Rails route to this action. We'll edit `config/routes.rb` to set the index page to our new method:
+Now we need to make Rails route to this action. We'll edit `config/routes.rb` to set the index page to our new method:
 
 ```ruby
 :::= file.append config/routes.rb#2
@@ -163,7 +163,7 @@ Then run:
 ::: $ bundle install
 ```
 
-We talk more about Rails integration on our [Ruby Support page](https://devcenter.heroku.com/articles/ruby-support#injected-plugins).
+We talk more about Rails integration in our [Heroku Ruby Support](https://devcenter.heroku.com/articles/ruby-support#injected-plugins) Dev Center article.
 
 ## Specify Ruby version in app
 
@@ -175,7 +175,7 @@ Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby instal
 ruby "2.3.0"
 ```
 
-You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
+You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
 
 ## Store your app in Git
 
@@ -186,7 +186,7 @@ Heroku relies on [Git](http://git-scm.com/), a distributed source control manage
 :::= | $ head -n 5
 ```
 
-If you don't see any output or get `command not found` you will need to install it on your system, verify that the [Heroku toolbelt](https://toolbelt.heroku.com/) is installed.
+If you don't see any output or get `command not found` you will need to install it on your system. Verify that the [Heroku toolbelt](https://toolbelt.heroku.com/) is installed.
 
 Once you've verified that Git works, first make sure you are in your Rails app directory by running `$ ls`:
 
@@ -220,13 +220,13 @@ Make sure you are in the directory that contains your Rails app, then create an 
 :::= $ heroku create
 ```
 
-You can verify that the remote was added to your project by running
+You can verify that the remote was added to your project by running:
 
 ```term
 :::= $ git config --list | grep heroku
 ```
 
-If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you may deploy your code. After you deploy your code, you will need to migrate your database, make sure it is properly scaled and use logs to debug any issues that come up.
+If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you may deploy your code. After you deploy your code, you will need to migrate your database, make sure it is properly scaled, and use logs to debug any issues that come up.
 
 Deploy your code:
 
@@ -249,7 +249,7 @@ Any commands after the `heroku run` will be executed on a Heroku [dyno](dynos). 
 ## Visit your application
 
 
-You've deployed your code to Heroku. You can now instruct Heroku to execute a process type. Heroku does this by running the associated command in a [dyno](dynos) - a lightweight container which is the basic unit of composition on Heroku.
+You've deployed your code to Heroku. You can now instruct Heroku to execute a process type. Heroku does this by running the associated command in a [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku.
 
 Let's ensure we have one dyno running the `web` process type:
 
@@ -273,7 +273,7 @@ We can now visit the app in our browser with `heroku open`.
 
 You should now see the "Hello World" text we inserted above.
 
-Heroku gives you a default web URL for simplicity while you are developing. When you are ready to scale up and use Heroku for production you can add your own [Custom Domain](https://devcenter.heroku.com/articles/custom-domains).
+Heroku gives you a default web URL for simplicity while you are developing. When you are ready to scale up and use Heroku for production you can add your own [custom domain](https://devcenter.heroku.com/articles/custom-domains).
 
 ## View the logs
 
@@ -351,7 +351,7 @@ web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
 Note: The case of `Procfile` matters, the first letter must be uppercase.
 
 
-We recommend generating a puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
+We recommend generating a Puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
 
 
 Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
@@ -387,7 +387,7 @@ $ foreman start
 18:24:57 web.1  | I, [2013-03-13T18:24:57.647574 #18795]  INFO -- : worker=0 ready
 ```
 
-Looks good, so press Ctrl-C to exit and you can deploy your changes to Heroku:
+Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
 
 ```term
 ::: $ git add .
@@ -395,13 +395,13 @@ Looks good, so press Ctrl-C to exit and you can deploy your changes to Heroku:
 ::: $ git push heroku master
 ```
 
-Check `ps`, you'll see the web process uses your new command specifying Puma as the web server
+Check `ps`. You'll see that the web process uses your new command specifying Puma as the web server.
 
 ```term
 :::= $ heroku ps
 ```
 
-The logs also reflect that we are now using Puma:
+The logs also reflect that we are now using Puma.
 
 ```term
 $ heroku logs
@@ -421,7 +421,7 @@ If you push up your app and it crashes (`heroku ps` shows state `crashed`), chec
 
 If you're missing a gem when you deploy, check your Bundler groups. Heroku builds your app without the `development` or `test` groups, and if you app depends on a gem from one of these groups to run, you should move it out of the group.
 
-One common example using the RSpec tasks in your `Rakefile`. If you see this in your Heroku deploy:
+One common example is using the RSpec tasks in your `Rakefile`. If you see this in your Heroku deploy:
 
 ```term
 $ heroku run rake -T
@@ -462,4 +462,4 @@ Confirm it works locally, then push to Heroku.
 
 ## Done
 
-You now have your first application deployed to Heroku. The next step is to deploy your own application. If you're interested in reading more you can read more about [Ruby on Heroku at the Dev Center](https://devcenter.heroku.com/categories/ruby).
+You have deployed your first application to Heroku. The next step is to deploy your own application. You can read more about Ruby on Heroku at the [Dev Center](https://devcenter.heroku.com/categories/ruby).
