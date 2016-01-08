@@ -94,7 +94,7 @@ To this:
 gem 'pg'
 ```
 
-> callout We highly recommend using PostgreSQL during development. Maintaining [parity between your development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of differences between your environments. [Install Postgres locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup) now if it is not allready on your system.
+> callout We highly recommend using PostgreSQL during development. Maintaining [parity between your development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of differences between your environments. [Install Postgres locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup) now if it is not already on your system.
 
 Now re-install your dependencies (to generate a new `Gemfile.lock`):
 
@@ -102,7 +102,7 @@ Now re-install your dependencies (to generate a new `Gemfile.lock`):
 $ bundle install
 ```
 
-You can get more information on why this change is needed and how to configure your app to run postgres locally see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
+You can get more information on why this change is needed and how to configure your app to run Postgres locally see [why you cannot use Sqlite3 on Heroku](https://devcenter.heroku.com/articles/sqlite3).
 
 In addition to using the `pg` gem, you'll also need to ensure the `config/database.yml` is using the `postgresql` adapter.
 
@@ -179,7 +179,7 @@ You should also be running the same version of Ruby locally. You can verify by r
 
 ## Store your App in Git
 
-Heroku relies on [git](http://git-scm.com/), a distributed source control managment tool, for deploying your project. If your project is not already in git first verify that `git` is on your system:
+Heroku relies on [Git](http://git-scm.com/), a distributed source control management tool, for deploying your project. If your project is not already in Git, first verify that `git` is on your system:
 
 ```term
 ::: $ git --help
@@ -188,7 +188,7 @@ Heroku relies on [git](http://git-scm.com/), a distributed source control managm
 
 If you don't see any output or get `command not found` you will need to install it on your system, verify that the [Heroku toolbelt](https://toolbelt.heroku.com/) is installed.
 
-Once you've verified that git works, first make sure you are in your Rails app directory by running `$ ls`:
+Once you've verified that Git works, first make sure you are in your Rails app directory by running `$ ls`:
 
 The output should look like this:
 
@@ -196,7 +196,7 @@ The output should look like this:
 :::= $ ls
 ```
 
-Now run these commands in your Rails app directory to initialize and commit your code to git:
+Now run these commands in your Rails app directory to initialize and commit your code to Git:
 
 ```term
 ::: $ git init
@@ -210,7 +210,7 @@ You can verify everything was committed correctly by running:
 :::= $ git status
 ```
 
-Now that your application is committed to git you can deploy to Heroku.
+Now that your application is committed to Git you can deploy to Heroku.
 
 ## Deploy your application to Heroku
 
@@ -273,7 +273,7 @@ We can now visit the app in our browser with `heroku open`.
 
 You should now see the "Hello World" text we inserted above.
 
-Heroku gives you a default web url for simplicty while you are developing. When you are ready to scale up and use Heroku for production you can add your own [Custom Domain](https://devcenter.heroku.com/articles/custom-domains).
+Heroku gives you a default web URL for simplicity while you are developing. When you are ready to scale up and use Heroku for production you can add your own [Custom Domain](https://devcenter.heroku.com/articles/custom-domains).
 
 ## View the logs
 
@@ -354,14 +354,14 @@ Note: The case of `Procfile` matters, the first letter must be uppercase.
 We recommend generating a puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
 
 
-Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the enviroment your Heroku app will run in.
+Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
 
 ```term
 :::= $ echo "RACK_ENV=development" >>.env
 :::= $ echo "PORT=3000" >> .env
 ```
 
-You'll also want to add `.env` to your `.gitignore` since this is for local enviroment setup.
+You'll also want to add `.env` to your `.gitignore` since this is for local environment setup.
 
 ```term
 ::: $ echo ".env" >> .gitignore
@@ -462,4 +462,4 @@ Confirm it works locally, then push to Heroku.
 
 ## Done
 
-You now have your first application deployed to Heroku. The next step is to deploy your own application. If you're interested in reading more you can read more about [Ruby on Heroku at the Devcenter](https://devcenter.heroku.com/categories/ruby).
+You now have your first application deployed to Heroku. The next step is to deploy your own application. If you're interested in reading more you can read more about [Ruby on Heroku at the Dev Center](https://devcenter.heroku.com/categories/ruby).
