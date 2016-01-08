@@ -8,9 +8,10 @@ Rundoc.configure do |config|
 end
 ```
 
-Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
+> warning
+> Rails 5 is in beta and will likely change. This article will not be stable until Rails 5 is released.
 
-> callout If you are already familiar with Heroku and Rails, reference the [simplifed Rails 4 on Heroku guide](https://devcenter.heroku.com/articles/rails4) instead. For general information on how to develop and architect apps for use on Heroku, see [Architecting Applications for Heroku](https://devcenter.heroku.com/articles/architecting-apps).
+Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
 For this guide you will need:
 
@@ -49,7 +50,7 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 > callout To run on Heroku your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`, and have the `rails_12factor` gem in the production group of your `Gemfile`
 
 
-You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
+You may be starting from an existing app, if so [upgrade to Rails 5](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0) before continuing. If not, a vanilla Rails 5 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 5.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
 :::= $ gem install rails --pre --no-ri --no-rdoc
@@ -120,7 +121,7 @@ Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapte
 
 ## Welcome page
 
-Rails 4 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
+Rails 5 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
 
 Next we'll add an index page.
 
@@ -149,7 +150,7 @@ And visiting [http://localhost:3000](http://localhost:3000) in your browser. If 
 
 ## Heroku gems
 
-Heroku integration has previously relied on using the Rails plugin system, which has been removed from Rails 4. To enable features such as static asset serving and logging on Heroku please add `rails_12factor` gem to your `Gemfile`.
+Heroku integration has previously relied on using the Rails plugin system, which has been removed from Rails 5. To enable features such as static asset serving and logging on Heroku please add `rails_12factor` gem to your `Gemfile`.
 
 ```ruby
 :::= file.append Gemfile
@@ -167,7 +168,7 @@ We talk more about Rails integration on our [Ruby Support page](https://devcente
 ## Specify Ruby version in app
 
 
-Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.
+Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`.
 
 ```ruby
 :::= file.append Gemfile
@@ -410,7 +411,7 @@ $ heroku logs
 
 There are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) when deploying to Heroku. For general information on the asset pipeline please see the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails-asset-pipeline) article.
 
-The `config.assets.initialize_on_precompile` option has been removed is and not needed for Rails 4. Also, any failure in asset compilation will now cause the push to fail. For Rails 4 asset pipeline support see the [Ruby Support](https://devcenter.heroku.com/articles/ruby-support#rails-4-x-applications) page.
+The `config.assets.initialize_on_precompile` option has been removed is and not needed for Rails 5. Also, any failure in asset compilation will now cause the push to fail. For Rails 5 asset pipeline support see the [Ruby Support](https://devcenter.heroku.com/articles/ruby-support#rails-4-x-applications) page.
 
 ## Troubleshooting
 
