@@ -23,7 +23,7 @@ For this guide you will need:
 > note
 > If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/upgrading_ruby_on_railsuby).
 
-## Local Workstation Setup
+## Local workstation setup
 
 Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Foreman, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install/).
 
@@ -45,7 +45,7 @@ Uploading ssh public key /Users/adam/.ssh/id_rsa.pub
 
 Press enter at the prompt to upload your existing `ssh` key or create a new one, used for pushing code later on.
 
-## Write your App
+## Write your app
 
 > callout To run on Heroku your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`, and have the `rails_12factor` gem in the production group of your `Gemfile`
 
@@ -70,7 +70,7 @@ Then move into your application directory.
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
 
-## Rails 5 Beta Known Issues
+## Rails 5 Beta known issues
 
 Rails 5 is still in beta, The first version 5.0.0.beta1 has a [known issue](https://github.com/rails/rails/issues/22917) that will not work on Heroku. A [fix has been merged into master](https://github.com/rails/rails/pull/22933). You can run master by editing your Gemfile and replacing the Rails line with:
 
@@ -177,7 +177,7 @@ ruby "2.3.0"
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
 
-## Store your App in Git
+## Store your app in Git
 
 Heroku relies on [Git](http://git-scm.com/), a distributed source control management tool, for deploying your project. If your project is not already in Git, first verify that `git` is on your system:
 
@@ -407,7 +407,7 @@ The logs also reflect that we are now using Puma:
 $ heroku logs
 ```
 
-## Rails Asset Pipeline
+## Rails asset pipeline
 
 There are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) when deploying to Heroku. For general information on the asset pipeline please see the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails-asset-pipeline) article.
 
