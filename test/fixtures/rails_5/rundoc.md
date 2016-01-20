@@ -18,10 +18,10 @@ For this guide you will need:
 - Basic Ruby/Rails knowledge.
 - A locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 5+.
 - Basic Git knowledge.
-- A Heroku user account: [Signup is free and instant](https://api.heroku.com/signup/devcenter).
+- A Heroku user account: [Signup is free and instant](https://signup.heroku.com/devcenter).
 
 > note
-> If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/upgrading_ruby_on_railsuby).
+> If you have questions about Ruby on Heroku, consider discussing it in the [Ruby on Heroku forums](https://discussion.heroku.com/category/ruby).
 
 ## Local workstation setup
 
