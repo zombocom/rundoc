@@ -25,7 +25,7 @@ For this guide you will need:
 
 ## Local workstation setup
 
-Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Heroku Local, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install/).
+Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local workstation. This ensures that you have access to the [Heroku command-line client](/categories/command-line), Heroku Local, and the Git revision control system. You will also need [Ruby and Rails installed](http://guides.railsgirls.com/install).
 
 Once installed, you'll have access to the `$ heroku` command from your command shell. Log in using the email address and password you used when creating your Heroku account:
 
