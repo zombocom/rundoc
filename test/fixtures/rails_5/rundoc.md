@@ -9,7 +9,7 @@ end
 ```
 
 > warning
-> Rails 5 is in beta and will likely change. This article will not be stable until Rails 5 is released.
+> Rails 5 release candidate means there may still be known bugs but the API is stable and will not change. This article will not be stable until Rails 5 is released.
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 4.x on Heroku](getting-started-with-rails4) or [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
@@ -66,16 +66,6 @@ Then move into your application directory.
 ```
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. If  you experience a problem, try reading through the entire document and then go back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
-
-## Rails 5 Beta known issues
-
-Rails 5 is still in beta. The first version, 5.0.0.beta1 has a [known issue](https://github.com/rails/rails/issues/22917) that will not work on Heroku. A [fix has been merged into master](https://github.com/rails/rails/pull/22933). You can run master by editing your Gemfile and replacing the Rails line with:
-
-```ruby
-gem 'rails', github: "rails/rails"
-```
-
-Then run `$ bundle install`. When released, 5.0.0.beta2 and beyond will have this fix. During the beta Rails 5's API is not stable and may change.
 
 ## Database
 
@@ -169,7 +159,7 @@ Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby instal
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.3.0"
+ruby "2.3.1"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -318,9 +308,7 @@ $ heroku run rake db:migrate
 
 ## Webserver
 
-By default, your app's web process runs `rails server`, which uses Webrick. This is fine for testing, but for production apps you'll want to switch to a more robust webserver. On Cedar, [we recommend Puma as the webserver](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server). Regardless of the webserver you choose, production apps should always specify the webserver explicitly in the `Procfile`.
-
-First, if not already specified, add `puma` to your application `Gemfile`:
+By default, your app's web process runs `rails server`, which uses Puma in Rails 5. If you are upgrading an app you'll need to add `puma` to your application `Gemfile`:
 
 ```ruby
 gem 'puma'
