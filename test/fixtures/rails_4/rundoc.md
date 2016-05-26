@@ -49,13 +49,16 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
-:::= $ gem install rails --no-ri --no-rdoc
+:::= $ gem install rails -v 4.2.6 --no-ri --no-rdoc
 ```
+
+Note: There may be a [more recent version of Rails](https://rubygems.org/gems/rails/versions) available, we recommend always running the latest. You may want to [run Rails 5 on Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5).
 
 Then create a new app:
 
-```term
-::: $ rails new myapp --database=postgresql
+```
+:::- $ rails _4.2.6_ new myapp --database=postgresql
+$ rails new myapp --database=postgresql
 ```
 
 Then move into your application directory.
@@ -156,7 +159,7 @@ Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby instal
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.2.0"
+ruby "2.3.1"
 ```
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
