@@ -280,8 +280,6 @@ $ heroku logs --tail
 
 ## Dyno sleeping and scaling
 
-## Dyno sleeping and scaling
-
 By default, your app is deployed on a free dyno. Free dynos will sleep after a half hour of inactivity and they can be active (receiving traffic) for no more than 18 hours a day before [going to sleep](dynos#dyno-sleeping).  If a free dyno is sleeping, and it hasn't exceeded the 18 hours, any web request will wake it. This causes a delay of a few seconds for the first request upon waking. Subsequent requests will perform normally.
 
 ```term
