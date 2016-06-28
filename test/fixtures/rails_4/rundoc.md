@@ -58,6 +58,9 @@ Then create a new app:
 
 ```
 :::- $ rails _4.2.6_ new myapp --database=postgresql
+```
+
+```term
 $ rails new myapp --database=postgresql
 ```
 
