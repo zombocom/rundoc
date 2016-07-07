@@ -7,6 +7,10 @@ Rundoc.configure do |config|
   config.filter_sensitive(email => "developer@example.com")
 end
 ```
+<!-- 
+  rundoc src:
+  https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_5/rundoc.md
+-->
 
 > warning
 > Rails 5 release candidate means there may still be known bugs but the API is stable and will not change. This article will not be stable until Rails 5 is released.
