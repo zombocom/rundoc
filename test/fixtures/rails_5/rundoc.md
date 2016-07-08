@@ -12,15 +12,12 @@ end
   https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_5/rundoc.md
 -->
 
-> warning
-> Rails 5 release candidate means there may still be known bugs but the API is stable and will not change. This article will not be stable until Rails 5 is released.
-
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 4.x on Heroku](getting-started-with-rails4) or [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
 For this guide you will need:
 
 - Basic Ruby/Rails knowledge.
-- A locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 5+.
+- A locally installed version of Ruby 2.2.0+, Rubygems, Bundler, and Rails 5+.
 - Basic Git knowledge.
 - A Heroku user account: [Signup is free and instant](https://signup.heroku.com/devcenter).
 
@@ -54,7 +51,7 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 If you are starting from an existing app, [upgrade to Rails 5](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0) before continuing. If not, a vanilla Rails 5 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 5.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
-:::= $ gem install rails --pre --no-ri --no-rdoc
+:::= $ gem install rails --no-ri --no-rdoc
 ```
 
 Then create a new app:
@@ -141,20 +138,18 @@ And visiting [http://localhost:3000](http://localhost:3000) in your browser. If 
 
 ## Heroku gems
 
-Heroku integration has previously relied on using the Rails plugin system, which has been removed from Rails 5. To enable features such as static asset serving and logging on Heroku please add `rails_12factor` gem to your `Gemfile`.
+Previous versions of Rails required you toadd a gem to your project [rails_12factor](https://github.com/heroku/rails_12factor) to enable static asset serving and logging on Heroku. If you are deploying a new application this gem is not needed. If you are upgrading an existing application you can remove this gem provided you have the apprpriate configuration in your `config/production.rb` file:
 
 ```ruby
-:::= file.append Gemfile
-gem 'rails_12factor', group: :production
+# config/production.rb
+config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
+if ENV["RAILS_LOG_TO_STDOUT"].present?
+  logger           = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+end
 ```
-
-Then run:
-
-```term
-::: $ bundle install
-```
-
-We talk more about Rails integration in our [Heroku Ruby Support](https://devcenter.heroku.com/articles/ruby-support#injected-plugins) Dev Center article.
 
 ## Specify Ruby version in app
 
@@ -239,7 +234,6 @@ Any commands after the `heroku run` will be executed on a Heroku [dyno](dynos). 
 
 ## Visit your application
 
-
 You've deployed your code to Heroku. You can now instruct Heroku to execute a process type. Heroku does this by running the associated command in a [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku.
 
 Let's ensure we have one dyno running the `web` process type:
@@ -284,15 +278,11 @@ $ heroku logs --tail
 
 ## Dyno sleeping and scaling
 
-By default, your app is deployed on a free dyno. Free dynos will sleep after a half hour of inactivity and they can be active (receiving traffic) for no more than 18 hours a day before [going to sleep](dynos#dyno-sleeping).  If a free dyno is sleeping, and it hasn't exceeded the 18 hours, any web request will wake it. This causes a delay of a few seconds for the first request upon waking. Subsequent requests will perform normally.
-
-```term
-$ heroku ps:scale web=1
-```
+By default, new applications are deployed to a free dyno. Free apps will "sleep" to conserve resources. You can find more information about this behavior by reading about [free dyno behavior](https://devcenter.heroku.com/articles/free-dyno-hours).
 
 To avoid dyno sleeping, you can upgrade to a hobby or professional dyno type as described in the [Dyno Types](dyno-types) article. For example, if you migrate your app to a professional dyno, you can easily scale it by running a command telling Heroku to execute a specific number of dynos, each running your web process type.
 
-## Console
+## Rails console
 
 Heroku allows you to run commands in a [one-off dyno](one-off-dynos) - scripts and applications that only need to be executed when needed - using the `heroku run` command. Use this to launch a Rails console process attached to your local terminal for experimenting in your app's environment:
 
@@ -301,6 +291,8 @@ $ heroku run rails console
 irb(main):001:0> puts 1+1
 2
 ```
+
+Another useful command for debugging is `$ heroku run bash` which will spin up a new dyno and give you access to a bash session.
 
 ## Rake
 
@@ -339,16 +331,22 @@ web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
 
 Note: The case of `Procfile` matters, the first letter must be uppercase.
 
-
 We recommend generating a Puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
 
+To use the Procfile locally you can use foreman.
 
-Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
+```term
+::: $ gem install foreman
+```
+
+In addition to running commands in your `Procfile` foreman can also help you manage environment variables locally through a `.env` file. Set the local `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
 
 ```term
 :::= $ echo "RACK_ENV=development" >>.env
 :::= $ echo "PORT=3000" >> .env
 ```
+
+> Note: Another alternative to using environment variables locally with a `.env` file is the [dotenv](https://github.com/bkeepers/dotenv) gem.
 
 You'll also want to add `.env` to your `.gitignore` since this is for local environment setup.
 
@@ -358,17 +356,11 @@ You'll also want to add `.env` to your `.gitignore` since this is for local envi
 ::: $ git commit -m "add .env to .gitignore"
 ```
 
-Test your Procfile locally using Foreman:
-
-```term
-::: $ gem install foreman
-```
-
-You can now start your web server by running
+Test your Procfile locally using Foreman. You can now start your web server by running:
 
 ```term
 $ foreman start
-18:24:56 web.1  | I, [2013-03-13T18:24:56.885046 #18793]  INFO -- : listening on addr=0.0.0.0:5000 fd=7
+18:24:56 web.1  | I, [2013-03-13T18:24:56.885046 #18793]  INFO -- : listening on addr=0.0.0.0:3000 fd=7
 18:24:56 web.1  | I, [2013-03-13T18:24:56.885140 #18793]  INFO -- : worker=0 spawning...
 18:24:56 web.1  | I, [2013-03-13T18:24:56.885680 #18793]  INFO -- : master process ready
 18:24:56 web.1  | I, [2013-03-13T18:24:56.886145 #18795]  INFO -- : worker=0 spawned pid=18795
@@ -400,7 +392,7 @@ $ heroku logs
 
 There are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) when deploying to Heroku. For general information on the asset pipeline please see the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails-asset-pipeline) article.
 
-The `config.assets.initialize_on_precompile` option has been removed is and not needed for Rails 5. Also, any failure in asset compilation will now cause the push to fail. For Rails 5 asset pipeline support see the [Ruby Support](https://devcenter.heroku.com/articles/ruby-support#rails-4-x-applications) page.
+The `config.assets.initialize_on_precompile` option has been removed is and not needed for Rails 5. Also, any failure in asset compilation will now cause the push to fail. For Rails 5 asset pipeline support see the [Ruby Support](https://devcenter.heroku.com/articles/ruby-support#rails-5-x-applications) page.
 
 ## Troubleshooting
 
