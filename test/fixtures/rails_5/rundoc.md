@@ -45,7 +45,7 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 
 ## Write your app
 
-> callout To run on Heroku, your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`, and have the `rails_12factor` gem in the production group of your `Gemfile`.
+> callout To run on Heroku, your app must be configured to use the Postgres database, have all dependencies declared in your `Gemfile`.
 
 
 If you are starting from an existing app, [upgrade to Rails 5](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0) before continuing. If not, a vanilla Rails 5 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 5.x using `$ rails -v`. You can get the new version of rails by running,
