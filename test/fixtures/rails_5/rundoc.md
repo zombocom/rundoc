@@ -97,8 +97,7 @@ In addition to using the `pg` gem, you'll also need to ensure the `config/databa
 The development section of your `config/database.yml` file should look something like this:
 
 ```term
-:::  $ cat config/database.yml
-:::= | $ head -n 23
+:::=  $ cat config/database.yml
 ```
 
 Be careful here. If you omit the `sql` at the end of `postgresql` in the `adapter` section, your application will not work.
