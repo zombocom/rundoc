@@ -113,13 +113,14 @@ The development section of your `config/database.yml` file should look something
 
 Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapter` section your application will not work.
 
-```term
-::: $ rails generate controller welcome
-```
-
 ## Welcome page
 
 Rails 4 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
+
+
+```term
+::: $ rails generate controller welcome
+```
 
 Next we'll add an index page.
 
