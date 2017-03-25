@@ -399,7 +399,7 @@ If you push up your app and it crashes (`heroku ps` shows state `crashed`), chec
 
 ### Runtime dependencies on development/test gems
 
-If you're missing a gem when you deploy, check your Bundler groups. Heroku builds your app without the `development` or `test` groups, and if you app depends on a gem from one of these groups to run, you should move it out of the group.
+If you're missing a gem when you deploy, check your Bundler groups. Heroku builds your app without the `development` or `test` groups, and if your app depends on a gem from one of these groups to run, you should move it out of the group.
 
 One common example is using the RSpec tasks in your `Rakefile`. If you see this in your Heroku deploy:
 

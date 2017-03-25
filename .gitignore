@@ -3,3 +3,4 @@ test/fixtures/*/tmp/
 test/fixtures/*/myapp/
 *.gem
 
+.DS_Store
