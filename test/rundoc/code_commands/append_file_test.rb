@@ -15,8 +15,8 @@ class AppendFileTest < Test::Unit::TestCase
 
         result = File.read(file)
 
-        assert_match /foo/, result
-        assert_match /bar/, result
+        assert_match(/foo/, result)
+        assert_match(/bar/, result)
 
         cc = Rundoc::CodeCommand::FileCommand::Append.new(file)
         cc << "baz"
@@ -29,14 +29,14 @@ class AppendFileTest < Test::Unit::TestCase
     end
   end
 
-    def test_appends_to_a_file_at_line_number
+  def test_appends_to_a_file_at_line_number
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
-contents = <<-CONTENTS
+        contents = <<-CONTENTS
 source 'https://rubygems.org'
 gem 'rails', '4.0.0'
-CONTENTS
+        CONTENTS
 
         file = "foo.rb"
         line = 2

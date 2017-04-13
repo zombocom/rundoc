@@ -19,4 +19,4 @@ module ::Rundoc
 end
 
 
-Rundoc.register_code_command(:rundoc, ::Rundoc::CodeCommand::RundocCommand)
+Rundoc.register_code_command(:rundoc, RundocCommand)
