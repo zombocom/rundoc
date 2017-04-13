@@ -1,5 +1,6 @@
 class Rundoc::CodeCommand::FileCommand
   class Append < Rundoc::CodeCommand
+    include FileUtil
 
     def initialize(filename)
       @filename, line = filename.split('#')
@@ -14,9 +15,9 @@ class Rundoc::CodeCommand::FileCommand
       raise "must call write in its own code section" unless env[:commands].empty?
       before = env[:before]
       if @line_number
-        env[:before] = "In file `#{@filename}`, on line #{@line_number} add:\n\n#{before}"
+        env[:before] = "In file `#{filename}`, on line #{@line_number} add:\n\n#{before}"
       else
-        env[:before] = "At the end of `#{@filename}` add:\n\n#{before}"
+        env[:before] = "At the end of `#{filename}` add:\n\n#{before}"
       end
       nil
     end
@@ -40,7 +41,7 @@ class Rundoc::CodeCommand::FileCommand
 
     def insert_contents_into_at_line(doc)
       lines = doc.lines
-      raise "Expected #{@filename} to have at least #{@line_number} but only has #{lines.count}" if lines.count < @line_number
+      raise "Expected #{filename} to have at least #{@line_number} but only has #{lines.count}" if lines.count < @line_number
       result = []
       lines.each_with_index do |line, index|
         line_number = index.next
@@ -54,19 +55,17 @@ class Rundoc::CodeCommand::FileCommand
     end
 
     def call(env = {})
-      dir = File.expand_path("../", @filename)
-      FileUtils.mkdir_p(dir)
-
-      doc = File.read(@filename)
+      mkdir_p
+      doc = File.read(filename)
       if @line_number
-        puts "Writing to: '#{@filename}' line #{@line_number} with: #{contents.inspect}"
+        puts "Writing to: '#{filename}' line #{@line_number} with: #{contents.inspect}"
         doc = insert_contents_into_at_line(doc)
       else
-        puts "Appending to file: '#{@filename}' with: #{contents.inspect}"
+        puts "Appending to file: '#{filename}' with: #{contents.inspect}"
         doc = concat_with_newline(doc, contents)
       end
 
-      File.open(@filename, "w") do |f|
+      File.open(filename, "w") do |f|
         f.write(doc)
       end
       contents
