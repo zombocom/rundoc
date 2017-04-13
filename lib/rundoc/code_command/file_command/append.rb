@@ -3,7 +3,11 @@ class Rundoc::CodeCommand::FileCommand
 
     def initialize(filename)
       @filename, line = filename.split('#')
-      @line_number    = Integer(line) if line
+      if line
+        @line_number = Integer(line)
+      else
+        @line_number = nil
+      end
     end
 
     def to_md(env)

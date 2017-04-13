@@ -21,14 +21,13 @@ class RemoveContentsTest < Test::Unit::TestCase
         @file = "foo.rb"
         `echo "#{@gemfile}" >> #{@file}`
 
-        assert_match /sqlite3/, File.read(@file)
+        assert_match(/sqlite3/, File.read(@file))
 
         cc = Rundoc::CodeCommand::FileCommand::Remove.new(@file)
         cc << "gem 'sqlite3'"
         cc.call
 
-        result = File.read(@file)
-        refute_match /sqlite3/, File.read(@file)
+        refute_match(/sqlite3/, File.read(@file))
 
         env = {}
         env[:commands] = []
