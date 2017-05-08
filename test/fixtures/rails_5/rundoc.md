@@ -10,6 +10,9 @@ end
 <!--
   rundoc src:
   https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_5/rundoc.md
+
+  Command:
+  $ bin/rundoc build --path test/fixtures/rails_5/rundoc.md
 -->
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 4.x on Heroku](getting-started-with-rails4) or [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
@@ -66,7 +69,7 @@ Then move into your application directory.
 ::: $ cd myapp
 ```
 
-> callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. If  you experience a problem, try reading through the entire document and then go back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
+> callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. If you experience a problem, try reading through the entire document and then go back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
 
 ## Database
 
@@ -137,7 +140,7 @@ And visiting [http://localhost:3000](http://localhost:3000) in your browser. If 
 
 ## Heroku gems
 
-Previous versions of Rails required you toadd a gem to your project [rails_12factor](https://github.com/heroku/rails_12factor) to enable static asset serving and logging on Heroku. If you are deploying a new application this gem is not needed. If you are upgrading an existing application you can remove this gem provided you have the apprpriate configuration in your `config/environments/production.rb` file:
+Previous versions of Rails required you to add a gem to your project [rails_12factor](https://github.com/heroku/rails_12factor) to enable static asset serving and logging on Heroku. If you are deploying a new application this gem is not needed. If you are upgrading an existing application you can remove this gem provided you have the apprpriate configuration in your `config/environments/production.rb` file:
 
 ```ruby
 # config/environments/production.rb
@@ -152,12 +155,11 @@ end
 
 ## Specify Ruby version in app
 
-
-Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`.
+Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`.
 
 ```ruby
 :::= file.append Gemfile
-ruby "2.3.1"
+ruby "2.4.1"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -332,13 +334,9 @@ Note: The case of `Procfile` matters, the first letter must be uppercase.
 
 We recommend generating a Puma config file based on [our Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
 
-To use the Procfile locally you can use foreman.
+To use the Procfile locally you can use `heroku local`.
 
-```term
-::: $ gem install foreman
-```
-
-In addition to running commands in your `Procfile` foreman can also help you manage environment variables locally through a `.env` file. Set the local `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
+In addition to running commands in your `Procfile` `heroku local` can also help you manage environment variables locally through a `.env` file. Set the local `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the environment your Heroku app will run in.
 
 ```term
 :::= $ echo "RACK_ENV=development" >>.env
@@ -358,13 +356,14 @@ You'll also want to add `.env` to your `.gitignore` since this is for local envi
 Test your Procfile locally using Foreman. You can now start your web server by running:
 
 ```term
-$ foreman start
-18:24:56 web.1  | I, [2013-03-13T18:24:56.885046 #18793]  INFO -- : listening on addr=0.0.0.0:3000 fd=7
-18:24:56 web.1  | I, [2013-03-13T18:24:56.885140 #18793]  INFO -- : worker=0 spawning...
-18:24:56 web.1  | I, [2013-03-13T18:24:56.885680 #18793]  INFO -- : master process ready
-18:24:56 web.1  | I, [2013-03-13T18:24:56.886145 #18795]  INFO -- : worker=0 spawned pid=18795
-18:24:56 web.1  | I, [2013-03-13T18:24:56.886272 #18795]  INFO -- : Refreshing Gem list
-18:24:57 web.1  | I, [2013-03-13T18:24:57.647574 #18795]  INFO -- : worker=0 ready
+$  heroku local
+[OKAY] Loaded ENV .env File as KEY=VALUE Format
+11:06:35 AM web.1   |  [18878] Puma starting in cluster mode...
+11:06:35 AM web.1   |  [18878] * Version 3.8.2 (ruby 2.4.1-p111), codename: Sassy Salamander
+11:06:35 AM web.1   |  [18878] * Min threads: 5, max threads: 5
+11:06:35 AM web.1   |  [18878] * Environment: development
+11:06:35 AM web.1   |  [18878] * Process workers: 2
+11:06:35 AM web.1   |  [18878] * Preloading application
 ```
 
 Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
@@ -409,7 +408,6 @@ Running `bundle exec rake -T` attached to terminal... up, ps.3
 rake aborted!
 no such file to load -- rspec/core/rake_task
 ```
-
 Then you've hit this problem. First, duplicate the problem locally:
 
 ```term
@@ -420,9 +418,9 @@ rake aborted!
 no such file to load -- rspec/core/rake_task
 ```
 
-Now you can fix it by making these Rake tasks conditional on the gem load. For example:
+> Note: The `--without` option on bundler is sticky. You can get rid of this option by running `bundle config --delete without`.
 
-### Rakefile
+Now you can fix it by making these Rake tasks conditional on the gem load. For example:
 
 ```ruby
 begin

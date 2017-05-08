@@ -166,8 +166,7 @@ We talk more about Rails integration on our [Ruby Support page](https://devcente
 
 ## Specify Ruby version in app
 
-
-Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.
+Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.
 
 ```ruby
 :::= file.append Gemfile
