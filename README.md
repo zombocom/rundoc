@@ -69,12 +69,11 @@ All runDOC commands are prefixed with three colons `:::` and are inclosed in a c
 command such as `$` which is an alias for `bash` commands like this:
 
     ```
-    ::: $ git init .
+    :::> $ git init .
     ```
 
 Nothing before the three colons matters. The space between the colons
 and the command is optional.
-
 
 If you don't want the command to output to your markdown document you
 can add a minus symbol `-` to the end to prevent it from being
@@ -84,13 +83,13 @@ rendered.
     :::- $ git init .
     ```
 
-Note: If all commands inside of a code block are hidden, the entire codeblock will not be rendered.
+> Note: If all commands inside of a code block are hidden, the entire codeblock will not be rendered.
 
 If you want the output of the actual command to be rendered to
-the screen you can use an equal sign so that
+the screen you can use two arrows so that:
 
     ```
-    :::= $ ls
+    :::>> $ ls
     ```
 
 This code block might generate an output something like this to your markdown doc:
@@ -103,6 +102,16 @@ This code block might generate an output something like this to your markdown do
 
 That's the syntax, let's look at different runDOC commands
 
+## Rendering Cheat Sheet
+
+An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The posions two positions are command first and result second. You can skip a trailing `-`.
+
+
+- `:::>`  (yes command, not result)
+- `:::>>` (yes command, yes result)
+- `:::-`  (not command, not result)
+- `:::->` (not command, yes result)
+
 ## Shell Commands
 
 Current Commands:
@@ -113,7 +122,7 @@ Current Commands:
 Anything you pass to `$` will be run in a shell. Any items below the command will be passed into the stdin of the bash command so:
 
     ```
-    :::= $ tail -n 2
+    :::>> $ tail -n 2
     foo
     bar
     baz
@@ -128,12 +137,12 @@ Would output:
    bahz
    ```
 
-This could be useful if you are running an interactive command such as `play new` which requires user input. For more fine grained input you'll need to use a custom repl object (will be covered later).
+This STDIN feature could be useful if you are running an interactive command such as `play new` which requires user input. For more fine grained input you'll need to use a custom repl object (will be covered later).
 
 If a shell command returns a non-zero exit status an error will be raised, if you expect a command to fail you can run it with `fail.$` keyword
 
     ```
-    :::= fail.$ cat /dev/null/foo
+    :::>> fail.$ cat /dev/null/foo
     ```
 
 Even though this command returns a non zero exit status, the contents of the command will be written since we're stating that we don't care if the command fails. This would be the output:
@@ -148,14 +157,14 @@ Some commands may be custom, for example when running `cd` you likely want to ch
 
 
     ```
-    :::= $ cd myapp/config
-    :::= $ cat database.yml
+    :::>> $ cd myapp/config
+    :::>> $ cat database.yml
     ```
 
-However this command would fall on it's face:
+However this command would fall on its face:
 
     ```
-    :::= $ cd myapp/config && cat database.yml
+    :::>> $ cd myapp/config && cat database.yml
     ```
 
 These custom commands are kept to a minimum, and for the most part behave as you would expect them to. Write your docs as you normally would and check the output frequently.
@@ -170,10 +179,10 @@ Current Commands:
 - `file.append`
 - `file.remove`
 
-Use the `filewrite` keyword followed by a filename, on the next line(s) put the contents of the file
+Use the `file.write` keyword followed by a filename, on the next line(s) put the contents of the file
 
     ```
-    ::: file.write config/routes.rb
+    :::> file.write config/routes.rb
 
     Example::Application.routes.draw do
       root        :to => "pages#index"
@@ -187,7 +196,7 @@ Use the `filewrite` keyword followed by a filename, on the next line(s) put the 
 If you wanted to change `users` to `products` you could write to the same file again.
 
     ```
-    ::: file.write config/routes.rb
+    :::> file.write config/routes.rb
     Example::Application.routes.draw do
       root        :to => "pages#index"
 
@@ -202,7 +211,7 @@ To fully delete files use bash `$` command such as `::: $ rm foo.rb`.
 To add contents to a file you can use `file.append`
 
     ```
-    :::= file.append myapp/Gemfile
+    :::>> file.append myapp/Gemfile
     gem 'pg'
     gem 'sextant', group: :development
     gem 'wicked'
@@ -212,7 +221,7 @@ To add contents to a file you can use `file.append`
 The contents of the file (in this example a file named `Gemfile`) will remain unchanged, but the contents of the `file.append` block will now appear in the bottom of the file. If you want to append the contents to a specific part of the file instead of the end of the file you can specify line number by putting a hash (`#`) then a number following it.
 
     ```
-    :::= file.append myapp/Gemfile#22
+    :::>> file.append myapp/Gemfile#22
     gem 'rails_12factor'
     ```
 This will add the `gem 'rails_12factor'` on line 22 of the file `myapp/Gemfile`. If line 22 has existing contents, they will be bumped down to line 23.
@@ -220,7 +229,7 @@ This will add the `gem 'rails_12factor'` on line 22 of the file `myapp/Gemfile`.
 Some times you may want to remove a small amount of text from an existing file. You can do this using `file.remove`, you pass in the contents you want removed:
 
     ```
-    :::= file.remove myapp/Gemfile
+    :::>> file.remove myapp/Gemfile
     gem 'sqlite3'
     ```
 
@@ -228,20 +237,19 @@ When this is run, the file `Gemfile` will be modified to not include `gem 'sqlit
 
 Note: `file.remove` currently requires a very explicit match so things like double versus single quotes, whitespace, and letter case all matter. Current best practice is to only use it for single line removals.
 
-
 ## Pipe
 
 Commands:
 - `|`
 - `pipe` (aliased `|`)
 
-Sometimes you need to need to pass data from one command to another. To do this there is a provided pipe command `|`
+Sometimes you need to need to pass data from one command to another. To do this there is a provided pipe command `|`.
 
 Let's say you want to output the first 23 lines of a file but you don't want to confuse your users with an additional pipe command in your shell line you could write something like this:
 
 ```sh
-:::  $ cat config/database.yml
-:::= | $ head -n 23
+:::>  $ cat config/database.yml
+:::>> | $ head -n 23
 ```
 
 Anything after the pipe `|` will generate a new command with the output of the previous command passed to it. The pipe command will only ouput its result, so the user will not know it was even executed.
@@ -306,10 +314,27 @@ This command `filter_sensitive` can be called multiple times with different valu
 
 This is a section for brainstorming. If it's here it's not guaranteed to get worked on, but it will be considered.
 
-- Breakpoints?
-- Better line matching for backtrace
-- `-=` command (runs command, only shows output, does not show command)
+- Seperate parsing from running. This will help for easier linting of syntax etc.
+- Cache SHAs and output of each code block. If one sha changes, re-generate all code blocks, otherwise allow a re-render without code execution. Configure a check sum for busting the cache for instance a new version of Rails is released.
+
+
 - A way to run background processes indefinitely such as `rails server`
+  - Maybe a way to truncate them after only a period of time such as grab a few lines of `heroku local`.
+
+
+    ```
+    :::> background.start(command: "rails server")
+    ```
+
+    ```
+    :::>> background.read("rails server")
+    :::> | $ head -n 23
+    :::> background.clear
+    ```
+
+
+  - Breakpoints?
+- Better line matching for backtrace
+- `-=` command (runs command, only shows output, does not show command) ?
 - An easy test syntax?
 - Screenshot tool(s) ?!?!?!?!?!?! :)
-

@@ -40,7 +40,7 @@ module Rundoc
 
     def render
       result = []
-      env = {}
+      env    = {}
       env[:commands] = []
       env[:before]   = "#{fence}#{lang}"
       env[:after]    = "#{fence}"
@@ -57,11 +57,12 @@ module Rundoc
 
         env[:commands] << { object: code_command, output: code_output, command: code_line}
 
-        if code_command.render_result?
-          result << [code_line, code_output]
-        else
-          result << code_line unless code_command.hidden?
-        end
+        tmp_result = []
+        tmp_result << code_line   if code_command.render_command?
+        tmp_result << code_output if code_command.render_result?
+
+        result << tmp_result unless code_command.hidden?
+        result
       end
 
       return "" if hidden?
@@ -112,16 +113,32 @@ module Rundoc
       command      = match[:command]
       tag          = match[:tag]
       statement    = match[:statement]
-
       code_command = Rundoc.code_command_from_keyword(command, statement)
 
       case tag
-      when /\-/
-        code_command.hidden        = true
+      when />>/ # show command, show result
+        code_command.render_command = true
+        code_command.render_result  = true
+      when /(>\-)|(>)/ # show command, not result
+        code_command.render_command = true
+        code_command.render_result  = false
+      when /\->/ # hide command, show result
+        code_command.render_command = false
+        code_command.render_result  = true
+      when /(\-)|(\-\-)/ # hide command, hide result
+        code_command.render_command = false
+        code_command.render_result  = false
+      # ========= DEPRECATED ==========
       when /\=/
-        code_command.render_result = true
+        puts "Deprecated: `:::=` is deprecated use `:::>>` instead"
+        puts "  command: #{command} #{statement}"
+        code_command.render_command = true
+        code_command.render_result  = true
       when /\s/
-        # default do nothing
+        puts "Deprecated: `:::` is deprecated use `:::>` instead"
+        puts "  command: #{command} #{statement}"
+        code_command.render_command = true
+        code_command.render_result  = false
       end
 
       @stack   << "\n" if commands.last.is_a?(Rundoc::CodeCommand)

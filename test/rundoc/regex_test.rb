@@ -100,13 +100,13 @@ RUBY
 foo
 
 ```
-:::$ mkdir
+:::>$ mkdir
 ```
 
 zoo
 
 ```
-:::$ cd ..
+:::>$ cd ..
 something
 ```
 
@@ -117,8 +117,8 @@ RUBY
 
     actual   = contents.partition(regex)
     expected = ["foo\n\n",
-                "```\n:::$ mkdir\n```\n",
-                "\nzoo\n\n```\n:::$ cd ..\nsomething\n```\n\nbar\n"]
+                "```\n:::>$ mkdir\n```\n",
+                "\nzoo\n\n```\n:::>$ cd ..\nsomething\n```\n\nbar\n"]
 
     assert_equal  expected, actual
 
@@ -137,7 +137,7 @@ RUBY
 
     contents =  <<-RUBY
 ```java
-:::= write app/controllers/Application.java
+:::>> write app/controllers/Application.java
 package controllers;
 
 import static java.util.concurrent.TimeUnit.SECONDS;

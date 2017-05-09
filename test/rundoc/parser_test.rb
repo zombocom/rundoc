@@ -10,8 +10,8 @@ class ParserTest < Test::Unit::TestCase
 sup
 
 ```
-:::  $ mkdir foo
-:::= $ ls
+:::>  $ mkdir foo
+:::>> $ ls
 ```
 
 yo
@@ -39,7 +39,7 @@ RUBY
 sup
 
 ```
-:::= write foo/code.rb
+:::>> write foo/code.rb
 a = 1 + 1
 b = a * 2
 ```
@@ -60,9 +60,9 @@ RUBY
     contents =  <<-RUBY
 
 ```
-:::= write foo/newb.rb
+:::>> write foo/newb.rb
 puts 'hello world'
-:::= $ cat foo/newb.rb
+:::>> $ cat foo/newb.rb
 ```
 RUBY
 
@@ -81,7 +81,7 @@ RUBY
 
     contents =  <<-RUBY
 ```
-:::= irb --simple-prompt
+:::>> irb --simple-prompt
 a = 3
 b = "foo" * a
 puts b

@@ -5,7 +5,7 @@ module Rundoc
     GITHUB_BLOCK       = '^(?<fence>(?<fence_char>~|`){3,})\s*?(?<lang>\w+)?\s*?\n(?<contents>.*?)^\g<fence>\g<fence_char>*\s*?\n'
     CODEBLOCK_REGEX    = /(#{GITHUB_BLOCK})/m
     COMMAND_REGEX      = ->(keyword) {
-                             /^#{keyword}(?<tag>(\s|=|-)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
+                             /^#{keyword}(?<tag>(\s|=|-|>)?(=|-|>)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
                             }
 
     attr_reader :contents, :keyword, :stack
