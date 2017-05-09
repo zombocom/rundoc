@@ -1,5 +1,7 @@
 ## Rundoc
 
+![Run DOC logo](https://www.dropbox.com/s/u354td51brynr4h/Screenshot%202017-05-09%2009.36.33.png?dl=1)
+
 ## What
 
 Write more technical content, faster and with a better consistency by using rundoc. Write in a rundoc compatible markdown format, then run your docs to generate matching projects. Instead of writing a tutorial and then building an example separately, your documentation can build the example app for you. Not only does this keep your doc writing DRY, it also enforces consistency and accuracy. If you make a typo in your docs your project won't build...you'll get early warning and be able to fix it before it has the opportunity to confuse your reader.
