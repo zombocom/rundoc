@@ -117,7 +117,7 @@ An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip
 Current Commands:
 
 - `$`
-- `fail.$
+- `fail.$`
 
 Anything you pass to `$` will be run in a shell. Any items below the command will be passed into the stdin of the bash command so:
 
