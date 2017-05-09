@@ -1,10 +1,14 @@
 module Rundoc
   class CodeCommand
-    attr_accessor :hidden, :render_result, :command, :contents, :keyword
-    alias :hidden? :hidden
+    attr_accessor :render_result, :render_command, :command, :contents, :keyword
     alias :render_result? :render_result
+    alias :render_command? :render_command
 
     def initialize(arg)
+    end
+
+    def hidden?
+      !render_command? && !render_result?
     end
 
     def not_hidden?
