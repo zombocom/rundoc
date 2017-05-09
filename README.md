@@ -1,14 +1,18 @@
-## Rundoc
+# RunDOC
 
 ![Run DOC logo](https://www.dropbox.com/s/u354td51brynr4h/Screenshot%202017-05-09%2009.36.33.png?dl=1)
 
 ## What
 
-Write more technical content, faster and with a better consistency by using rundoc. Write in a rundoc compatible markdown format, then run your docs to generate matching projects. Instead of writing a tutorial and then building an example separately, your documentation can build the example app for you. Not only does this keep your doc writing DRY, it also enforces consistency and accuracy. If you make a typo in your docs your project won't build...you'll get early warning and be able to fix it before it has the opportunity to confuse your reader.
+This library allows you to "run" your docs and embed the code as well as results back into the documentation.
 
-Think of rundoc as your ever-vigilant tech editor and writing partner.
+Write in a runDOC compatible markdown format, then run your docs to generate matching projects. Instead of writing a tutorial and then building an example separately, your documentation can build the example app for you. Not only does this keep your doc writing DRY, it also enforces consistency and accuracy. If you make a typo in your docs your project won't build...you'll get early warning and be able to fix it before it has the opportunity to confuse your reader.
 
-Once docs are run, they output a project and fully valid markdown doc (without any of the special rundoc tags). You could configure your project to be automatically pushed to github or anything else you want afterwards, check out the config section.
+Think of runDOC as your ever-vigilant tech editor and writing partner.
+
+Once docs are run, they output a project and fully valid markdown doc (without any of the special runDOC tags). You could configure your project to be automatically pushed to github or anything else you want afterwards, check out the config section.
+
+Write more technical content, faster and with a better consistency by using runDOC.
 
 ## Why
 
@@ -19,13 +23,13 @@ documentation at the same time. I enjoyed the experience but having to do both e
 While I was writing the course I dreamed of a system where the docs and the
 code could automatically stay in sync. One where if I had a typo in my tutorials, an automatic tech-editor would know and tell me. One where I couldn't accidentally skip over critical sections leaving true novices confused.
 
-Dream no more, because rundoc does just that:
+Dream no more, because runDOC does just that:
 
 Write docs, build software.
 
 ## Isn't this Overkill?
 
-No. Many new doc writers skip steps accidentally, or omit lines of code with `...` and assume their readers can follow along. Even if this is true for 80% of your users, 20% of people will become frustrated and may give up as a result. I found by including [check steps](http://schneems.com/post/60359275700/prepare-do-test-make-your-technical-writing-shine) such as running `ls` to ensure directory contents were the difference between good docs and great ones. The only problem: the output of `ls` on a Rails 4.0.0 and 4.0.1 project may be different. So the only way to ensure output is to actually run the command and copy it into your docs. With rundoc you don't need to do that. Rundoc runs the command then it can insert the output for you.
+No. Many new doc writers skip steps accidentally, or omit lines of code with `...` and assume their readers can follow along. Even if this is true for 80% of your users, 20% of people will become frustrated and may give up as a result. I found by including [check steps](http://schneems.com/post/60359275700/prepare-do-test-make-your-technical-writing-shine) such as running `ls` to ensure directory contents were the difference between good docs and great ones. The only problem: the output of `ls` on a Rails 4.0.0 and 4.0.1 project may be different. So the only way to ensure output is to actually run the command and copy it into your docs. With runDOC you don't need to do that. Rundoc runs the command then it can insert the output for you.
 
 If you don't intend on updating or revising your content, then this project is overkill. On the other hand if you're writing docs without the intent of revising them, you probably shouldn't be writing technical docs.
 
@@ -48,7 +52,7 @@ gem 'rundoc`
 Run the `rundoc build` command on any markdown file
 
 ```sh
-$ rundoc build --path rundoc.md
+$ rundoc build --path runDOC.md
 ```
 
 Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in it's own empty directory.
@@ -58,10 +62,10 @@ This will generate a project folder with your project in it, and a markdown READ
 ## Write it:
 
 Rundoc uses github flavored markdown. This means you write like normal but in your code sections
-you can add special annotations that when run through rundoc can
+you can add special annotations that when run through runDOC can
 generate a project.
 
-All rundoc commands are prefixed with three colons `:::` and are inclosed in a code block a
+All runDOC commands are prefixed with three colons `:::` and are inclosed in a code block a
 command such as `$` which is an alias for `bash` commands like this:
 
     ```
@@ -97,7 +101,7 @@ This code block might generate an output something like this to your markdown do
         Gemfile.lock  Rakefile  config    db    lib   public    test    vendor
     ```
 
-That's the syntax, let's look at different rundoc commands
+That's the syntax, let's look at different runDOC commands
 
 ## Shell Commands
 
@@ -247,7 +251,7 @@ This command is currently hacked together, and needs a refactor. Use it, but if 
 
 ## Configure
 
-You can configure your docs in your docs use the `rundoc` command
+You can configure your docs in your docs use the `runDOC` command
 
     ```
     :::- rundoc
@@ -274,7 +278,7 @@ This will eval any code you put under that line (in Ruby). If you want to run so
 
 **Project Root**
 
-By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell rundoc to output contents in `./myapp` instead.
+By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell runDOC to output contents in `./myapp` instead.
 
     ```
     :::- rundoc
