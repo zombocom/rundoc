@@ -10,9 +10,6 @@ end
 <!--
   rundoc src:
   https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_5/rundoc.md
-
-  Command:
-  $ bin/rundoc build --path test/fixtures/rails_5_beta/rundoc.md
 -->
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 4.x on Heroku](getting-started-with-rails4) or [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
