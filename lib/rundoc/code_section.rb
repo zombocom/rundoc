@@ -131,12 +131,12 @@ module Rundoc
       # ========= DEPRECATED ==========
       when /\=/
         puts "Deprecated: `:::=` is deprecated use `:::>>` instead"
-        puts "  command: #{command} #{statement}"
+        puts "  :::>> #{command} #{statement}"
         code_command.render_command = true
         code_command.render_result  = true
       when /\s/
         puts "Deprecated: `:::` is deprecated use `:::>` instead"
-        puts "  command: #{command} #{statement}"
+        puts "  :::> #{command} #{statement}"
         code_command.render_command = true
         code_command.render_result  = false
       end
