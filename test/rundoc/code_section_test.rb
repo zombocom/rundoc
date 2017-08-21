@@ -39,4 +39,96 @@ RUBY
     assert_equal contents, result
   end
 
+  def test_show_command_hide_render
+    contents = <<-RUBY
+```
+:::> $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal true,  code_command.render_command
+    assert_equal false, code_command.render_result
+
+    contents = <<-RUBY
+```
+:::>- $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal true,  code_command.render_command
+    assert_equal false, code_command.render_result
+  end
+
+  def test_show_command_show_render
+    contents = <<-RUBY
+```
+:::>> $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal true,  code_command.render_command
+    assert_equal true, code_command.render_result
+  end
+
+  def test_hide_command_hide_render
+    contents = <<-RUBY
+```
+:::- $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal false,  code_command.render_command
+    assert_equal false, code_command.render_result
+
+    contents = <<-RUBY
+```
+:::-- $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal false,  code_command.render_command
+    assert_equal false, code_command.render_result
+  end
+
+  def test_hide_command_show_render
+    contents = <<-RUBY
+```
+:::-> $ echo "foo"
+```
+RUBY
+
+    match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
+    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section.render
+
+    code_command = code_section.commands.first
+    assert_equal false,  code_command.render_command
+    assert_equal true, code_command.render_result
+  end
+
 end

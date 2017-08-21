@@ -116,16 +116,16 @@ module Rundoc
       code_command = Rundoc.code_command_from_keyword(command, statement)
 
       case tag
-      when />>/ # show command, show result
+      when /\A>>/ # show command, show result
         code_command.render_command = true
         code_command.render_result  = true
-      when /(>\-)|(>)/ # show command, not result
+      when /(\A>\-)|(\A>[^\-]?)/ # show command, not result
         code_command.render_command = true
         code_command.render_result  = false
-      when /\->/ # hide command, show result
+      when /\A\->/ # hide command, show result
         code_command.render_command = false
         code_command.render_result  = true
-      when /(\-)|(\-\-)/ # hide command, hide result
+      when /(\A\-)|(\A\-\-)/ # hide command, hide result
         code_command.render_command = false
         code_command.render_result  = false
       # ========= DEPRECATED ==========
@@ -139,6 +139,8 @@ module Rundoc
         puts "  :::> #{command} #{statement}"
         code_command.render_command = true
         code_command.render_result  = false
+      else
+        raise "Tag is invalid #{tag.inspect}"
       end
 
       @stack   << "\n" if commands.last.is_a?(Rundoc::CodeCommand)
