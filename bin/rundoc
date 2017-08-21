@@ -44,7 +44,6 @@ class RundocCLI < Thor
         Command: #{ $0 } #{$*.join(' ')}
       STOP -->
     HEREDOC
-    puts banner
 
     puts "== Running your docs"
     Dir.chdir(tmp_dir) do
