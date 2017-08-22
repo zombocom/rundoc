@@ -7,7 +7,6 @@ Rundoc.configure do |config|
   config.filter_sensitive(email => "developer@example.com")
 end
 ```
-
 <!--
   rundoc src:
   https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_4/rundoc.md
@@ -57,25 +56,29 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
-:::= $ gem install rails -v 4.2.6 --no-ri --no-rdoc
+:::>> $ gem install rails -v 4.2.9 --no-ri --no-rdoc
 ```
 
 Note: There may be a [more recent version of Rails](https://rubygems.org/gems/rails/versions) available, we recommend always running the latest. You may want to [run Rails 5 on Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5).
 
 Then create a new app:
 
-```
-:::- $ rails _4.2.6_ new myapp --database=postgresql
-```
+<!--
+ You may run into this bug when tring to use a
+ specific version of rails:
+
+ https://github.com/rubygems/rubygems/issues/1932#issuecomment-304133990
+-->
 
 ```term
 $ rails new myapp --database=postgresql
+:::- $ rails _4.2.9_ new myapp --database=postgresql
 ```
 
 Then move into your application directory.
 
 ```term
-::: $ cd myapp
+:::> $ cd myapp
 ```
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
@@ -107,8 +110,8 @@ In addition to using the `pg` gem, you'll also need to ensure the `config/databa
 The development section of your `config/database.yml` file should look something like this:
 
 ```term
-:::  $ cat config/database.yml
-:::= | $ head -n 23
+:::>  $ cat config/database.yml
+:::>> | $ head -n 23
 ```
 
 Be careful here, if you omit the `sql` at the end of `postgresql` in the `adapter` section your application will not work.
@@ -119,13 +122,13 @@ Rails 4 no longer has a static index page in production. When you're using a new
 
 
 ```term
-::: $ rails generate controller welcome
+:::> $ rails generate controller welcome
 ```
 
 Next we'll add an index page.
 
 ```html
-:::= file.write app/views/welcome/index.html.erb
+:::>> file.write app/views/welcome/index.html.erb
 <h2>Hello World</h2>
 <p>
   The time is now: <%= Time.now %>
@@ -135,7 +138,7 @@ Next we'll add an index page.
 Now we need to have Rails route to this action. We'll edit `config/routes.rb` to set the index page to our new method:
 
 ```ruby
-:::= file.append config/routes.rb#2
+:::>> file.append config/routes.rb#2
   root 'welcome#index'
 ```
 
@@ -152,14 +155,14 @@ And visiting [http://localhost:3000](http://localhost:3000) in your browser. If 
 Heroku integration has previously relied on using the Rails plugin system, which has been removed from Rails 4. To enable features such as static asset serving and logging on Heroku please add `rails_12factor` gem to your `Gemfile`.
 
 ```ruby
-:::= file.append Gemfile
+:::>> file.append Gemfile
 gem 'rails_12factor', group: :production
 ```
 
 Then run:
 
 ```term
-::: $ bundle install
+:::> $ bundle install
 ```
 
 We talk more about Rails integration on our [Ruby Support page](https://devcenter.heroku.com/articles/ruby-support#injected-plugins).
@@ -169,8 +172,8 @@ We talk more about Rails integration on our [Ruby Support page](https://devcente
 Rails 4 requires Ruby 1.9.3 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. For this guide we'll be using Ruby 2.
 
 ```ruby
-:::= file.append Gemfile
-ruby "2.3.1"
+:::>> file.append Gemfile
+ruby "2.3.4"
 ```
 
 You should also be running the same version of Ruby locally. You can verify by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -180,8 +183,8 @@ You should also be running the same version of Ruby locally. You can verify by r
 Heroku relies on [git](http://git-scm.com/), a distributed source control managment tool, for deploying your project. If your project is not already in git first verify that `git` is on your system:
 
 ```term
-::: $ git --help
-:::= | $ head -n 5
+:::> $ git --help
+:::-> | $ head -n 5
 ```
 
 If you don't see any output or get `command not found` you will need to install it on your system, verify that the [Heroku toolbelt](https://toolbelt.heroku.com/) is installed.
@@ -191,21 +194,21 @@ Once you've verified that git works, first make sure you are in your Rails app d
 The output should look like this:
 
 ```term
-:::= $ ls
+:::>> $ ls
 ```
 
 Now run these commands in your Rails app directory to initialize and commit your code to git:
 
 ```term
-::: $ git init
-::: $ git add .
-::: $ git commit -m "init"
+:::> $ git init
+:::> $ git add .
+:::> $ git commit -m "init"
 ```
 
 You can verify everything was committed correctly by running:
 
 ```term
-:::= $ git status
+:::>> $ git status
 ```
 
 Now that your application is committed to git you can deploy to Heroku.
@@ -215,13 +218,13 @@ Now that your application is committed to git you can deploy to Heroku.
 Make sure you are in the directory that contains your Rails app, then create an app on Heroku:
 
 ```term
-:::= $ heroku create
+:::>> $ heroku create
 ```
 
 You can verify that the remote was added to your project by running
 
 ```term
-:::= $ git config --list | grep heroku
+:::>> $ git config --list | grep heroku
 ```
 
 If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you may deploy your code. After you deploy your code, you will need to migrate your database, make sure it is properly scaled and use logs to debug any issues that come up.
@@ -229,7 +232,7 @@ If you see `fatal: not in a git directory` then you are likely not in the correc
 Deploy your code:
 
 ```term
-:::= $ git push heroku master
+:::>> $ git push heroku master
 ```
 
 It is always a good idea to check to see if there are any warnings or errors in the output. If everything went well you can migrate your database.
@@ -252,13 +255,13 @@ You've deployed your code to Heroku. You can now instruct Heroku to execute a pr
 Let's ensure we have one dyno running the `web` process type:
 
 ```term
-::: $ heroku ps:scale web=1
+:::> $ heroku ps:scale web=1
 ```
 
 You can check the state of the app's dynos. The `heroku ps` command lists the running dynos of your application:
 
 ```term
-:::= $ heroku ps
+:::>> $ heroku ps
 ```
 
 Here, one dyno is running.
@@ -266,7 +269,7 @@ Here, one dyno is running.
 We can now visit the app in our browser with `heroku open`.
 
 ```term
-:::= $ heroku open
+:::>> $ heroku open
 ```
 
 You should now see the "Hello World" text we inserted above.
@@ -280,7 +283,7 @@ If you run into any problems getting your app to perform properly, you will need
 You can view information about your running app using one of the [logging commands](logging), `heroku logs`:
 
 ```term
-:::= $ heroku logs
+:::>> $ heroku logs
 ```
 
 You can also get the full stream of logs by running the logs command with the `--tail` flag option like this:
@@ -324,14 +327,14 @@ By default, your app's web process runs `rails server`, which uses Webrick. This
 First, add Puma to your application `Gemfile`:
 
 ```ruby
-:::= file.append Gemfile
+:::>> file.append Gemfile
 gem 'puma'
 ```
 
 Then run
 
 ```term
-::: $ bundle install
+:::> $ bundle install
 ```
 
 Now you are ready to configure your app to use Puma. For this tutorial we will use the default settings of Puma, but we recommend generating a `config/puma.rb` file and reading more about configuring your application for maximum performance by [reading the Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server)
@@ -343,7 +346,7 @@ Finally you will need to tell Heroku how to run your Rails app by creating a `Pr
 Change the command used to launch your web process by creating a file called [Procfile](procfile) and entering this:
 
 ```
-:::= file.write Procfile
+:::>> file.write Procfile
 web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
 ```
 
@@ -356,22 +359,22 @@ We recommend generating a puma config file based on [our Puma documentation](htt
 Set the `RACK_ENV` to development in your environment and a `PORT` to connect to. Before pushing to Heroku you'll want to test with the `RACK_ENV` set to production since this is the enviroment your Heroku app will run in.
 
 ```term
-:::= $ echo "RACK_ENV=development" >>.env
-:::= $ echo "PORT=3000" >> .env
+:::>> $ echo "RACK_ENV=development" >>.env
+:::>> $ echo "PORT=3000" >> .env
 ```
 
 You'll also want to add `.env` to your `.gitignore` since this is for local enviroment setup.
 
 ```term
-::: $ echo ".env" >> .gitignore
-::: $ git add .gitignore
-::: $ git commit -m "add .env to .gitignore"
+:::> $ echo ".env" >> .gitignore
+:::> $ git add .gitignore
+:::> $ git commit -m "add .env to .gitignore"
 ```
 
 Test your Procfile locally using Foreman:
 
 ```term
-::: $ gem install foreman
+:::> $ gem install foreman
 ```
 
 You can now start your web server by running
@@ -389,15 +392,15 @@ $ foreman start
 Looks good, so press Ctrl-C to exit and you can deploy your changes to Heroku:
 
 ```term
-::: $ git add .
-::: $ git commit -m "use puma via procfile"
-::: $ git push heroku master
+:::> $ git add .
+:::> $ git commit -m "use puma via procfile"
+:::> $ git push heroku master
 ```
 
 Check `ps`, you'll see the web process uses your new command specifying Puma as the web server
 
 ```term
-:::= $ heroku ps
+:::>> $ heroku ps
 ```
 
 The logs also reflect that we are now using Puma:
