@@ -1,6 +1,6 @@
 # RunDOC
 
-![Run DOC logo](https://www.dropbox.com/s/u354td51brynr4h/Screenshot%202017-05-09%2009.36.33.png?dl=1)
+![](https://www.dropbox.com/s/u354td51brynr4h/Screenshot%202017-05-09%2009.36.33.png?dl=1)
 
 ## What
 
