@@ -55,7 +55,7 @@ Run the `rundoc build` command on any markdown file
 $ rundoc build --path runDOC.md
 ```
 
-Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in it's own empty directory.
+Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
 
