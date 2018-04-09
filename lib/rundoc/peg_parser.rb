@@ -74,7 +74,6 @@ module Rundoc
     }
 
     rule(:named_args => subtree(:na)) {
-
       (na.is_a?(Array) ? na : [ na ]).each_with_object({}) { |element, hash|
         key = element[:key_value][:key].to_sym
         val = element[:key_value][:val]

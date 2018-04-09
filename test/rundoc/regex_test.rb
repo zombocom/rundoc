@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RegexTest < Test::Unit::TestCase
+class RegexTest < Minitest::Test
 
   def setup
   end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CodeSectionTest < Test::Unit::TestCase
+class CodeSectionTest < Minitest::Test
 
   def setup
   end

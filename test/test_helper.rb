@@ -4,7 +4,7 @@ Bundler.require
 
 
 require 'rundoc'
-require 'test/unit'
+require "minitest/autorun"
 require "mocha/setup"
 require 'tmpdir'
 

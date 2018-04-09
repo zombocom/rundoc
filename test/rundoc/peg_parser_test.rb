@@ -1,5 +1,4 @@
 require 'test_helper'
-require "minitest/autorun"
 require 'parslet/convenience'
 
 class PegParserTest < Minitest::Test

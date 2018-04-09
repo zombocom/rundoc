@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PipeTest < Test::Unit::TestCase
+class PipeTest < Minitest::Test
 
   def test_pipe
     pipe_cmd = "tail -n 2"

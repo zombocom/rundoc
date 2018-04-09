@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ParserTest < Test::Unit::TestCase
+class ParserTest < Minitest::Test
 
   def setup
   end
