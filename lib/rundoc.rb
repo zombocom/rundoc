@@ -74,3 +74,4 @@ end
 require 'rundoc/parser'
 require 'rundoc/code_section'
 require 'rundoc/code_command'
+require 'rundoc/peg_parser'
