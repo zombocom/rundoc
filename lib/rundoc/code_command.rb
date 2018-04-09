@@ -1,6 +1,11 @@
 module Rundoc
+  # Generic CodeCommand class to be inherited
+  #
   class CodeCommand
-    attr_accessor :render_result, :render_command, :command, :contents, :keyword
+    attr_accessor :render_result, :render_command,
+                  :command, :contents, :keyword,
+                  :original_args
+
     alias :render_result? :render_result
     alias :render_command? :render_command
 

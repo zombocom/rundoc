@@ -6,9 +6,9 @@ module Rundoc
     rule(:spaces?) { spaces.maybe }
     rule(:comma) { spaces? >> str(',') >> spaces? }
     rule(:digit) { match('[0-9]') }
-    rule(:single_string) {
+    rule(:lparen)     { str('(') >> spaces? }
+    rule(:rparen)     { str(')') >> spaces? }
 
-    }
     rule(:singlequote_string) {
       str("'") >> (
         str("'").absnt? >> any
@@ -60,6 +60,30 @@ module Rundoc
       (key_value >> (comma >> key_value).repeat).maybe.as(:named_args) >>
       spaces?
     }
+
+    rule(:args) {
+      named_args
+    }
+
+    rule(:funcall) {
+      match('[^ \(\)]').repeat(1).as(:funcall)
+    }
+
+    rule(:parens_method) {
+      funcall >> lparen >>
+      args.as(:args) >>
+      rparen
+    }
+
+    rule(:seattle_method) {
+      funcall >> spaces >>
+      args.as(:args) >>
+      spaces?
+    }
+
+    rule(:method_call) {
+      (parens_method | seattle_method).as(:method_call)
+    }
   end
 end
 
@@ -79,6 +103,12 @@ module Rundoc
         val = element[:key_value][:val]
         hash[key] = val
       }
+    }
+
+    rule(method_call: subtree(:mc)) {
+      keyword = mc[:funcall].to_sym
+      args    = mc[:args]
+      Rundoc.code_command_from_keyword(keyword, args)
     }
   end
 end

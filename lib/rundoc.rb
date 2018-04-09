@@ -9,6 +9,7 @@ module Rundoc
     klass      = code_command(keyword.to_sym) || Rundoc::CodeCommand::NoSuchCommand
     cc         = klass.new(args)
     cc.keyword = keyword
+    cc.original_args = args
     cc
   end
 
