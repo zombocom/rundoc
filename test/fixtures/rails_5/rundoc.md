@@ -17,6 +17,10 @@ end
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 4.x](getting-started-with-rails4) or [Rails 3.x](getting-started-with-rails3).
 
+```
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.5.1'"
+```
+
 For this guide you will need:
 
 - Basic familiarity with Ruby/Rails and Git
