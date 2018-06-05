@@ -2,12 +2,12 @@ require 'parslet'
 
 module Rundoc
   class PegParser < Parslet::Parser
-    rule(:spaces) { match('\s').repeat(1) }
+    rule(:spaces)  { match('\s').repeat(1) }
     rule(:spaces?) { spaces.maybe }
-    rule(:comma) { spaces? >> str(',') >> spaces? }
-    rule(:digit) { match('[0-9]') }
-    rule(:lparen)     { str('(') >> spaces? }
-    rule(:rparen)     { str(')') >> spaces? }
+    rule(:comma)   { spaces? >> str(',') >> spaces? }
+    rule(:digit)   { match('[0-9]') }
+    rule(:lparen)  { str('(') >> spaces? }
+    rule(:rparen)  { str(')') >> spaces? }
 
     rule(:singlequote_string) {
       str("'") >> (
@@ -44,29 +44,34 @@ module Rundoc
     }
 
     rule(:key) {
-      match['[^:\s]'].repeat
+      spaces? >> (
+        str(':').absent? >> match('\s').absent? >> any
+      ).repeat.as(:key) >> str(':') >> spaces?
     }
 
     rule(:key_value) {
       (
-         key.as(:key) >> spaces? >>
-         str(':') >> spaces? >>
-         value.as(:val)
-      ).as(:key_value)
+        key >> value.as(:val)
+      ).as(:key_value) >> spaces?
     }
 
     rule(:named_args) {
-      spaces? >>
-      (key_value >> (comma >> key_value).repeat).maybe.as(:named_args) >>
+      spaces? >> (
+        key_value >>  (comma >> key_value).repeat
+      ).as(:named_args) >>
       spaces?
     }
 
+    rule(:unquoted_string) {
+      match['[^\n\'\"]'].repeat.as(:string)
+    }
+
     rule(:args) {
-      named_args
+      named_args | string | unquoted_string
     }
 
     rule(:funcall) {
-      match('[^ \(\)]').repeat(1).as(:funcall)
+      spaces? >> match('[^ \(\)]').repeat(1).as(:funcall)
     }
 
     rule(:parens_method) {
@@ -84,15 +89,30 @@ module Rundoc
     rule(:method_call) {
       (parens_method | seattle_method).as(:method_call)
     }
+
+    rule(:visability) {
+      (
+        match('>|-').as(:vis_command) >> match('>|-').as(:vis_result)
+      ).as(:visability)
+    }
+
+    rule(:command) {
+      (
+        match(/\A:/) >> str('::') >>
+        visability.as(:cmd_visability) >> spaces? >> method_call.as(:cmd_method_call)
+      ).as(:command)
+    }
   end
 end
 
 
 module Rundoc
   class PegTransformer < Parslet::Transform
-    rule(:string => simple(:st)) {
-      st.to_s
-    }
+    rule(nill:   simple(:nu)) { nil }
+    rule(true:   simple(:tr)) { true }
+    rule(false:  simple(:fa)) { false }
+    rule(string: simple(:st)) { st.to_s }
+
     rule(:number => simple(:nb)) {
       nb.match(/[eE\.]/) ? Float(nb) : Integer(nb)
     }
@@ -110,5 +130,83 @@ module Rundoc
       args    = mc[:args]
       Rundoc.code_command_from_keyword(keyword, args)
     }
+
+    class Visability
+      attr_reader :command, :result
+      alias :command? :command
+      alias :result? :result
+      def initialize(command:, result:)
+        @command = command
+        @result  = result
+      end
+    end
+
+    rule(:visability => {vis_command: simple(:command), vis_result: simple(:result)}) {
+      visability.new(
+        command: command.to_s == '>'.freeze,
+        result:  result.to_s  == '>'.freeze
+      )
+    }
+
+    rule(visability: simple(:v), method_call: simple(:mc)) {
+      puts "====== compound match"
+      puts v
+    }
+
+    rule(command: subtree(:c)) {
+      puts "==== command"
+      puts c.inspect
+    }
   end
 end
+
+
+class FooTransformer < Parslet::Transform
+  class Visability
+    attr_reader :command, :result
+    def initialize(command:, result:)
+      @command = command
+      @result  = result
+    end
+  end
+
+  class MethodCall
+    attr_reader :keyword, :args
+    def initialize(keyword:, args:)
+      @keyword = keyword
+      @args  = args
+    end
+  end
+
+  rule(:visability => {vis_command: simple(:command), vis_result: simple(:result)}) {
+    puts "---"
+    Visability.new(command: command.to_s == '>'.freeze, result:  result.to_s  == '>'.freeze)
+  }
+
+  rule(method_call: subtree(:mc)) {
+    MethodCall.new(keyword: mc[:funcall].to_sym, args: mc[:args])
+  }
+
+  # rule(visability: subtree(:blerg)) {
+  #   # raise "Called"
+  # }
+end
+
+puts "=="
+transformer = FooTransformer.new
+vis = {:visability=>{:vis_command => ">", :vis_result => ">"}}
+puts transformer.apply(vis).inspect
+# => #<FooTransformer::visability:0x00007fb81a8ac418 @command=true, @result=true>
+
+method_call = {:method_call=>{:funcall=>"$", :args=>"cat foo.rb"}}
+puts transformer.apply(method_call).inspect
+# => #<FooTransformer::MethodCall:0x00007fd0dd04e970 @keyword="$", @args="cat foo.rb">
+
+compound = {}
+compound[:cmd_visability]  = vis
+compound[:cmd_method_call] = method_call
+puts compound
+# => {:visability=>{:vis_command=>">", :vis_result=>">"}, :method_call=>{:funcall=>"$", :args=>"cat foo.rb"}}
+puts transformer.apply(compound).inspect
+# => Nothing matched
+
