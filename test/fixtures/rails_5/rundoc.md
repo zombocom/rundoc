@@ -132,6 +132,7 @@ And visiting [http://localhost:3000](http://localhost:3000) in your browser. If 
 
 Previous versions of Rails required you to add a gem to your project [rails_12factor](https://github.com/heroku/rails_12factor) to enable static asset serving and logging on Heroku. If you are deploying a new application, this gem is not needed. If you are upgrading an existing application, you can remove this gem provided you have the apprpriate configuration in your `config/environments/production.rb` file:
 
+
 ```ruby
 # config/environments/production.rb
 config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
