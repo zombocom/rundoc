@@ -150,7 +150,7 @@ Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby instal
 
 ```ruby
 :::>> file.append Gemfile
-ruby "2.4.1"
+ruby "2.5.1"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -350,7 +350,7 @@ Test your Procfile locally using Foreman. You can now start your web server by r
 $ heroku local
 [OKAY] Loaded ENV .env File as KEY=VALUE Format
 11:06:35 AM web.1   |  [18878] Puma starting in cluster mode...
-11:06:35 AM web.1   |  [18878] * Version 3.8.2 (ruby 2.4.1-p111), codename: Sassy Salamander
+11:06:35 AM web.1   |  [18878] * Version 3.8.2 (ruby 2.5.1-p111), codename: Sassy Salamander
 11:06:35 AM web.1   |  [18878] * Min threads: 5, max threads: 5
 11:06:35 AM web.1   |  [18878] * Environment: development
 11:06:35 AM web.1   |  [18878] * Process workers: 2
