@@ -426,7 +426,7 @@ Confirm it works locally, then push to Heroku.
 
 ## Next steps
 
-Congratluations! You have deployed your first Rails 5 application to Heroku. Here's some recommended reading:
+Congratulations! You have deployed your first Rails 5 application to Heroku. Here's some recommended reading:
 
 * Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
 * The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.
