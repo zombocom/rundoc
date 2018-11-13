@@ -10,7 +10,7 @@ class PegParserTest < Minitest::Test
     input = %Q{"hello world"}
     parser = Rundoc::PegParser.new.string
     tree = parser.parse_with_debug(input)
-    expected = {:string=>"hello world"}
+    expected = {:string => "hello world"}
     assert_equal expected, tree
 
     actual = @transformer.apply(tree)
@@ -30,7 +30,6 @@ class PegParserTest < Minitest::Test
     input = %Q{sup(foo: 'bar')}
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
-    puts tree
 
     actual = @transformer.apply(tree)
     assert_equal :sup, actual.keyword
@@ -122,9 +121,34 @@ class PegParserTest < Minitest::Test
     parser = Rundoc::PegParser.new.command
     tree = parser.parse_with_debug(input)
 
-    puts tree.inspect
     actual = @transformer.apply(tree)
     assert_equal :"$", actual.keyword
     assert_equal("cat foo.rb", actual.original_args)
   end
+
+  def test_command_with_space
+    input = String.new
+    input << ":::>> $ cat foo.rb\n"
+    input << "hello"
+
+    parser = Rundoc::PegParser.new.command_with_space
+    tree = parser.parse_with_debug(input)
+
+    puts tree.inspect
+
+    actual = @transformer.apply(tree)
+    assert_equal :"$", actual.keyword
+    assert_equal("cat foo.rb", actual.original_args)
+  end
+
+#   def test_multiple_commands
+#     input = %Q{
+# :::>> $ cat foo.rb
+# hello
+# :::>> $ cat bar.rb
+# }
+#     parser = Rundoc::PegParser.new.multiple_commands
+#     tree = parser.parse_with_debug(input)
+
+#   end
 end
