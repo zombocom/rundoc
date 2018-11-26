@@ -126,20 +126,37 @@ class PegParserTest < Minitest::Test
     assert_equal("cat foo.rb", actual.original_args)
   end
 
-  def test_command_with_space
+  def test_command_with_stdin
     input = String.new
-    input << ":::>> $ cat foo.rb\n"
-    input << "hello"
+    input << ":::>> file.write hello.txt\n"
+    input << "world\n"
 
-    parser = Rundoc::PegParser.new.command_with_space
+    parser = Rundoc::PegParser.new.command_with_stdin
     tree = parser.parse_with_debug(input)
 
-    puts tree.inspect
-
     actual = @transformer.apply(tree)
-    assert_equal :"$", actual.keyword
-    assert_equal("cat foo.rb", actual.original_args)
+    assert_equal :"file.write", actual.keyword
+    assert_equal("hello.txt", actual.original_args)
+    assert_equal("world\n", actual.contents)
   end
+
+  def test_multiple_commands
+    input = String.new
+    input << ":::>> file.write hello.txt\n"
+    input << "world\n"
+    input << ":::>> file.write cinco.txt\n"
+    input << "dog\n"
+
+    parser = Rundoc::PegParser.new.multiple_commands
+    tree = parser.parse_with_debug(input)
+
+    puts tree
+    actual = @transformer.apply(tree)
+    assert_equal :"file.write", actual.keyword
+    assert_equal("hello.txt", actual.original_args)
+    assert_equal("world\n", actual.contents)
+  end
+
 
 #   def test_multiple_commands
 #     input = %Q{

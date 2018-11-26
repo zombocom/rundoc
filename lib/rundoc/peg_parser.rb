@@ -96,23 +96,25 @@ module Rundoc
       ).as(:visability)
     }
 
+    rule(:start_command) {
+      match(/\A:/) >> str('::')
+    }
+
     # :::>> $ cat foo.rb
     rule(:command) {
       (
-        match(/\A:/) >> str('::') >>
+        start_command >>
         visability.as(:cmd_visability) >> spaces? >>
         method_call.as(:cmd_method_call)
       ).as(:command)
     }
 
-    rule(:command_with_space) {
-      command >> any.maybe
+    rule(:command_with_stdin) {
+      command >> (start_command.absent? >> any).repeat.as(:stdin)
     }
 
     rule(:multiple_commands) {
-      match("\n").maybe >>
-      command.repeat >>
-      match("\n").maybe
+      command_with_stdin.repeat
     }
   end
 end
@@ -173,6 +175,11 @@ module Rundoc
     }
 
     rule(command: simple(:code_command)) {
+      code_command
+    }
+
+    rule(command: simple(:code_command), stdin: simple(:str)) {
+      code_command << str
       code_command
     }
   end
