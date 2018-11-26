@@ -8,6 +8,7 @@ module Rundoc
     rule(:digit)   { match('[0-9]') }
     rule(:lparen)  { str('(') >> spaces? }
     rule(:rparen)  { str(')') >> spaces? }
+    rule(:newline)     { str("\r").maybe >> str("\n") }
 
     rule(:singlequote_string) {
       str("'") >> (
@@ -82,20 +83,24 @@ module Rundoc
 
     rule(:seattle_method) {
       funcall >> spaces >>
-      args.as(:args) >>
-      spaces?
+      args.as(:args)
     }
 
     rule(:method_call) {
       (parens_method | seattle_method).as(:method_call)
     }
 
+    # >>
+    # >-
+    # ->
+    # --
     rule(:visability) {
       (
         match('>|-').as(:vis_command) >> match('>|-').as(:vis_result)
       ).as(:visability)
     }
 
+    # :::
     rule(:start_command) {
       match(/\A:/) >> str('::')
     }
@@ -105,16 +110,18 @@ module Rundoc
       (
         start_command >>
         visability.as(:cmd_visability) >> spaces? >>
-        method_call.as(:cmd_method_call)
+        method_call.as(:cmd_method_call) >> newline.maybe
       ).as(:command)
     }
 
     rule(:command_with_stdin) {
-      command >> (start_command.absent? >> any).repeat.as(:stdin)
+      command >>
+        (start_command.absent? >> any).repeat(1).as(:stdin) |
+        command
     }
 
     rule(:multiple_commands) {
-      command_with_stdin.repeat
+      (command_with_stdin | command).repeat
     }
   end
 end
