@@ -175,15 +175,52 @@ class PegParserTest < Minitest::Test
     assert_equal("\n\n\n  river\n", actual.last.contents)
   end
 
+  def test_multiple_commands_with_fence
+    input = String.new
+    input << "```\n"
+    input << ":::>> file.write hello.txt\n"
+    input << "world\n"
+    input << "```\n"
 
-#   def test_multiple_commands
-#     input = %Q{
-# :::>> $ cat foo.rb
-# hello
-# :::>> $ cat bar.rb
-# }
-#     parser = Rundoc::PegParser.new.multiple_commands
-#     tree = parser.parse_with_debug(input)
+    parser = Rundoc::PegParser.new.fenced_commands
+    tree = parser.parse_with_debug(input)
 
-#   end
+    actual = @transformer.apply(tree)
+
+    assert_equal :"file.write", actual.first.keyword
+    assert_equal("hello.txt", actual.first.original_args)
+    assert_equal("world\n", actual.first.contents)
+  end
+
+  def test_raw
+    input = String.new
+    input << "hello.txt\n"
+    input << "world\n"
+    input << ":::>> $ cd foo"
+
+    parser = Rundoc::PegParser.new.raw_code
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+
+    assert_equal "hello.txt\nworld\n", actual.first.contents
+    assert_equal :"$", actual.last.keyword
+    assert_equal("cd foo", actual.last.original_args)
+  end
+
+
+  def test_foo
+    input = %Q{:::>- $ git commit -m "init"\n}
+    parser = Rundoc::PegParser.new.code_block
+    tree = parser.parse_with_debug(input)
+
+    puts tree
+
+    actual = @transformer.apply(tree)
+
+    puts actual.inspect
+
+    assert_equal :"$", actual.last.keyword
+    assert_equal('git commit -m "init"', actual.last.original_args)
+  end
 end

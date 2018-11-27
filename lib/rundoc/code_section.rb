@@ -82,83 +82,28 @@ module Rundoc
       commands.map(&:not_hidden?).detect {|c| c }
     end
 
-    def command_regex
-      COMMAND_REGEX.call(keyword)
-    end
-
-    def add_code(match, line)
-      add_match_to_code_command(match, commands)
-      check_parse_error(line, code)
-    end
-
-    def add_contents(line)
-      if commands.empty?
-        @stack << line
-      else
-        commands.last << line
-      end
-    end
-
     def parse_code_command
-      code.lines.each do |line|
-        if match = line.match(command_regex)
-          add_code(match, line)
-        else
-          add_contents(line)
-        end
+      parser = Rundoc::PegParser.new.code_block
+      tree = parser.parse(@code)
+      actual = Rundoc::PegTransformer.new.apply(tree)
+      actual = [actual] unless actual.is_a?(Array)
+      actual.each do |code_command|
+        @stack   << "\n" if commands.last.is_a?(Rundoc::CodeCommand)
+        @stack   << code_command
+        commands << code_command
       end
     end
 
-    def add_match_to_code_command(match, commands)
-      command      = match[:command]
-      tag          = match[:tag]
-      statement    = match[:statement]
-      code_command = Rundoc.code_command_from_keyword(command, statement)
-
-      case tag
-      when /\A>>/ # show command, show result
-        code_command.render_command = true
-        code_command.render_result  = true
-      when /(\A>\-)|(\A>[^\-]?)/ # show command, not result
-        code_command.render_command = true
-        code_command.render_result  = false
-      when /\A\->/ # hide command, show result
-        code_command.render_command = false
-        code_command.render_result  = true
-      when /(\A\-)|(\A\-\-)/ # hide command, hide result
-        code_command.render_command = false
-        code_command.render_result  = false
-      # ========= DEPRECATED ==========
-      when /\=/
-        puts "Deprecated: `:::=` is deprecated use `:::>>` instead"
-        puts "  :::>> #{command} #{statement}"
-        code_command.render_command = true
-        code_command.render_result  = true
-      when /\s/
-        puts "Deprecated: `:::` is deprecated use `:::>` instead"
-        puts "  :::> #{command} #{statement}"
-        code_command.render_command = true
-        code_command.render_result  = false
-      else
-        raise "Tag is invalid #{tag.inspect}"
-      end
-
-      @stack   << "\n" if commands.last.is_a?(Rundoc::CodeCommand)
-      @stack   << code_command
-      commands << code_command
-      code_command
-    end
-
-    def check_parse_error(command, code_block)
-      return unless code_command = @stack.last
-      return unless code_command.is_a?(Rundoc::CodeCommand::NoSuchCommand)
-      @original.lines.each_with_index do |line, index|
-        next unless line == command
-        raise ParseError.new(keyword:     code_command.keyword,
-                             block:       code_block,
-                             command:     command,
-                             line_number: index.next)
-      end
-    end
+    # def check_parse_error(command, code_block)
+    #   return unless code_command = @stack.last
+    #   return unless code_command.is_a?(Rundoc::CodeCommand::NoSuchCommand)
+    #   @original.lines.each_with_index do |line, index|
+    #     next unless line == command
+    #     raise ParseError.new(keyword:     code_command.keyword,
+    #                          block:       code_block,
+    #                          command:     command,
+    #                          line_number: index.next)
+    #   end
+    # end
   end
 end

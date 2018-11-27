@@ -64,7 +64,7 @@ module Rundoc
     }
 
     rule(:unquoted_string) {
-      match['[^\n\'\"]'].repeat.as(:string)
+      (any.repeat(1)).as(:string) #>> newline
     }
 
     rule(:args) {
@@ -114,14 +114,46 @@ module Rundoc
       ).as(:command)
     }
 
+    # :::>> file.write hello.txt
+    # world
     rule(:command_with_stdin) {
       command >>
-        (start_command.absent? >> any).repeat(1).as(:stdin) |
+        (
+          start_command.absent? >>
+          code_fence.absent? >>
+          any
+        ).repeat(1).as(:stdin) |
         command
     }
 
+
+    # :::>> file.write hello.txt
+    # world
+    # :::>> file.write foo.txt
+    # bar
     rule(:multiple_commands) {
       (command_with_stdin | command).repeat
+    }
+
+    rule(:code_fence) {
+      match(/\A`/) >> str("``")
+    }
+
+    rule(:fenced_commands) {
+      code_fence >>
+        match('\S').repeat >>
+        newline >>
+      multiple_commands >>
+      code_fence >> newline
+    }
+
+    rule(:raw_code) {
+      (command.absent? >> any).repeat(1).as(:raw_code) >>
+      multiple_commands.maybe
+    }
+
+    rule(:code_block) {
+      raw_code | multiple_commands
     }
   end
 end
@@ -164,7 +196,7 @@ module Rundoc
 
     rule(:visability => {
             vis_command: simple(:command),
-            vis_result: simple(:result)
+            vis_result:  simple(:result)
         }) {
       Visability.new(
         command: command.to_s == '>'.freeze,
@@ -173,8 +205,8 @@ module Rundoc
     }
 
     rule(
-      cmd_visability: simple(:cmd_vis),    # Visibility
-      cmd_method_call: simple(:code_command) # Rundoc::CodeCommand
+      cmd_visability: simple(:cmd_vis),      # Visibility#new
+      cmd_method_call: simple(:code_command) # Rundoc::CodeCommand#new
         ) {
       code_command.render_command = cmd_vis.command?
       code_command.render_result  = cmd_vis.result?
@@ -189,56 +221,17 @@ module Rundoc
       code_command << str
       code_command
     }
+
+    # The lines before a CodeCommand are rendered
+    # without running any code
+    rule(raw_code: simple(:raw_code)) {
+      CodeCommand::Raw.new(raw_code)
+    }
+
+    # Sometimes
+    rule(raw_code: sequence(:raw_code)) {
+      hidden = raw_code.nil? || raw_code.empty?
+      CodeCommand::Raw.new(raw_code, visible: !hidden)
+    }
   end
 end
-
-
-# class FooTransformer < Parslet::Transform
-#   class Visability
-#     attr_reader :command, :result
-#     def initialize(command:, result:)
-#       @command = command
-#       @result  = result
-#     end
-#   end
-
-#   class MethodCall
-#     attr_reader :keyword, :args
-#     def initialize(keyword:, args:)
-#       @keyword = keyword
-#       @args  = args
-#     end
-#   end
-
-#   rule(:visability => {vis_command: simple(:command), vis_result: simple(:result)}) {
-#     puts "---"
-#     Visability.new(command: command.to_s == '>'.freeze, result:  result.to_s  == '>'.freeze)
-#   }
-
-#   rule(method_call: subtree(:mc)) {
-#     MethodCall.new(keyword: mc[:funcall].to_sym, args: mc[:args])
-#   }
-
-#   # rule(visability: subtree(:blerg)) {
-#   #   # raise "Called"
-#   # }
-# end
-
-# puts "=="
-# transformer = FooTransformer.new
-# vis = {:visability=>{:vis_command => ">", :vis_result => ">"}}
-# puts transformer.apply(vis).inspect
-# # => #<FooTransformer::visability:0x00007fb81a8ac418 @command=true, @result=true>
-
-# method_call = {:method_call=>{:funcall=>"$", :args=>"cat foo.rb"}}
-# puts transformer.apply(method_call).inspect
-# # => #<FooTransformer::MethodCall:0x00007fd0dd04e970 @keyword="$", @args="cat foo.rb">
-
-# compound = {}
-# compound[:cmd_visability]  = vis
-# compound[:cmd_method_call] = method_call
-# puts compound
-# # => {:visability=>{:vis_command=>">", :vis_result=>">"}, :method_call=>{:funcall=>"$", :args=>"cat foo.rb"}}
-# puts transformer.apply(compound).inspect
-# # => Nothing matched
-

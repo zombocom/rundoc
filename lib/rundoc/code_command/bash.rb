@@ -43,7 +43,7 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
       result = sanitize_escape_chars io.read
     end
     unless $?.success?
-      raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.include?("fail")
+      raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.to_s.include?("fail")
     end
     return result
   end
