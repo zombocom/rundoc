@@ -96,7 +96,7 @@ module Rundoc
     # --
     rule(:visability) {
       (
-        match('>|-').as(:vis_command) >> match('>|-').as(:vis_result)
+        match('>|-').maybe.as(:vis_command) >> match('>|-').maybe.as(:vis_result)
       ).as(:visability)
     }
 
@@ -194,10 +194,27 @@ module Rundoc
       end
     end
 
+    class TransformError < ::StandardError
+      attr_reader :line_and_column
+      def initialize(message: , line_and_column:)
+        @line_and_column = line_and_column || [1, 1]
+        super message
+      end
+    end
+
     rule(:visability => {
             vis_command: simple(:command),
             vis_result:  simple(:result)
         }) {
+      if result.nil? || command.nil?
+        line_and_column = command&.line_and_column
+        line_and_column ||= result&.line_and_column
+
+        message = +""
+        message << "You attempted to use a command that does not begin with two visibility indicators. Please replace: "
+        message << "`:::#{command}#{result}` with `:::#{command || '-'}#{result || '-'}`"
+        raise TransformError.new(message: message, line_and_column: line_and_column)
+      end
       Visability.new(
         command: command.to_s == '>'.freeze,
         result:  result.to_s  == '>'.freeze

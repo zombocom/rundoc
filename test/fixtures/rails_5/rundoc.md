@@ -1,5 +1,5 @@
 ```
-:::- rundoc
+:::-- rundoc
 email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`
 
 Rundoc.configure do |config|

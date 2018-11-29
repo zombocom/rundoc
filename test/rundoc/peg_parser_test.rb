@@ -209,7 +209,7 @@ class PegParserTest < Minitest::Test
   end
 
 
-  def test_foo
+  def test_quotes_in_shell_commands
     input = %Q{:::>- $ git commit -m "init"\n}
     parser = Rundoc::PegParser.new.code_block
     tree = parser.parse_with_debug(input)
@@ -219,4 +219,16 @@ class PegParserTest < Minitest::Test
     assert_equal :"$", actual.last.keyword
     assert_equal('git commit -m "init"', actual.last.original_args)
   end
+
+  def test_raises_on_syntax
+    input = %Q{:::> $ git commit -m "init"\n}
+    assert_raises(Rundoc::PegTransformer::TransformError) do
+      parser = Rundoc::PegParser.new.code_block
+      tree = parser.parse_with_debug(input)
+
+      actual = @transformer.apply(tree)
+    end
+  end
+
+
 end
