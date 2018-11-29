@@ -179,6 +179,8 @@ Current Commands:
 - `file.append`
 - `file.remove`
 
+If the exact filename is not known you can use a [file glob (\*)](https://github.com/schneems/rundoc/pull/6).
+
 Use the `file.write` keyword followed by a filename, on the next line(s) put the contents of the file
 
     ```
