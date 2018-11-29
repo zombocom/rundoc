@@ -151,11 +151,15 @@ end
 
 ## Specify your Ruby version
 
-Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`:
+Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. Depending on your version of Ruby that you are currently running it might look like this:
+
+```
+:::-- $ sed -i'' '/^ruby/d' ./Gemfile.old # Remove implicit ruby version in Gemfile
+```
 
 ```ruby
-:::>> file.append Gemfile
-ruby "2.5.1"
+:::>> file.append Gemfile#4
+ruby "2.5.3"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
