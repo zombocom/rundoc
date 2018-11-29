@@ -2,7 +2,8 @@ module ::Rundoc
   class CodeCommand
     class ::RundocCommand < ::Rundoc::CodeCommand
 
-      def initialize(line)
+      def initialize(contents = "")
+        @contents = contents
       end
 
       def to_md(env = {})

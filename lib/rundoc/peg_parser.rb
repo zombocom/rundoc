@@ -72,7 +72,7 @@ module Rundoc
     }
 
     rule(:funcall) {
-      spaces? >> match('[^ \(\)]').repeat(1).as(:funcall)
+      spaces? >> (newline.absent? >> match('[^ \(\)]')).repeat(1).as(:funcall)
     }
 
     rule(:parens_method) {
@@ -83,11 +83,15 @@ module Rundoc
 
     rule(:seattle_method) {
       funcall >> spaces >>
-      args.as(:args)
+      (args).as(:args)
+    }
+
+    rule(:no_args_method) {
+      spaces? >> ( lparen.absent? >> rparen.absent? >> spaces.absent? >> any).repeat(1)
     }
 
     rule(:method_call) {
-      (parens_method | seattle_method).as(:method_call)
+      (parens_method | seattle_method | no_args_method).as(:method_call)
     }
 
     # >>
@@ -110,7 +114,7 @@ module Rundoc
       (
         start_command >>
         visability.as(:cmd_visability) >> spaces? >>
-        method_call.as(:cmd_method_call) >> newline
+        method_call.as(:cmd_method_call) >> newline #>> match(/\z/)
       ).as(:command)
     }
 
@@ -179,8 +183,14 @@ module Rundoc
     }
 
     rule(method_call: subtree(:mc)) {
-      keyword = mc[:funcall].to_sym
-      args    = mc[:args]
+      if mc.is_a?(::Parslet::Slice)
+        keyword = mc.to_sym
+        args = nil
+      else
+        keyword = mc[:funcall].to_sym
+        args    = mc[:args]
+      end
+
       Rundoc.code_command_from_keyword(keyword, args)
     }
 

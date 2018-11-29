@@ -231,4 +231,35 @@ class PegParserTest < Minitest::Test
   end
 
 
+  def test_no_args
+    # input = String.new
+    # input << %Q{rundoc}
+    # parser = Rundoc::PegParser.new.no_args_method
+    # tree = parser.parse_with_debug(input)
+    # actual = @transformer.apply(tree)
+    # assert_equal("rundoc", actual.to_s)
+
+    # input = String.new
+    # input << %Q{:::-- rundoc\n}
+    # parser = Rundoc::PegParser.new.command
+    # tree = parser.parse_with_debug(input)
+
+    # actual = @transformer.apply(tree)
+    # assert_equal :rundoc, actual.keyword
+    # assert_nil(actual.original_args)
+
+
+    input = String.new
+    input << %Q{:::-- rundoc\n}
+    input << %Q{email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`\n}
+
+    parser = Rundoc::PegParser.new.command_with_stdin
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal :rundoc, actual.keyword
+    assert_equal("email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`", actual.original_args)
+  end
+
+
 end
