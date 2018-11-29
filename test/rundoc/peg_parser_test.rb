@@ -117,7 +117,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_command
-    input = %Q{:::>> $ cat foo.rb}
+    input = %Q{:::>> $ cat foo.rb\n}
     parser = Rundoc::PegParser.new.command
     tree = parser.parse_with_debug(input)
 
@@ -196,7 +196,7 @@ class PegParserTest < Minitest::Test
     input = String.new
     input << "hello.txt\n"
     input << "world\n"
-    input << ":::>> $ cd foo"
+    input << ":::>> $ cd foo\n"
 
     parser = Rundoc::PegParser.new.raw_code
     tree = parser.parse_with_debug(input)
@@ -214,11 +214,7 @@ class PegParserTest < Minitest::Test
     parser = Rundoc::PegParser.new.code_block
     tree = parser.parse_with_debug(input)
 
-    puts tree
-
     actual = @transformer.apply(tree)
-
-    puts actual.inspect
 
     assert_equal :"$", actual.last.keyword
     assert_equal('git commit -m "init"', actual.last.original_args)

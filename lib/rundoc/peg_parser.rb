@@ -64,11 +64,11 @@ module Rundoc
     }
 
     rule(:unquoted_string) {
-      (any.repeat(1)).as(:string) #>> newline
+      (newline.absent? >> any).repeat.as(:string) #>> newline
     }
 
     rule(:args) {
-      named_args | string | unquoted_string
+      (named_args | string | unquoted_string)
     }
 
     rule(:funcall) {
@@ -110,7 +110,7 @@ module Rundoc
       (
         start_command >>
         visability.as(:cmd_visability) >> spaces? >>
-        method_call.as(:cmd_method_call) >> newline.maybe
+        method_call.as(:cmd_method_call) >> newline
       ).as(:command)
     }
 
