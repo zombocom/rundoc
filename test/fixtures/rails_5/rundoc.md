@@ -102,7 +102,7 @@ Be careful here. If you omit the `sql` at the end of `postgresql` in the `adapte
 
 ## Create a welcome page
 
-Rails 5 no longer has a static index page in production. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
+Rails 5 no longer has a static index page in production by default. When you're using a new app, there will not be a root page in production, so we need to create one. We will first create a controller called `welcome` for our home page to live:
 
 ```term
 :::>- $ rails generate controller welcome
@@ -153,12 +153,9 @@ end
 
 Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. Depending on your version of Ruby that you are currently running it might look like this:
 
-```
-:::-- $ sed -i'' '/^ruby/d' ./Gemfile.old # Remove implicit ruby version in Gemfile
-```
-
 ```ruby
-:::>> file.append Gemfile#4
+:::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
+:::>- file.append Gemfile#4
 ruby "2.5.3"
 ```
 
@@ -358,12 +355,12 @@ Test your Procfile locally using Foreman. You can now start your web server by r
 ```term
 $ heroku local
 [OKAY] Loaded ENV .env File as KEY=VALUE Format
-11:06:35 AM web.1   |  [18878] Puma starting in cluster mode...
-11:06:35 AM web.1   |  [18878] * Version 3.8.2 (ruby 2.5.1-p111), codename: Sassy Salamander
-11:06:35 AM web.1   |  [18878] * Min threads: 5, max threads: 5
-11:06:35 AM web.1   |  [18878] * Environment: development
-11:06:35 AM web.1   |  [18878] * Process workers: 2
-11:06:35 AM web.1   |  [18878] * Preloading application
+9:30:32 PM web.1 |  Puma starting in single mode...
+9:30:32 PM web.1 |  * Version 3.12.0 (ruby 2.5.3-p105), codename: Llamas in Pajamas
+9:30:32 PM web.1 |  * Min threads: 5, max threads: 5
+9:30:32 PM web.1 |  * Environment: development
+9:30:33 PM web.1 |  * Listening on tcp://0.0.0.0:3000
+9:30:33 PM web.1 |  Use Ctrl-C to stop
 ```
 
 Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
