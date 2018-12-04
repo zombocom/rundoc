@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ParseJavaTest < Test::Unit::TestCase
+class ParseJavaTest < Minitest::Test
 
   def setup
 

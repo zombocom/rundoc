@@ -69,7 +69,7 @@ All runDOC commands are prefixed with three colons `:::` and are inclosed in a c
 command such as `$` which is an alias for `bash` commands like this:
 
     ```
-    :::> $ git init .
+    :::>- $ git init .
     ```
 
 Nothing before the three colons matters. The space between the colons
@@ -80,7 +80,7 @@ can add a minus symbol `-` to the end to prevent it from being
 rendered.
 
     ```
-    :::- $ git init .
+    :::-- $ git init .
     ```
 
 > Note: If all commands inside of a code block are hidden, the entire codeblock will not be rendered.
@@ -107,9 +107,9 @@ That's the syntax, let's look at different runDOC commands
 An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The posions two positions are command first and result second. You can skip a trailing `-`.
 
 
-- `:::>`  (yes command, not result)
+- `:::>-` (yes command, not result)
 - `:::>>` (yes command, yes result)
-- `:::-`  (not command, not result)
+- `:::--` (not command, not result)
 - `:::->` (not command, yes result)
 
 ## Shell Commands
@@ -179,10 +179,12 @@ Current Commands:
 - `file.append`
 - `file.remove`
 
+If the exact filename is not known you can use a [file glob (\*)](https://github.com/schneems/rundoc/pull/6).
+
 Use the `file.write` keyword followed by a filename, on the next line(s) put the contents of the file
 
     ```
-    :::> file.write config/routes.rb
+    :::>- file.write config/routes.rb
 
     Example::Application.routes.draw do
       root        :to => "pages#index"
@@ -196,7 +198,7 @@ Use the `file.write` keyword followed by a filename, on the next line(s) put the
 If you wanted to change `users` to `products` you could write to the same file again.
 
     ```
-    :::> file.write config/routes.rb
+    :::>- file.write config/routes.rb
     Example::Application.routes.draw do
       root        :to => "pages#index"
 
@@ -262,7 +264,7 @@ This command is currently hacked together, and needs a refactor. Use it, but if 
 You can configure your docs in your docs use the `runDOC` command
 
     ```
-    :::- rundoc
+    :::-- rundoc
     ```
 
 Note: Make sure you run this as a hidden command (with `-`).
@@ -273,7 +275,7 @@ This will eval any code you put under that line (in Ruby). If you want to run so
 
 
     ```
-    :::- rundoc
+    :::-- rundoc
     Rundoc.configure do |config|
       config.after_build do
         puts "you could push to github here"
@@ -289,7 +291,7 @@ This will eval any code you put under that line (in Ruby). If you want to run so
 By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell runDOC to output contents in `./myapp` instead.
 
     ```
-    :::- rundoc
+    :::-- rundoc
     Rundoc.configure do |config|
       config.project_root = "myapp"
     end
@@ -302,7 +304,7 @@ This will also be the root directory that the `after_build` is executed in.
 Sometimes sensitive info like usernames, email addresses, or passwords may be introduced to the output readme. Let's say that your email address was `schneems@example.com` you could filter this out of your final document and replace it with `developer@example.com` instead like this:
 
     ```
-    :::- rundoc
+    :::-- rundoc
     Rundoc.configure do |config|
       config.filter_sensitive("schneems@exmaple.com" => "developer@example.com")
     end
@@ -323,13 +325,13 @@ This is a section for brainstorming. If it's here it's not guaranteed to get wor
 
 
     ```
-    :::> background.start(command: "rails server")
+    :::>- background.start(command: "rails server")
     ```
 
     ```
     :::>> background.read("rails server")
-    :::> | $ head -n 23
-    :::> background.clear
+    :::>- | $ head -n 23
+    :::>- background.clear
     ```
 
 

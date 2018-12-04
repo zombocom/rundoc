@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CodeSectionTest < Test::Unit::TestCase
+class CodeSectionTest < Minitest::Test
 
   def setup
   end
@@ -10,7 +10,7 @@ class CodeSectionTest < Test::Unit::TestCase
 sup
 
 ```
-:::-  $ mkdir foo
+:::--  $ mkdir foo
 ```
 
 yo
@@ -42,7 +42,7 @@ RUBY
   def test_show_command_hide_render
     contents = <<-RUBY
 ```
-:::> $ echo "foo"
+:::>- $ echo "foo"
 ```
 RUBY
 
@@ -80,15 +80,16 @@ RUBY
     code_section = Rundoc::CodeSection.new(match, keyword: ":::")
     code_section.render
 
+    puts code_section.commands.inspect
     code_command = code_section.commands.first
-    assert_equal true,  code_command.render_command
+    assert_equal true, code_command.render_command
     assert_equal true, code_command.render_result
   end
 
   def test_hide_command_hide_render
     contents = <<-RUBY
 ```
-:::- $ echo "foo"
+:::-- $ echo "foo"
 ```
 RUBY
 

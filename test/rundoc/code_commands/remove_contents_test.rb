@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RemoveContentsTest < Test::Unit::TestCase
+class RemoveContentsTest < Minitest::Test
 
   def setup
     @gemfile = <<-RUBY

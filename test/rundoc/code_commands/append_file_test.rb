@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AppendFileTest < Test::Unit::TestCase
+class AppendFileTest < Minitest::Test
 
   def test_appends_to_a_file
     Dir.mktmpdir do |dir|
@@ -71,7 +71,7 @@ gem 'rails', '4.0.0'
       Dir.chdir(dir) do
         FileUtils.touch("file-1234.txt")
         FileUtils.touch("file-5678.txt")
-        assert_raise do
+        assert_raises do
           cc = Rundoc::CodeCommand::FileCommand::Append.new("file-*.txt")
           cc << "some text"
           cc.call

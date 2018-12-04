@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BashTest < Test::Unit::TestCase
+class BashTest < Minitest::Test
 
   def test_bash_returns_cd
     original_dir = `pwd`
