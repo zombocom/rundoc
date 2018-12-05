@@ -153,9 +153,10 @@ end
 
 Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby installed by default, however you can specify an exact version by using the `ruby` DSL in your `Gemfile`. Depending on your version of Ruby that you are currently running it might look like this:
 
+
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
-:::>- file.append Gemfile#4
+:::-> file.append Gemfile#4
 ruby "2.5.3"
 ```
 
