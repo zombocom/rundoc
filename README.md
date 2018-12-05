@@ -59,6 +59,18 @@ Note: This command will create and manipulate directories in the working directo
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
 
+## Quick docs
+
+- [$]()
+- [fail.$]()
+- [file.write]()
+- [file.append]()
+- [file.remove]()
+- [background.start]()
+- [background.stop]()
+- [background.log.read]()
+- [background.log.clear]()
+
 ## Write it:
 
 Rundoc uses github flavored markdown. This means you write like normal but in your code sections
@@ -258,6 +270,40 @@ Anything after the pipe `|` will generate a new command with the output of the p
 
 This command is currently hacked together, and needs a refactor. Use it, but if something does not behave as you would expected open an issue and explain it.
 
+## Background
+
+Sometimes you want to start a long lived process like a server in the background. In that case, the `background` namespace has your, well, back.
+
+To start a process, pass in the command as the first arg, and give it a name (so it can be referenced later):
+
+```
+:::>> background.start("rails server", name: "server")
+```
+
+You can make the background process wait until it receives a certain string in the logs. For instance to make sure that the server is fully booted:
+
+```
+:::>> background.start("rails server", name: "server", wait: "Listening on")
+```
+
+You can stop the process by referencing the name:
+
+```
+:::-- background.stop(name: "server")
+```
+
+You can also get the log contents:
+
+
+```
+:::>> background.log.read(name: "server")
+```
+
+You can also truncate the logs:
+
+```
+:::>> background.log.clear(name: "server")
+```
 
 ## Configure
 

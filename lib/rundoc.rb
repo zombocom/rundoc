@@ -7,10 +7,21 @@ module Rundoc
 
   def code_command_from_keyword(keyword, args)
     klass      = code_command(keyword.to_sym) || Rundoc::CodeCommand::NoSuchCommand
-    cc         = klass.new(args)
+    original_args = args.dup
+    if args.is_a?(Array) && args.last.is_a?(Hash)
+      kwargs = args.pop
+      cc = klass.new(*args, **kwargs)
+    elsif args.is_a?(Hash)
+      cc = klass.new(**args)
+    else
+      cc = klass.new(*args)
+    end
+
+    cc.original_args = original_args
     cc.keyword = keyword
-    cc.original_args = args
     cc
+  rescue ArgumentError => e
+    raise ArgumentError, "Wrong method signature for #{keyword} with arguments: #{original_args.inspect}, error:\n #{e.message}"
   end
 
   def parser_options

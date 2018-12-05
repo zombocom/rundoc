@@ -53,7 +53,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_with_string_arg
-    input = %Q{sup("hey") }
+    input = %Q{sup("hey")}
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -61,7 +61,7 @@ class PegParserTest < Minitest::Test
     assert_equal :sup, actual.keyword
     assert_equal("hey", actual.original_args)
 
-    input = %Q{sup "hey" }
+    input = %Q{sup "hey"}
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -262,4 +262,87 @@ class PegParserTest < Minitest::Test
   end
 
 
+  def test_positional_args
+    input = +""
+    input << %Q{call("foo", "bar", biz: "baz")}
+
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    # =====================================
+    #
+    # Handles more than one value, but not only one value
+    actual = @transformer.apply(tree)
+    assert_equal ["foo", "bar", { biz: "baz"}], actual.original_args
+
+    input = +""
+    input << %Q{call("foo", biz: "baz")}
+
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal ["foo", { biz: "baz"}], actual.original_args
+
+    input = +""
+    input << %Q{call("rails server", name: "server")}
+
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal ["rails server", {name: "server"}], actual.original_args
+
+    # input = +""
+    # input << %Q{background.start("rails server", name: "server")}
+    # parser = Rundoc::PegParser.new.method_call
+
+    # tree = parser.parse_with_debug(input)
+
+    # puts tree.inspect
+
+    # actual = @transformer.apply(tree)
+    # assert_equal :"background.start", actual.keyword
+
+    # ================
+
+    input = +""
+    input << %Q{call("foo", "bar")}
+
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    # puts tree.inspect
+
+    actual = @transformer.apply(tree)
+    assert_equal ["foo", "bar"], actual.original_args
+
+    # ======================
+
+    input = +""
+    input << %Q{call("foo", "bar", biz: "baz")}
+
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal ["foo", "bar", { biz: "baz"}], actual.original_args
+  end
+
+  def test_positional_args_code_block
+
+    input = +""
+    input << %Q{:::>> background.start("rails server", name: "server")\n}
+    # input << %Q{:::-- background.stop(name: "server")\n}
+
+    parser = Rundoc::PegParser.new.command
+
+    tree = parser.parse_with_debug(input)
+
+    # puts tree.inspect
+
+    actual = @transformer.apply(tree)
+    assert_equal :"background.start", actual.keyword
+    assert_equal ["rails server", {:name=>"server"}], actual.original_args
+  end
 end

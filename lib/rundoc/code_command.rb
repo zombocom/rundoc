@@ -9,7 +9,7 @@ module Rundoc
     alias :render_result? :render_result
     alias :render_command? :render_command
 
-    def initialize(arg)
+    def initialize(*args)
     end
 
     def hidden?
@@ -26,8 +26,14 @@ module Rundoc
     end
     alias :<< :push
 
-    # executes command to build project
+    # Executes command to build project
+    # Is expected to return the result of the command
     def call(env = {})
+      raise "not implemented"
+    end
+
+    # the output of the command, i.e. `$ cat foo.txt`
+    def to_md(env = {})
       raise "not implemented"
     end
   end
@@ -41,3 +47,4 @@ require 'rundoc/code_command/repl'
 require 'rundoc/code_command/rundoc_command'
 require 'rundoc/code_command/no_such_command'
 require 'rundoc/code_command/raw'
+require 'rundoc/code_command/background'

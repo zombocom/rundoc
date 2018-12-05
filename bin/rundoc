@@ -84,6 +84,14 @@ class RundocCLI < Thor
     Dir.chdir(project_dir) do
       Rundoc.run_after_build
     end
+
+  ensure
+    Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
+      next unless task.alive?
+
+      puts "Warning background task is still running, cleaning up: name: #{name}"
+      task.stop
+    end
   end
 end
 
