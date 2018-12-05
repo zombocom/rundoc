@@ -128,7 +128,8 @@ Now we need to make Rails route to this action. We'll edit `config/routes.rb` to
 You can verify that the page is there by running your server:
 
 ```term
-$ rails server
+:::>> background.start("rails server", name: "server")
+:::-- background.stop(name: "server")
 ```
 
 And visiting [http://localhost:3000](http://localhost:3000) in your browser. If you do not see the page, [use the logs](#view-the-logs) that are output to your server to debug.
@@ -354,14 +355,8 @@ You'll also want to add `.env` to your `.gitignore` since this is for local envi
 Test your Procfile locally using Foreman. You can now start your web server by running:
 
 ```term
-$ heroku local
-[OKAY] Loaded ENV .env File as KEY=VALUE Format
-9:30:32 PM web.1 |  Puma starting in single mode...
-9:30:32 PM web.1 |  * Version 3.12.0 (ruby 2.5.3-p105), codename: Llamas in Pajamas
-9:30:32 PM web.1 |  * Min threads: 5, max threads: 5
-9:30:32 PM web.1 |  * Environment: development
-9:30:33 PM web.1 |  * Listening on tcp://0.0.0.0:3000
-9:30:33 PM web.1 |  Use Ctrl-C to stop
+:::>> background.start("heroku local", name: "local", wait: "Ctrl-C to stop")
+:::-- background.stop(name: "local")
 ```
 
 Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
