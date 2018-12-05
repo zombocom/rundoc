@@ -26,8 +26,14 @@ module Rundoc
     end
     alias :<< :push
 
-    # executes command to build project
+    # Executes command to build project
+    # Is expected to return the result of the command
     def call(env = {})
+      raise "not implemented"
+    end
+
+    # the output of the command, i.e. `$ cat foo.txt`
+    def to_md(env = {})
       raise "not implemented"
     end
   end
