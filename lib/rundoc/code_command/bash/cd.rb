@@ -5,7 +5,7 @@ class Rundoc::CodeCommand::Bash
   class Cd < Rundoc::CodeCommand::Bash
 
     def initialize(line)
-      @line     = line
+      @line = line
     end
 
     def call(env)
