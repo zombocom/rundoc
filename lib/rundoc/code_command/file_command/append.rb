@@ -12,6 +12,8 @@ class Rundoc::CodeCommand::FileCommand
     end
 
     def to_md(env)
+      return unless render_command?
+
       raise "must call write in its own code section" unless env[:commands].empty?
       before = env[:before]
       if @line_number
