@@ -9,7 +9,7 @@ module Rundoc
     alias :render_result? :render_result
     alias :render_command? :render_command
 
-    def initialize(arg)
+    def initialize(*args)
     end
 
     def hidden?

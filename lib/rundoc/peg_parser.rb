@@ -7,7 +7,7 @@ module Rundoc
     rule(:comma)   { spaces? >> str(',') >> spaces? }
     rule(:digit)   { match('[0-9]') }
     rule(:lparen)  { str('(') >> spaces? }
-    rule(:rparen)  { str(')') >> spaces? }
+    rule(:rparen)  { str(')') }
     rule(:newline)     { str("\r").maybe >> str("\n") }
 
     rule(:singlequote_string) {
