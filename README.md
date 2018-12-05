@@ -59,6 +59,13 @@ Note: This command will create and manipulate directories in the working directo
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
 
+## Quick docs
+
+- [$]()
+- [fail.$]()
+- [file.write]()
+- [file.append]()
+- [file.remove]()
 ## Write it:
 
 Rundoc uses github flavored markdown. This means you write like normal but in your code sections
