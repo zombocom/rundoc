@@ -58,7 +58,7 @@ module Rundoc
 
     rule(:named_args) {
       spaces? >> (
-        key_value >>  (comma >> key_value).repeat
+        key_value >> (comma >> key_value).repeat
       ).as(:named_args) >>
       spaces?
     }
@@ -67,8 +67,13 @@ module Rundoc
       (newline.absent? >> any).repeat.as(:string) #>> newline
     }
 
+    rule(:positional_args) {
+      spaces? >> value.as(:val) >> (comma >> value.as(:val)).repeat >>
+      comma.maybe >> named_args.maybe
+    }
+
     rule(:args) {
-      (named_args | string | unquoted_string)
+      (positional_args | named_args | string | unquoted_string)
     }
 
     rule(:funcall) {
@@ -152,7 +157,7 @@ module Rundoc
     }
 
     rule(:raw_code) {
-      (command.absent? >> any).repeat(1).as(:raw_code) >>
+      (start_command.absent? >> command.absent? >> any).repeat(1).as(:raw_code) >>
       multiple_commands.maybe
     }
 
@@ -174,12 +179,25 @@ module Rundoc
       nb.match(/[eE\.]/) ? Float(nb) : Integer(nb)
     }
 
-    rule(:named_args => subtree(:na)) {
+    def self.convert_named_args(na)
       (na.is_a?(Array) ? na : [ na ]).each_with_object({}) { |element, hash|
         key = element[:key_value][:key].to_sym
         val = element[:key_value][:val]
         hash[key] = val
       }
+    end
+
+    rule(:named_args => subtree(:na)) {
+      PegTransformer.convert_named_args(na)
+    }
+
+    rule(val: simple(:val)) {
+      val
+    }
+
+    # Handle the case where there is only one value
+    rule(val: simple(:val), named_args: subtree(:na)) {
+      [val, PegTransformer.convert_named_args(na)]
     }
 
     rule(method_call: subtree(:mc)) {
