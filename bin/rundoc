@@ -86,7 +86,6 @@ class RundocCLI < Thor
     end
 
   ensure
-
     Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
       next unless task.alive?
 

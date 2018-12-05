@@ -1,7 +1,6 @@
 require 'test_helper'
 
-class AppendFileTest < Minitest::Test
-
+class BackgroundTest < Minitest::Test
   def test_background_start
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
