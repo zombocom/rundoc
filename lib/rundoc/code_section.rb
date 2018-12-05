@@ -92,6 +92,8 @@ module Rundoc
         @stack   << code_command
         commands << code_command
       end
+    rescue ::Parslet::ParseFailed => e
+      raise "Could not compile code:\n#{@code}\nReason: #{e.message}"
     end
 
     # def check_parse_error(command, code_block)
