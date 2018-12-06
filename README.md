@@ -70,6 +70,8 @@ This will generate a project folder with your project in it, and a markdown READ
 - [background.stop]()
 - [background.log.read]()
 - [background.log.clear]()
+- [pipe]()
+- [|]()
 
 ## Write it:
 
