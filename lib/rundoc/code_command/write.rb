@@ -47,3 +47,4 @@ Rundoc.register_code_command(:'file.write', Rundoc::CodeCommand::Write)
 
 require 'rundoc/code_command/file_command/append'
 require 'rundoc/code_command/file_command/remove'
+require 'rundoc/code_command/file_command/replace'

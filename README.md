@@ -66,6 +66,7 @@ This will generate a project folder with your project in it, and a markdown READ
 - [file.write]()
 - [file.append]()
 - [file.remove]()
+- [file.replace]()
 - [background.start]()
 - [background.stop]()
 - [background.log.read]()
