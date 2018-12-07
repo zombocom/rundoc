@@ -37,6 +37,7 @@ class Rundoc::CodeCommand::Background
       return unless wait_value
 
       Timeout.timeout(Integer(timeout_value)) do
+        sleep 1
         until @log.read.match(wait_value)
           sleep 0.01
         end
@@ -55,7 +56,7 @@ class Rundoc::CodeCommand::Background
 
     def stop
       return unless alive?
-      Process.kill('TERM', @pid)
+      Process.kill('TERM', -Process.getpgid(@pid))
       Process.wait(@pid)
     end
 
@@ -64,7 +65,7 @@ class Rundoc::CodeCommand::Background
     end
 
     private def call
-      @pid ||= Process.spawn(@command)
+      @pid ||= Process.spawn(@command, pgroup: true)
     end
   end
 end
