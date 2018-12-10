@@ -1,5 +1,6 @@
 require 'shellwords'
 require 'timeout'
+require 'fileutils'
 
 class Rundoc::CodeCommand::Background
   class ProcessSpawn
@@ -27,6 +28,7 @@ class Rundoc::CodeCommand::Background
 
       @log = Pathname.new(@log)
       @log.dirname.mkpath
+      FileUtils.touch(@log)
 
       @command = "/usr/bin/env bash -c #{@command.shellescape} >> #{@log} #{out}"
       @pid = nil
@@ -37,7 +39,6 @@ class Rundoc::CodeCommand::Background
       return unless wait_value
 
       Timeout.timeout(Integer(timeout_value)) do
-        sleep 1
         until @log.read.match(wait_value)
           sleep 0.01
         end
