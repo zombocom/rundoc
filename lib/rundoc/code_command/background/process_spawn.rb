@@ -1,7 +1,32 @@
 require 'shellwords'
 require 'timeout'
+require 'fileutils'
 
 class Rundoc::CodeCommand::Background
+  # This class is responsible for running processes in the background
+  #
+  # By default it logs output to a file. This can be used to "wait" for a
+  # specific output before continuing:
+  #
+  #   server = ProcessSpawn("rails server")
+  #   server.wait("Use Ctrl-C to stop")
+  #
+  # The process can be queried for it's status to check if it is still booted or not.
+  # the process can also be manually stopped:
+  #
+  #   server = ProcessSpawn("rails server")
+  #   server.alive? # => true
+  #   server.stop
+  #   server.alive? # => false
+  #
+  #
+  # There are class level methods that can be used to "name" and record
+  # background processes. They can be used like this:
+  #
+  #   server = ProcessSpawn("rails server")
+  #   ProcessSpawn.add("muh_server", server)
+  #   ProcessSpawn.find("muh_server") # => <# ProcessSpawn instance >
+  #   ProcessSpawn.find("foo") # => RuntimeError "Could not find task with name 'foo', ..."
   class ProcessSpawn
     def self.tasks
       @tasks
@@ -27,6 +52,7 @@ class Rundoc::CodeCommand::Background
 
       @log = Pathname.new(@log)
       @log.dirname.mkpath
+      FileUtils.touch(@log)
 
       @command = "/usr/bin/env bash -c #{@command.shellescape} >> #{@log} #{out}"
       @pid = nil
@@ -55,7 +81,7 @@ class Rundoc::CodeCommand::Background
 
     def stop
       return unless alive?
-      Process.kill('TERM', @pid)
+      Process.kill('TERM', -Process.getpgid(@pid))
       Process.wait(@pid)
     end
 
@@ -64,7 +90,7 @@ class Rundoc::CodeCommand::Background
     end
 
     private def call
-      @pid ||= Process.spawn(@command)
+      @pid ||= Process.spawn(@command, pgroup: true)
     end
   end
 end
