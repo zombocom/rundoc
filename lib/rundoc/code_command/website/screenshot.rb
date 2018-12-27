@@ -1,7 +1,8 @@
 class Rundoc::CodeCommand::Website
   class Screenshot < Rundoc::CodeCommand
-    def initialize(name: , width: 640, height: 480)
+    def initialize(name: , upload: false)
       @driver = Rundoc::CodeCommand::Website::Driver.find(name)
+      @upload = upload
     end
 
     def to_md(env = {})
@@ -10,7 +11,7 @@ class Rundoc::CodeCommand::Website
 
     def call(env = {})
       puts "Taking screenshot: #{@driver.current_url}"
-      filename = @driver.screenshot
+      filename = @driver.screenshot(upload: @upload)
       env[:replace] = "![Screenshot of #{@driver.current_url}](#{filename})"
       ""
     end

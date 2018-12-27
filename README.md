@@ -360,6 +360,52 @@ Sometimes sensitive info like usernames, email addresses, or passwords may be in
 
 This command `filter_sensitive` can be called multiple times with different values. Since the config is in Ruby you could iterate over an array of sensitive data
 
+## Screenshots - [BETA]
+
+You'll need selenium and `chromedriver` installed on your system to make screenshots work. On a mac you can run:
+
+```
+$ brew cask install chromedriver
+```
+
+To take a screenshot first "visit" a website. The values you pass in to stdin can be used to further navigate. For more information see the [Capybara DSL](https://www.rubydoc.info/github/teamcapybara/capybara/master#the-dsl). Use the keyword `session`
+
+Once you're on the page you want to capture you can execute `website.screenshot`:
+
+```
+:::>> website.visit(name: "localhost", url: "http://localhost:3000", scroll: 100)
+session.execute_script "window.scrollBy(0,100)"
+session.click("sign up")
+
+:::>> website.screenshot(name: "localhost")
+```
+
+The result of the screenshot command will be to replace the code section with a markdown link to a relative path of the screenshot.
+
+## Upload Screenshots
+
+You can specify that you want to upload files to S3 instead of hosting them locally by passing in `upload: "s3"` to the screenshot command:
+
+```
+:::>> website.visit(name: "localhost", url: "http://localhost:3000", scroll: 100)
+:::>> website.screenshot(name: "localhost", upload: "s3")
+```
+
+To authorize, you'll need to set these environment variables:
+
+```
+AWS_ACCESS_KEY_ID
+AWS_REGION
+AWS_SECRET_ACCESS_KEY
+AWS_BUCKET_NAME
+```
+
+The bucketeer addon on Heroku is supported out of the box. To specify project specific environment variables see the "dotenv" section below.
+
+## Dotenv support
+
+If you need to specify project specific environment variables create a file called `.env` at the same directory as your `rundoc.md` and it will be imported. Add this file to your `.gitignore` so you don't accidentally share with the world
+
 ## TODO
 
 This is a section for brainstorming. If it's here it's not guaranteed to get worked on, but it will be considered.
@@ -388,3 +434,4 @@ This is a section for brainstorming. If it's here it's not guaranteed to get wor
 - `-=` command (runs command, only shows output, does not show command) ?
 - An easy test syntax?
 - Screenshot tool(s) ?!?!?!?!?!?! :)
+

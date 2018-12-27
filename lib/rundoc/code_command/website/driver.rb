@@ -22,14 +22,6 @@ class Rundoc::CodeCommand::Website
       @session.visit(url)
     end
 
-    def screenshot
-      session.resize_window_to(session.current_window_handle, @width, @height)
-      FileUtils.mkdir_p("tmp/rundoc_screenshots")
-      filename = "tmp/rundoc_screenshots/#{self.class.next_screenshot_name}"
-      session.save_screenshot(filename)
-      filename
-    end
-
     def timestamp
       Time.now.utc.strftime("%Y%m%d%H%M%S%L%N")
     end
@@ -48,6 +40,38 @@ class Rundoc::CodeCommand::Website
 
     def self.tasks
       @tasks
+    end
+
+    def screenshot(upload: false)
+      session.resize_window_to(session.current_window_handle, @width, @height)
+      FileUtils.mkdir_p("tmp/rundoc_screenshots")
+      file_name = self.class.next_screenshot_name
+      file_path = "tmp/rundoc_screenshots/#{file_name}"
+      session.save_screenshot(file_path)
+
+      return file_path unless upload
+
+      case upload
+      when 's3', 'aws'
+        puts "Uploading screenshot to S3"
+        require 'aws-sdk-s3'
+        ENV.fetch('AWS_ACCESS_KEY_ID')
+        s3 = Aws::S3::Resource.new(region: ENV.fetch('AWS_REGION'))
+
+        key = "#{timestamp}/#{file_name}"
+        obj = s3.bucket(ENV.fetch('AWS_BUCKET_NAME')).object(key)
+        obj.upload_file(file_path)
+
+        obj.client.put_object_acl(
+          acl: 'public-read' ,
+          bucket: ENV.fetch('AWS_BUCKET_NAME'),
+          key: key
+        )
+
+        obj.public_url
+      else
+        raise "Upload #{upload.inspect} is not valid, use 's3' instead"
+      end
     end
 
     @tasks = {}

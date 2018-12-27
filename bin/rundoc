@@ -30,6 +30,17 @@ class RundocCLI < Thor
   def build
     raise "#{@path} does not exist" unless File.exist?(@path)
     raise "Expecting #{@path} to be a rundoc markdown file" unless File.file?(@path)
+
+    dot_env_path = File.expand_path("../.env", @path)
+    if File.exist?(dot_env_path)
+      require 'dotenv'
+      Dotenv.load(dot_env_path)
+      ENV['AWS_ACCESS_KEY_ID']     ||= ENV['BUCKETEER_AWS_ACCESS_KEY_ID']
+      ENV['AWS_REGION']            ||= ENV['BUCKETEER_AWS_REGION']
+      ENV['AWS_SECRET_ACCESS_KEY'] ||= ENV['BUCKETEER_AWS_SECRET_ACCESS_KEY']
+      ENV['AWS_BUCKET_NAME']       ||= ENV['BUCKETEER_BUCKET_NAME']
+    end
+
     source_contents = File.read(@path)
     tmp_dir         = @working_dir.join("tmp")
 
