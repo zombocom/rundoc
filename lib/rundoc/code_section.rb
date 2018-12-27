@@ -65,6 +65,8 @@ module Rundoc
         result
       end
 
+      return env[:replace] if env[:replace]
+
       return "" if hidden?
 
       array = [env[:before], result, env[:after]]
