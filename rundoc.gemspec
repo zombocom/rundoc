@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Rundoc::VERSION
   gem.authors       = ["Richard Schneeman"]
   gem.email         = ["richard.schneeman+rubygems@gmail.com"]
-  gem.description   = %q{runDOC turns docs to runable code}
-  gem.summary       = %q{runDOC generates runable code from docs}
+  gem.description   = %q{RunDOC turns docs to runable code}
+  gem.summary       = %q{RunDOC generates runable code from docs}
   gem.homepage      = "https://github.com/schneems/rundoc"
   gem.license       = "MIT"
 

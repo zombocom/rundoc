@@ -4,34 +4,28 @@
 
 ## What
 
-This library allows you to "run" your docs and embed the code as well as results back into the documentation.
-
-Write in a runDOC compatible markdown format, then run your docs to generate matching projects. Instead of writing a tutorial and then building an example separately, your documentation can build the example app for you. Not only does this keep your doc writing DRY, it also enforces consistency and accuracy. If you make a typo in your docs your project won't build...you'll get early warning and be able to fix it before it has the opportunity to confuse your reader.
-
-Think of runDOC as your ever-vigilant tech editor and writing partner.
-
-Once docs are run, they output a project and fully valid markdown doc (without any of the special runDOC tags). You could configure your project to be automatically pushed to github or anything else you want afterwards, check out the config section.
-
-Write more technical content, faster and with a better consistency by using runDOC.
-
-## Why
-
-I wrote a [Rails course for the University of Texas](http://schneems.com), that required I build an app and write
-documentation at the same time. I enjoyed the experience but having to do both essentially doubled my work load, worse than the time wasted copying snippets between the two was my docs were prone to paste errors, keyboard slips, or me just forgetting to add sections that I had implemented in the app. The only way for me to find these errors was to give the docs to someone to actually follow them and build the project. This method of manually checking is extremely time consuming, prone to errors (the developer may work around problems instead of reporting them to you), and makes making minor edits a major pain. Instead of writing your docs once and iterating, I found adding sections required me to start from scratch.
+This library allows you to "run" your docs and embed the code as well as results back into the documentation. Here's a quick example:
 
 
-While I was writing the course I dreamed of a system where the docs and the
-code could automatically stay in sync. One where if I had a typo in my tutorials, an automatic tech-editor would know and tell me. One where I couldn't accidentally skip over critical sections leaving true novices confused.
+    Install by running:
 
-Dream no more, because runDOC does just that:
+    ```
+    :::>> $ gem install rails --no-document
+    ```
 
-Write docs, build software.
+Now if you "run" this document you'll get this output:
 
-## Isn't this Overkill?
+    Install by running:
 
-No. Many new doc writers skip steps accidentally, or omit lines of code with `...` and assume their readers can follow along. Even if this is true for 80% of your users, 20% of people will become frustrated and may give up as a result. I found by including [check steps](http://schneems.com/post/60359275700/prepare-do-test-make-your-technical-writing-shine) such as running `ls` to ensure directory contents were the difference between good docs and great ones. The only problem: the output of `ls` on a Rails 4.0.0 and 4.0.1 project may be different. So the only way to ensure output is to actually run the command and copy it into your docs. With runDOC you don't need to do that. Rundoc runs the command then it can insert the output for you.
+    ```
+    $ gem install rails --no-document
+    Successfully installed rails-5.2.2
+    1 gem installed
+    ```
 
-If you don't intend on updating or revising your content, then this project is overkill. On the other hand if you're writing docs without the intent of revising them, you probably shouldn't be writing technical docs.
+The idea is that as your documentation "runs" it builds a working tutorial. It also acts as tests since if your docs become incorrect due to a typo or bitrot then when you try to generate them, the process will fail.
+
+Think of RunDOC as your ever-vigilant tech editor and writing partner.
 
 ## Install
 
@@ -52,34 +46,49 @@ gem 'rundoc`
 Run the `rundoc build` command on any markdown file
 
 ```sh
-$ rundoc build --path runDOC.md
+$ rundoc build --path my/path/to/run_doc.md
 ```
 
-Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
+> Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
 
 This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
 
 ## Quick docs
 
-- [$]()
-- [fail.$]()
-- [file.write]()
-- [file.append]()
-- [file.remove]()
-- [background.start]()
-- [background.stop]()
-- [background.log.read]()
-- [background.log.clear]()
-- [pipe]()
-- [|]()
+- [Understanding the Syntax](#rundoc-syntax)
+- [Dotenv support](#dotenv-support)
+- [Rendering cheat sheet](#rendering-cheat-sheet)
 
-## Write it:
+### Commands
 
-Rundoc uses github flavored markdown. This means you write like normal but in your code sections
-you can add special annotations that when run through runDOC can
+- Execute Bash Commands
+  - [$](#shell-commands)
+  - [fail.$](#shell-commands)
+- Chain commands
+  - [pipe](#pipe)
+  - [|](#pipe)
+- Manipulate Files
+  - [file.write](#file-commands)
+  - [file.append](#file-commands)
+  - [file.remove](#file-commands)
+- Boot background processes such as a local server
+  - [background.start](#background)
+  - [background.stop](#background)
+  - [background.log.read](#background)
+  - [background.log.clear](#background)
+- Take screenshots
+  - [website.visit](#screenshots)
+  - [website.screenshot](#screenshots)
+- Configure Rundoc
+  - [rundoc](#configure)
+
+## RunDOC Syntax
+
+RunDOC uses GitHub flavored markdown. This means you write like normal but in your code sections
+you can add special annotations that when run through RunDOC can
 generate a project.
 
-All runDOC commands are prefixed with three colons `:::` and are inclosed in a code block a
+All RunDOC commands are prefixed with three colons `:::` and are inclosed in a code block a
 command such as `$` which is an alias for `bash` commands like this:
 
     ```
@@ -114,26 +123,9 @@ This code block might generate an output something like this to your markdown do
         Gemfile.lock  Rakefile  config    db    lib   public    test    vendor
     ```
 
-That's the syntax, let's look at different runDOC commands
+### Stdin
 
-## Rendering Cheat Sheet
-
-An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The posions two positions are command first and result second. You can skip a trailing `-`.
-
-
-- `:::>-` (yes command, not result)
-- `:::>>` (yes command, yes result)
-- `:::--` (not command, not result)
-- `:::->` (not command, yes result)
-
-## Shell Commands
-
-Current Commands:
-
-- `$`
-- `fail.$`
-
-Anything you pass to `$` will be run in a shell. Any items below the command will be passed into the stdin of the bash command so:
+Any items below the command will be passed into the stdin of the command. For example using a `$` command you can effectively pipe contents to stdin:
 
     ```
     :::>> $ tail -n 2
@@ -153,7 +145,76 @@ Would output:
 
 This STDIN feature could be useful if you are running an interactive command such as `play new` which requires user input. For more fine grained input you'll need to use a custom repl object (will be covered later).
 
-If a shell command returns a non-zero exit status an error will be raised, if you expect a command to fail you can run it with `fail.$` keyword
+Different commands will do different things with this input. For example the `rundoc` command executes Ruby configuration code:
+
+    ```
+    :::-- rundoc
+    Rundoc.configure do |config|
+      config.after_build do
+        puts "you could push to GitHub here"
+        puts "You could do anything here"
+        puts "This code will run after the docs are done building"
+      end
+    end
+    ```
+
+
+And the `website.visit` command allows you to navigate and manipulate a webpage via a Capybara API:
+
+    ```
+    :::>> website.visit(name: "localhost", url: "http://localhost:3000", scroll: 100)
+    session.execute_script "window.scrollBy(0,100)"
+    session.click("sign up")
+    ```
+
+### Exact output
+
+RunDOC only cares about things that come after a `:::` section. If you have a "regular" code section, it will be rendered as as normal:
+
+    ```
+    $ echo "I won't run since i'm missing the :::>> at the front"
+    ```
+
+You can mix non-command code and commands, as long as the things that aren't rendering come first. This can be used to "fake" a command, for example:
+
+```
+$ rails new myapp # Not a command since it's missing the ":::>>""
+:::-> $ rails new myapp --skip-test --skip-yarn --skip-sprockets
+:::>> | $ head -n 5
+```
+
+This will render as:
+
+```
+$ rails new myapp # Not a command since it's missing the ":::>>""
+      create
+      create  README.md
+      create  Rakefile
+      create  .ruby-version
+      create  config.ru
+```
+
+It looks like the command was run without any flags, but in reality `rails new myapp --skip-test --skip-yarn --skip-sprockets | head -n 5` was executed.
+
+## Rendering Cheat Sheet
+
+An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The posions two positions are **command** first and **result** second.
+
+
+- `:::>-` (yes command, not result)
+- `:::>>` (yes command, yes result)
+- `:::--` (not command, not result)
+- `:::->` (not command, yes result)
+
+## Shell Commands
+
+Current Commands:
+
+- `$`
+- `fail.$`
+
+Anything you pass to `$` will be run in a shell. If a shell command returns a non-zero exit status an error will be raised. If you expect a non-zero exit status use `fail.$` instead:
+
 
     ```
     :::>> fail.$ cat /dev/null/foo
@@ -178,7 +239,8 @@ Some commands may be custom, for example when running `cd` you likely want to ch
 However this command would fall on its face:
 
     ```
-    :::>> $ cd myapp/config && cat database.yml
+    :::>> $ cd myapp && cat config/database.yml
+    :::>> $ rails g scaffold users # <=== This command would be in the wrong directory, not `myapp`
     ```
 
 These custom commands are kept to a minimum, and for the most part behave as you would expect them to. Write your docs as you normally would and check the output frequently.
@@ -193,9 +255,7 @@ Current Commands:
 - `file.append`
 - `file.remove`
 
-If the exact filename is not known you can use a [file glob (\*)](https://github.com/schneems/rundoc/pull/6).
-
-Use the `file.write` keyword followed by a filename, on the next line(s) put the contents of the file
+Use the `file.write` keyword followed by a filename, on the next line(s) put the contents of the file:
 
     ```
     :::>- file.write config/routes.rb
@@ -208,6 +268,8 @@ Use the `file.write` keyword followed by a filename, on the next line(s) put the
       end
     end
     ```
+
+> If the exact filename is not known you can use a [file glob (\*)](https://GitHub.com/schneems/rundoc/pull/6).
 
 If you wanted to change `users` to `products` you could write to the same file again.
 
@@ -296,7 +358,6 @@ You can stop the process by referencing the name:
 
 You can also get the log contents:
 
-
 ```
 :::>> background.log.read(name: "server")
 ```
@@ -307,60 +368,7 @@ You can also truncate the logs:
 :::>> background.log.clear(name: "server")
 ```
 
-## Configure
-
-You can configure your docs in your docs use the `runDOC` command
-
-    ```
-    :::-- rundoc
-    ```
-
-Note: Make sure you run this as a hidden command (with `-`).
-
-** After Build**
-
-This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
-
-
-    ```
-    :::-- rundoc
-    Rundoc.configure do |config|
-      config.after_build do
-        puts "you could push to github here"
-        puts "You could do anything here"
-        puts "This code will run after the docs are done building"
-      end
-    end
-    ```
-
-
-**Project Root**
-
-By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell runDOC to output contents in `./myapp` instead.
-
-    ```
-    :::-- rundoc
-    Rundoc.configure do |config|
-      config.project_root = "myapp"
-    end
-    ```
-
-This will also be the root directory that the `after_build` is executed in.
-
-**Filter Sensitive Info**
-
-Sometimes sensitive info like usernames, email addresses, or passwords may be introduced to the output readme. Let's say that your email address was `schneems@example.com` you could filter this out of your final document and replace it with `developer@example.com` instead like this:
-
-    ```
-    :::-- rundoc
-    Rundoc.configure do |config|
-      config.filter_sensitive("schneems@exmaple.com" => "developer@example.com")
-    end
-    ```
-
-This command `filter_sensitive` can be called multiple times with different values. Since the config is in Ruby you could iterate over an array of sensitive data
-
-## Screenshots - [BETA]
+## Screenshots
 
 You'll need selenium and `chromedriver` installed on your system to make screenshots work. On a mac you can run:
 
@@ -368,7 +376,7 @@ You'll need selenium and `chromedriver` installed on your system to make screens
 $ brew cask install chromedriver
 ```
 
-To take a screenshot first "visit" a website. The values you pass in to stdin can be used to further navigate. For more information see the [Capybara DSL](https://www.rubydoc.info/github/teamcapybara/capybara/master#the-dsl). Use the keyword `session`
+To take a screenshot first "visit" a website. The values you pass in to stdin can be used to further navigate. For more information see the [Capybara DSL](https://www.rubydoc.info/GitHub/teamcapybara/capybara/master#the-dsl). Use the keyword `session`
 
 Once you're on the page you want to capture you can execute `website.screenshot`:
 
@@ -406,32 +414,59 @@ The bucketeer addon on Heroku is supported out of the box. To specify project sp
 
 If you need to specify project specific environment variables create a file called `.env` at the same directory as your `rundoc.md` and it will be imported. Add this file to your `.gitignore` so you don't accidentally share with the world
 
-## TODO
+## Configure
 
-This is a section for brainstorming. If it's here it's not guaranteed to get worked on, but it will be considered.
+You can configure your docs in your docs use the `RunDOC` command
 
-- Seperate parsing from running. This will help for easier linting of syntax etc.
-- Cache SHAs and output of each code block. If one sha changes, re-generate all code blocks, otherwise allow a re-render without code execution. Configure a check sum for busting the cache for instance a new version of Rails is released.
+    ```
+    :::-- rundoc
+    ```
 
+Note: Make sure you run this as a hidden command (with `-`).
 
-- A way to run background processes indefinitely such as `rails server`
-  - Maybe a way to truncate them after only a period of time such as grab a few lines of `heroku local`.
+** After Build**
+
+This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
 
 
     ```
-    :::>- background.start(command: "rails server")
+    :::-- rundoc
+    Rundoc.configure do |config|
+      config.after_build do
+        puts "you could push to GitHub here"
+        puts "You could do anything here"
+        puts "This code will run after the docs are done building"
+      end
+    end
     ```
 
+
+**Project Root**
+
+By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell RunDOC to output contents in `./myapp` instead.
+
     ```
-    :::>> background.read("rails server")
-    :::>- | $ head -n 23
-    :::>- background.clear
+    :::-- rundoc
+    Rundoc.configure do |config|
+      config.project_root = "myapp"
+    end
     ```
 
+This will also be the root directory that the `after_build` is executed in.
 
-  - Breakpoints?
-- Better line matching for backtrace
-- `-=` command (runs command, only shows output, does not show command) ?
-- An easy test syntax?
-- Screenshot tool(s) ?!?!?!?!?!?! :)
+**Filter Sensitive Info**
 
+Sometimes sensitive info like usernames, email addresses, or passwords may be introduced to the output readme. Let's say that your email address was `schneems@example.com` you could filter this out of your final document and replace it with `developer@example.com` instead like this:
+
+    ```
+    :::-- rundoc
+    Rundoc.configure do |config|
+      config.filter_sensitive("schneems@exmaple.com" => "developer@example.com")
+    end
+    ```
+
+This command `filter_sensitive` can be called multiple times with different values. Since the config is in Ruby you could iterate over an array of sensitive data
+
+## Copyright
+
+All content Copyright Richard Schneeman © 2019
