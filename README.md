@@ -6,6 +6,7 @@
 
 This library allows you to "run" your docs and embed the code as well as results back into the documentation. Here's a quick example:
 
+Write documentation:
 
     Install by running:
 
@@ -23,7 +24,7 @@ Now if you "run" this document you'll get this output:
     1 gem installed
     ```
 
-The idea is that as your documentation "runs" it builds a working tutorial. It also acts as tests since if your docs become incorrect due to a typo or bitrot then when you try to generate them, the process will fail.
+The idea is that as your documentation "runs" it builds a working tutorial. It also acts as tests since if your docs become incorrect due to a typo or bit-rot then when you try to generate them, the process will fail.
 
 Think of RunDOC as your ever-vigilant tech editor and writing partner.
 
