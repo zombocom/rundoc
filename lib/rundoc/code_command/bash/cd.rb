@@ -8,11 +8,29 @@ class Rundoc::CodeCommand::Bash
       @line = line
     end
 
+    # Ignore duplicate chdir warnings "warning: conflicting chdir during another chdir block"
+    def supress_chdir_warning
+      old_stderr     = $stderr
+      capture_stderr = StringIO.new
+      $stderr        = capture_stderr
+      return yield
+    ensure
+      if old_stderr
+        $stderr = old_stderr
+        capture_string = capture_stderr.string
+        $stderr.puts capture_string if capture_string.each_line.count > 1 || !capture_string.include?("conflicting chdir")
+      end
+    end
+
     def call(env)
       line = @line.sub('cd', '').strip
       puts "running $ cd #{line}"
-      Dir.chdir(line)
-      nil
+
+      supress_chdir_warning do
+        Dir.chdir(line)
+      end
+
+      return nil
     end
   end
 end
