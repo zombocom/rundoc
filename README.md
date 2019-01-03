@@ -420,7 +420,7 @@ If you need to specify project specific environment variables create a file call
 You can configure your docs in your docs use the `RunDOC` command
 
     ```
-    :::-- rundoc
+    :::-- rundoc.configure
     ```
 
 Note: Make sure you run this as a hidden command (with `-`).
@@ -431,7 +431,7 @@ This will eval any code you put under that line (in Ruby). If you want to run so
 
 
     ```
-    :::-- rundoc
+    :::-- rundoc.configure
     Rundoc.configure do |config|
       config.after_build do
         puts "you could push to GitHub here"
@@ -447,7 +447,7 @@ This will eval any code you put under that line (in Ruby). If you want to run so
 By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell RunDOC to output contents in `./myapp` instead.
 
     ```
-    :::-- rundoc
+    :::-- rundoc.configure
     Rundoc.configure do |config|
       config.project_root = "myapp"
     end
@@ -460,7 +460,7 @@ This will also be the root directory that the `after_build` is executed in.
 Sometimes sensitive info like usernames, email addresses, or passwords may be introduced to the output readme. Let's say that your email address was `schneems@example.com` you could filter this out of your final document and replace it with `developer@example.com` instead like this:
 
     ```
-    :::-- rundoc
+    :::-- rundoc.configure
     Rundoc.configure do |config|
       config.filter_sensitive("schneems@exmaple.com" => "developer@example.com")
     end

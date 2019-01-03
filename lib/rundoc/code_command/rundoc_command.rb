@@ -21,3 +21,4 @@ end
 
 
 Rundoc.register_code_command(:rundoc, RundocCommand)
+Rundoc.register_code_command(:"rundoc.configure", RundocCommand)
