@@ -6,12 +6,8 @@ module Rundoc
       # ::: | tail -n 2
       # => "test\ntmp.file\n"
       def initialize(line)
-        line_array = line.split(" ")
-        @first     = line_array.shift.strip
-        @delegate  = Rundoc.code_command_from_keyword(@first, line_array.join(" "))
-        @delegate  = Rundoc::CodeCommand::Bash.new(line) if @delegate.kind_of?(Rundoc::CodeCommand::NoSuchCommand)
+        @delegate = parse(line)
       end
-
       # before: "",
       # after:  "",
       # commands:
@@ -26,6 +22,23 @@ module Rundoc
 
       def to_md(env = {})
         ""
+      end
+
+      private def parse(code)
+        parser = Rundoc::PegParser.new.command
+        tree = parser.parse(code)
+        actual = Rundoc::PegTransformer.new.apply(tree)
+
+        if actual.is_a?(Array)
+          return actual.first
+        else
+          return actual
+        end
+
+      # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
+      # are bash
+      rescue Parslet::ParseFailed
+        Rundoc::CodeCommand::Bash.new(code)
       end
     end
   end
