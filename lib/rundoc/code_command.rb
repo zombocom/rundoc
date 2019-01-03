@@ -29,12 +29,12 @@ module Rundoc
     # Executes command to build project
     # Is expected to return the result of the command
     def call(env = {})
-      raise "not implemented"
+      raise "not implemented on #{self.inspect}"
     end
 
     # the output of the command, i.e. `$ cat foo.txt`
     def to_md(env = {})
-      raise "not implemented"
+      raise "not implemented on #{self.inspect}"
     end
   end
 end
