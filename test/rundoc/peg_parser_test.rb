@@ -261,6 +261,39 @@ class PegParserTest < Minitest::Test
     assert_equal("email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`", actual.original_args)
   end
 
+  def test_rundoc_sub_commands_no_quotes
+    input = String.new
+    input << %Q{:::-- rundoc.depend_on ../foo/bar.md\n}
+
+    parser = Rundoc::PegParser.new.command_with_stdin
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal :"rundoc.depend_on", actual.keyword
+  end
+
+  def test_seattle_style_method_call
+    input = String.new
+    input << %Q{rundoc.depend_on '../foo/bar.md'}
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+
+    assert_equal :"rundoc.depend_on", actual.keyword
+  end
+
+  def test_rundoc_seattle_sub_command
+    input = String.new
+    input << %Q{:::>> rundoc.depend_on '../foo/bar.md'\n}
+
+    parser = Rundoc::PegParser.new.command
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+
+    assert_equal :"rundoc.depend_on", actual.keyword
+  end
 
   def test_positional_args
     input = +""

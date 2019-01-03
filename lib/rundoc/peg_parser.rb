@@ -119,7 +119,7 @@ module Rundoc
       (
         start_command >>
         visability.as(:cmd_visability) >> spaces? >>
-        method_call.as(:cmd_method_call) >> newline #>> match(/\z/)
+        method_call.as(:cmd_method_call) >> newline.maybe #>> match(/\z/)
       ).as(:command)
     }
 

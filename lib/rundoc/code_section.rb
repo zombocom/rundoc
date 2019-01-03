@@ -32,6 +32,7 @@ module Rundoc
       @commands = []
       @stack    = []
       @keyword  = options[:keyword] or raise "keyword is required"
+      @document_path = options[:document_path]
       @fence    = match[:fence]
       @lang     = match[:lang]
       @code     = match[:contents]
@@ -42,8 +43,9 @@ module Rundoc
       result = []
       env    = {}
       env[:commands] = []
-      env[:before]   = "#{fence}#{lang}"
-      env[:after]    = "#{fence}"
+      env[:before]   = String.new("#{fence}#{lang}")
+      env[:after]    = String.new(fence)
+      env[:document_path] = @document_path
 
       @stack.each do |s|
         unless s.respond_to?(:call)
@@ -55,7 +57,7 @@ module Rundoc
         code_output  = code_command.call(env)  || ""
         code_line    = code_command.to_md(env) || ""
 
-        env[:commands] << { object: code_command, output: code_output, command: code_line}
+        env[:commands] << { object: code_command, output: code_output, command: code_line }
 
         tmp_result = []
         tmp_result << code_line   if code_command.render_command?
@@ -70,7 +72,12 @@ module Rundoc
       return "" if hidden?
 
       array = [env[:before], result, env[:after]]
-      return array.flatten.compact.map(&:rstrip).reject(&:empty?).join("\n") << "\n"
+      array.flatten!
+      array.compact!
+      array.map!(&:rstrip)
+      array.reject!(&:empty?)
+
+      return array.join("\n") << "\n"
     end
 
     # all of the commands are hidden
