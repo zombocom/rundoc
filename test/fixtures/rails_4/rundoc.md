@@ -56,7 +56,7 @@ Press enter at the prompt to upload your existing `ssh` key or create a new one,
 You may be starting from an existing app, if so [upgrade to Rails 4](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-3-2-to-rails-4-0) before continuing. If not, a vanilla Rails 4 app will serve as a suitable sample app. To build a new app make sure that you're using the Rails 4.x using `$ rails -v`. You can get the new version of rails by running,
 
 ```term
-:::>> $ gem install rails -v 4.2.9 --no-ri --no-rdoc
+:::>> $ gem install rails -v 4.2.9 --no-document
 ```
 
 Note: There may be a [more recent version of Rails](https://rubygems.org/gems/rails/versions) available, we recommend always running the latest. You may want to [run Rails 5 on Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5).
