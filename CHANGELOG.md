@@ -1,5 +1,6 @@
 ## master
 
+- The `rundoc` command is now `rundoc.configure`.
 - Ignore chdir warning since that affect is intentional [#20](https://github.com/schneems/rundoc/pull/20)
 
 ## 1.0.0
