@@ -18,7 +18,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 4.x](getting-started-with-rails4) or [Rails 3.x](getting-started-with-rails3).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.5.3'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.6.0'"
 ```
 
 For this guide you will need:
@@ -53,7 +53,7 @@ If you are starting with an existing app that uses a previous version of Rails, 
 To create a new app, first make sure that you're using Rails 5.x by running `rails -v`. If necessary, you can get the new version of rails by running the following:
 
 ```term
-:::>> $ gem install rails --no-ri --no-rdoc
+:::>> $ gem install rails --no-document
 ```
 
 Then create a new app and move into its root directory:
@@ -158,7 +158,7 @@ Rails 5 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby instal
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "2.5.3"
+ruby "2.6.0"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
