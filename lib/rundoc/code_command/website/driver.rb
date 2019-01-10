@@ -6,16 +6,22 @@ class Rundoc::CodeCommand::Website
   class Driver
     attr_reader :session
 
-    def initialize(name: , url: , width: 1024, height: 720)
+    def initialize(name: , url: , width: 1024, height: 720, visible: false)
       browser_options = ::Selenium::WebDriver::Chrome::Options.new
-      browser_options.args << '--headless'
+      browser_options.args << '--headless' unless visible
       browser_options.args << '--disable-gpu' if Gem.win_platform?
       browser_options.args << '--hide-scrollbars'
       # browser_options.args << "--window-size=#{width},#{height}"
       @width = width
       @height = height
 
-      @session = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options)
+      @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options)
+      driver_name = "rundoc_driver_#{name}".to_sym
+      Capybara.register_driver(driver_name) do |app|
+        @driver
+      end
+
+      @session = Capybara::Session.new(driver_name)
     end
 
     def visit(url)
@@ -42,8 +48,19 @@ class Rundoc::CodeCommand::Website
       @tasks
     end
 
+    def safe_eval(code)
+      @driver.send(:eval, code)
+    rescue => e
+      msg = String.new
+      msg << "Error running code #{code.inspect} at #{current_url.inspect}\n"
+      msg << "saving a screenshot to: `tmp/error.png`"
+      puts msg
+      session.save_screenshot("tmp/error.png")
+      raise e
+    end
+
     def screenshot(upload: false)
-      session.resize_window_to(session.current_window_handle, @width, @height)
+      @driver.resize_window_to(@driver.current_window_handle, @width, @height)
       FileUtils.mkdir_p("tmp/rundoc_screenshots")
       file_name = self.class.next_screenshot_name
       file_path = "tmp/rundoc_screenshots/#{file_name}"

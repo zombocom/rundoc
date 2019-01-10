@@ -1,6 +1,6 @@
 class Rundoc::CodeCommand::Website
   class Visit < Rundoc::CodeCommand
-    def initialize(name: , url: , scroll: nil, height: 720, width: 1024)
+    def initialize(name: , url: nil, scroll: nil, height: 720, width: 1024, visible: false)
       @name = name
       @url  = url
       @scroll = scroll
@@ -8,7 +8,8 @@ class Rundoc::CodeCommand::Website
         name: name,
         url: url,
         height: height,
-        width: width
+        width: width,
+        visible: visible
       )
       Driver.add(@name, @driver)
     end
@@ -23,12 +24,12 @@ class Rundoc::CodeCommand::Website
 
       puts message
 
-      @driver.visit(@url)
+      @driver.visit(@url) if @url
       @driver.scroll(@scroll) if @scroll
 
 
       return "" if contents.nil? || contents.empty?
-      @driver.send(:eval, contents)
+      @driver.safe_eval(contents)
 
       return ""
     end
