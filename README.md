@@ -79,6 +79,7 @@ This will generate a project folder with your project in it, and a markdown READ
   - [background.log.clear](#background)
 - Take screenshots
   - [website.visit](#screenshots)
+  - [website.nav](#screenshots)
   - [website.screenshot](#screenshots)
 - Configure RunDOC
   - [rundoc.configure](#configure)
@@ -387,12 +388,24 @@ Once you're on the page you want to capture you can execute `website.screenshot`
 ```
 :::>> website.visit(name: "localhost", url: "http://localhost:3000", scroll: 100)
 session.execute_script "window.scrollBy(0,100)"
-session.click("sign up")
+session.first(:link, "sign up").click
 
 :::>> website.screenshot(name: "localhost")
 ```
 
 The result of the screenshot command will be to replace the code section with a markdown link to a relative path of the screenshot.
+
+Once you've visited a website you can further navigate using `website.nav` or `website.navigate`:
+
+
+```
+:::>> website.visit(name: "localhost", url: "http://localhost:3000")
+:::>> website.navigate(name: "localhost")
+session.execute_script "window.scrollBy(0,100)"
+session.first(:link, "sign up").click
+
+:::>> website.screenshot(name: "localhost")
+```
 
 ## Upload Screenshots
 
