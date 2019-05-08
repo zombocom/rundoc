@@ -7,6 +7,7 @@ class Rundoc::CodeCommand::Background
       @name    = name
       @wait    = wait
       @allow_fail = allow_fail
+      FileUtils.touch(log)
 
       @spawn = ProcessSpawn.new(
         @command,
