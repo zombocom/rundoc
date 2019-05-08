@@ -1,5 +1,13 @@
+```
+:::-- rundoc
+email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`
+
+Rundoc.configure do |config|
+  config.project_root = "myapp"
+  config.filter_sensitive(email => "developer@example.com")
 end
 ```
+
 <!--
   rundoc src:
   https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_6/rundoc.md
