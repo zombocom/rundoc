@@ -131,7 +131,7 @@ You can verify that the page is there by running your server:
 :::-- background.stop(name: "server")
 ```
 
-And visiting [http://localhost:3000](http://localhost:3000) in your browser. If you do not see the page, [use the logs](#view-the-logs) that are output to your server to debug.
+And visiting [http://localhost:3000](http://localhost:3000) in your browser. If you do not see the page, [use the logs](#view-logs) that are output to your server to debug.
 
 ## Heroku gems
 
