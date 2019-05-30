@@ -25,6 +25,10 @@ class Rundoc::CodeCommand::Background
     def call(env = {})
       @spawn.wait(@wait)
       @spawn.check_alive! unless @allow_fail
+
+      # WTF BBQ SAUCE
+      FileUtils.touch(@spawn.log)
+
       @spawn.log.read
     end
 
