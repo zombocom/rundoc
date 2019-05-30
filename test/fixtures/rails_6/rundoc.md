@@ -25,7 +25,7 @@ Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.
 For this guide you will need:
 
 - Basic familiarity with Ruby/Rails and Git
-- A locally installed version of Ruby 2.2.0+, Rubygems, Bundler, and Rails 6+
+- A locally installed version of Ruby 2.5.0+, Rubygems, Bundler, and Rails 6+
 - A Heroku user account: [Signup is free and instant](https://signup.heroku.com/devcenter).
 
 ## Local setup
