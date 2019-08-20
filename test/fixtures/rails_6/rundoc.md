@@ -52,7 +52,7 @@ Press Enter at the prompt to upload your existing `ssh` key or create a new one,
 To create a new app, first make sure that you're using Rails 6.x by running `rails -v`. If necessary, you can get the new version of rails by running the following:
 
 ```term
-:::>> $ gem install rails --pre --no-document
+:::>> $ gem install rails --no-document
 ```
 
 Then create a new app and move into its root directory:
