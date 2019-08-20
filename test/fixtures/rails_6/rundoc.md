@@ -351,6 +351,13 @@ You'll also want to add `.env` to your `.gitignore` since this is for local envi
 :::>- $ git commit -m "add .env to .gitignore"
 ```
 
+If you're running Rails 6.0.0 you'll need to create a `tmp/pids` directory:
+
+```term
+:::>> $ mkdir -p tmp/pids
+:::>> $ touch tmp/pids/.gitkeep
+```
+
 Test your Procfile locally using Foreman. You can now start your web server by running:
 
 ```term
