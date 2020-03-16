@@ -68,6 +68,12 @@ Then move into your application directory.
 :::>- $ cd myapp
 ```
 
+Create a database locally:
+
+```
+:::>> $ bin/rake db:create
+```
+
 ## Add the pg gem
 
 If you're using an existing app that was created without specifying `--database=postgresql`, you need to add the `pg` gem to your Rails project. Edit your `Gemfile` and change this line:
