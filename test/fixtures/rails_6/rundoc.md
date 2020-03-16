@@ -19,7 +19,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 6 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 5.x](getting-started-with-rails5) or [Rails 4.x](getting-started-with-rails4).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.6.3'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.6.5'"
 ```
 
 For this guide you will need:
@@ -157,7 +157,7 @@ Rails 6 requires Ruby 2.2.0 or above. Heroku has a recent version of Ruby instal
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "2.6.3"
+ruby "2.6.5"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -211,7 +211,7 @@ You can verify that the remote was added to your project by running:
 :::>> $ git config --list | grep heroku
 ```
 
-If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you can deploy your code. After you deploy your code, you  need to migrate your database, make sure it is properly scaled, and use logs to debug any issues that come up.
+If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise, you can deploy your code. After you deploy your code, you need to migrate your database, make sure it is properly scaled, and use logs to debug any issues that come up.
 
 Deploy your code:
 
