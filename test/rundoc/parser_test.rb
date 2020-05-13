@@ -83,7 +83,6 @@ puts b
 ```
 RUBY
 
-
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
 
