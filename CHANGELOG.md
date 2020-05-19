@@ -1,5 +1,7 @@
 ## master
 
+- Sleep 1 second before reading from log file to avoid race condition
+
 ## 1.1.0
 
 - Pipe logic is now implemented through a parser (https://github.com/schneems/rundoc/pull/22)

@@ -62,6 +62,7 @@ class Rundoc::CodeCommand::Background
       call
       return unless wait_value
 
+      sleep 1
       Timeout.timeout(Integer(timeout_value)) do
         until @log.read.match(wait_value)
           sleep 0.01
