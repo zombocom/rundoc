@@ -1,5 +1,9 @@
 ## master
 
+## 1.1.1
+
+- Fix log read race condition (https://github.com/schneems/rundoc/pull/25)
+
 ## 1.1.0
 
 - Pipe logic is now implemented through a parser (https://github.com/schneems/rundoc/pull/22)
