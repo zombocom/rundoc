@@ -48,9 +48,9 @@ class Rundoc::CodeCommand::Background
     def initialize(command , timeout: 5, log: Tempfile.new("log"), out: "2>&1")
       @command = command
       @timeout_value = timeout
-      @log           = log
+      @log_reference = log # https://twitter.com/schneems/status/1285289971083907075
 
-      @log = Pathname.new(@log)
+      @log = Pathname.new(log)
       @log.dirname.mkpath
       FileUtils.touch(@log)
 
