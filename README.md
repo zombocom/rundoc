@@ -39,7 +39,7 @@ $ gem install rundoc
 or add it to your Gemfile:
 
 ```
-gem 'rundoc`
+gem 'rundoc'
 ```
 
 ## Use It
