@@ -128,8 +128,6 @@ This code block might generate an output something like this to your markdown do
         Gemfile.lock  Rakefile  config    db    lib   public    test    vendor
     ```
 
-### Stdin
-
 Any items below the command will be passed into the stdin of the command. For example using a `$` command you can effectively pipe contents to stdin:
 
     ```
@@ -203,13 +201,13 @@ It looks like the command was run without any flags, but in reality `rails new m
 
 ## Rendering Cheat Sheet
 
-An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The posions two positions are **command** first and **result** second.
+An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The two positions are **command** first and **result** second.
 
 
-- `:::>-` (yes command, not result)
-- `:::>>` (yes command, yes result)
-- `:::--` (not command, not result)
-- `:::->` (not command, yes result)
+- `:::>-` (YES command output, not result output)
+- `:::>>` (YES command output, YES result output)
+- `:::--` (not command output, not result output)
+- `:::->` (not command output, YES result output)
 
 ## Shell Commands
 
@@ -463,7 +461,7 @@ You can configure your docs in your docs use the `RunDOC` command
 
 Note: Make sure you run this as a hidden command (with `-`).
 
-** After Build**
+**After Build**
 
 This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
 
@@ -500,7 +498,7 @@ Sometimes sensitive info like usernames, email addresses, or passwords may be in
     ```
     :::-- rundoc.configure
     Rundoc.configure do |config|
-      config.filter_sensitive("schneems@exmaple.com" => "developer@example.com")
+      config.filter_sensitive("schneems@example.com" => "developer@example.com")
     end
     ```
 
@@ -508,4 +506,4 @@ This command `filter_sensitive` can be called multiple times with different valu
 
 ## Copyright
 
-All content Copyright Richard Schneeman © 2019
+All content Copyright Richard Schneeman © 2020
