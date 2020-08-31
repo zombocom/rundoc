@@ -1,5 +1,7 @@
 ## HEAD
 
+## 1.1.2
+
 - Fix pipe support (https://github.com/schneems/rundoc/pull/28)
 
 ## 1.1.1
