@@ -222,7 +222,7 @@ If you see `fatal: not in a git directory` then you are likely not in the correc
 Deploy your code:
 
 ```term
-:::>> $ git push heroku master
+:::>> $ git push heroku main || git push heroku master
 ```
 
 It is always a good idea to check to see if there are any warnings or errors in the output. If everything went well you can migrate your database.
@@ -376,7 +376,7 @@ Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
 ```term
 :::>- $ git add .
 :::>- $ git commit -m "use puma via procfile"
-:::>- $ git push heroku master
+:::>- $ git push heroku main || git push heroku master
 ```
 
 Check `ps`. You'll see that the web process uses your new command specifying Puma as the web server.

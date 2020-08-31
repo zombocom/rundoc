@@ -8,6 +8,7 @@ module Rundoc
       def initialize(line)
         @delegate = parse(line)
       end
+
       # before: "",
       # after:  "",
       # commands:
@@ -25,15 +26,14 @@ module Rundoc
       end
 
       private def parse(code)
-        parser = Rundoc::PegParser.new.command
+        parser = Rundoc::PegParser.new.method_call
         tree = parser.parse(code)
         actual = Rundoc::PegTransformer.new.apply(tree)
 
-        if actual.is_a?(Array)
-          return actual.first
-        else
-          return actual
-        end
+        actual = actual.first if actual.is_a?(Array)
+
+        actual = Rundoc::CodeCommand::Bash.new(code) if actual.is_a?(Rundoc::CodeCommand::NoSuchCommand)
+        return actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash

@@ -116,6 +116,16 @@ class PegParserTest < Minitest::Test
     assert_equal false, actual.result?
   end
 
+  def test_blerg_method_call
+    input = %Q{$ cat foo.rb}
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal :"$", actual.keyword
+    assert_equal("cat foo.rb", actual.original_args)
+  end
+
   def test_command
     input = %Q{:::>> $ cat foo.rb\n}
     parser = Rundoc::PegParser.new.command
