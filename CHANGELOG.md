@@ -1,5 +1,7 @@
 ## HEAD
 
+- Bugfix: Bash commands that output to stderr and use `||` are now captured (https://github.com/schneems/rundoc/pull/29)
+
 ## 1.1.2
 
 - Fix pipe support (https://github.com/schneems/rundoc/pull/28)
