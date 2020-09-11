@@ -1,5 +1,7 @@
 ## HEAD
 
+## 1.1.3
+
 - Bugfix: Bash commands that output to stderr and use `||` are now captured (https://github.com/schneems/rundoc/pull/29)
 
 ## 1.1.2
