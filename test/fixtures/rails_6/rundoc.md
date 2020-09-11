@@ -214,7 +214,7 @@ Make sure you are in the directory that contains your Rails app, then create an 
 You can verify that the remote was added to your project by running:
 
 ```term
-:::>> $ git config --list | grep heroku
+:::>> $ git config --list --local | grep heroku
 ```
 
 If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise, you can deploy your code. After you deploy your code, you need to migrate your database, make sure it is properly scaled, and use logs to debug any issues that come up.
