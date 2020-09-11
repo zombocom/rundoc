@@ -9,7 +9,7 @@ end
 ```
 <!--
   rundoc src:
-  https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_5/rundoc.md
+  https://github.com/schneems/rundoc/blob/main/test/fixtures/rails_5/rundoc.md
 
   Command:
   $ bin/rundoc build --path test/fixtures/rails_5/rundoc.md
@@ -220,10 +220,14 @@ You can verify that the remote was added to your project by running:
 
 If you see `fatal: not in a git directory` then you are likely not in the correct directory. Otherwise you can deploy your code. After you deploy your code, you  need to migrate your database, make sure it is properly scaled, and use logs to debug any issues that come up.
 
+
+>note
+>Following changes in the industry, Heroku has updated our default git branch name to `main`. If the project you’re deploying uses `master` as its default branch name, use `git push heroku master`.
+
 Deploy your code:
 
 ```term
-:::>> $ git push heroku master
+:::>> $ git push heroku main
 ```
 
 It is always a good idea to check to see if there are any warnings or errors in the output. If everything went well you can migrate your database.
@@ -370,7 +374,7 @@ Looks good, so press `Ctrl+C` to exit and you can deploy your changes to Heroku:
 ```term
 :::>- $ git add .
 :::>- $ git commit -m "use puma via procfile"
-:::>- $ git push heroku master
+:::>- $ git push heroku main
 ```
 
 Check `ps`. You'll see that the web process uses your new command specifying Puma as the web server.
