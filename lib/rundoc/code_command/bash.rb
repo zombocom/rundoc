@@ -32,12 +32,13 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
   end
 
   def shell(cmd, stdin = nil)
+    cmd = "(#{cmd}) 2>&1"
     msg  = "Running: $ '#{cmd}'"
     msg  << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
     puts msg
 
     result = ""
-    IO.popen("#{cmd} 2>&1", "w+") do |io|
+    IO.popen(cmd, "w+") do |io|
       io << stdin if stdin
       io.close_write
       result = sanitize_escape_chars io.read
