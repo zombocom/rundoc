@@ -10,7 +10,7 @@ end
 
 <!--
   rundoc src:
-  https://github.com/schneems/rundoc/blob/master/test/fixtures/rails_6/rundoc.md
+  https://github.com/schneems/rundoc/blob/main/test/fixtures/rails_6/rundoc.md
 
   Command:
   $ bin/rundoc build --path test/fixtures/rails_6/rundoc.md
