@@ -13,7 +13,7 @@ end
 -->
 
 > warning
-> The latest version of Rails available is [Rails 5](https://devcenter.heroku.com/articles/getting-started-with-rails5). If you are starting a new application we recommend you use the most recently released version.
+> The latest version of Rails available is [Rails 6](https://devcenter.heroku.com/articles/getting-started-with-rails6). If you are starting a new application we recommend you use the most recently released version.
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 

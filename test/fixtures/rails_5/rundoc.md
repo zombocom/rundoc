@@ -15,6 +15,9 @@ end
   $ bin/rundoc build --path test/fixtures/rails_5/rundoc.md
 -->
 
+> warning
+> The latest version of Rails available is [Rails 6](https://devcenter.heroku.com/articles/getting-started-with-rails6). If you are starting a new application we recommend you use the most recently released version.
+
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 5 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 4.x](getting-started-with-rails4) or [Rails 3.x](getting-started-with-rails3).
 
 ```
