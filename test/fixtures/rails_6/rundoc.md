@@ -5,6 +5,7 @@ email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`
 Rundoc.configure do |config|
   config.project_root = "myapp"
   config.filter_sensitive(email => "developer@example.com")
+  config.filter_sensitive(Dir.pwd => ".")
 end
 ```
 
@@ -19,7 +20,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 6 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 5.x](getting-started-with-rails5) or [Rails 4.x](getting-started-with-rails4).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.6.6'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.7.2'"
 ```
 
 For this guide you will need:
@@ -65,6 +66,7 @@ Then move into your application directory.
 
 ```term
 :::>- $ cd myapp
+:::>> $ bundle lock --add-platform x86_64-linux --add-platform ruby
 ```
 
 Create a database locally:
@@ -163,7 +165,7 @@ Rails 6 requires Ruby 2.5.0 or above. Heroku has a recent version of Ruby instal
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "2.6.6"
+ruby "2.7.2"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
