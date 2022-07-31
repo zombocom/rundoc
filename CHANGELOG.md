@@ -1,5 +1,7 @@
 ## HEAD
 
+- Breaking: Remove repl_runner support.
+
 ## 1.1.3
 
 - Bugfix: Bash commands that output to stderr and use `||` are now captured (https://github.com/schneems/rundoc/pull/29)

@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "thor"
-  gem.add_dependency "repl_runner"
   gem.add_dependency 'parslet', '~> 1'
   gem.add_dependency 'capybara', '~> 3'
   gem.add_dependency 'selenium-webdriver', '~> 3'
