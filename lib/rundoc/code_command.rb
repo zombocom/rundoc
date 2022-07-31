@@ -43,7 +43,6 @@ end
 require 'rundoc/code_command/bash'
 require 'rundoc/code_command/pipe'
 require 'rundoc/code_command/write'
-require 'rundoc/code_command/repl'
 require 'rundoc/code_command/rundoc_command'
 require 'rundoc/code_command/no_such_command'
 require 'rundoc/code_command/raw'

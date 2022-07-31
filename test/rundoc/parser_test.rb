@@ -71,28 +71,4 @@ RUBY
       end
     end
   end
-
-  def test_irb
-
-    contents =  <<-RUBY
-```
-:::>> irb --simple-prompt
-a = 3
-b = "foo" * a
-puts b
-```
-RUBY
-
-    Dir.mktmpdir do |dir|
-      Dir.chdir(dir) do
-
-        parsed = Rundoc::Parser.new(contents)
-        actual = parsed.to_md
-        expected = "```\n$ irb --simple-prompt\na = 3\n=> 3\r\nb = \"foo\" * a\n=> \"foofoofoo\"\r\nputs b\nfoofoofoo\r\n=> nil\n```\n"
-        assert_equal expected, actual
-      end
-    end
-
-  end
-
 end

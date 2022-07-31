@@ -146,7 +146,7 @@ Would output:
    bahz
    ```
 
-This STDIN feature could be useful if you are running an interactive command such as `play new` which requires user input. For more fine grained input you'll need to use a custom repl object (will be covered later).
+This STDIN feature could be useful if you are running an interactive command such as `play new` which requires user input.
 
 Different commands will do different things with this input. For example the `rundoc` command executes Ruby configuration code:
 

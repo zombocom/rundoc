@@ -62,10 +62,6 @@ module Rundoc
     yield self
   end
 
-  def register_repl(*args, &block)
-    ReplRunner.register_commands(*args, &block)
-  end
-
   def filter_sensitive(sensitive)
     raise "Expecting #{sensitive} to be a hash" unless sensitive.is_a?(Hash)
     @sensitive ||= {}
