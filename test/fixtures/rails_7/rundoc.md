@@ -20,7 +20,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 7 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 6.x](getting-started-with-rails6) or [Rails 5.x](getting-started-with-rails5).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.0.2'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.2'"
 ```
 
 Before continuing, it’s helpful to have:
@@ -45,20 +45,20 @@ Generating new SSH public key.
 Uploading ssh public key /Users/adam/.ssh/id_rsa.pub
 ```
 
-Press Enter at the prompt to upload an existing `ssh` key or create a new one. 
+Press Enter at the prompt to upload an existing `ssh` key or create a new one.
 
 >info
 >After November 30, 2021, Heroku [will no longer support the SSH Git transport](​​https://devcenter.heroku.com/changelog-items/2215). SSH keys will serve no purpose in pushing code to applications on the Heroku platform.
 
-## Create a New or Upgrade an Existing Rails App 
+## Create a New or Upgrade an Existing Rails App
 
 Ensure Rails 7 is installed with `rails -v` before creating an app. If necessary, install Rails 7 with `gem install`:
 
 ```term
-:::>> $ gem install rails --no-document --pre
+:::>> $ gem install rails --no-document
 ```
 
-Create an app and move it into its root directory:
+Create a Rails app:
 
 ```term
 :::>- $ rails new myapp --database=postgresql
@@ -79,7 +79,7 @@ Create a local database:
 
 ## Add the pg gem
 
-For new or existing apps where `--database=postgresql` wasn’t defined, confirm the `sqlite3` gem doesn’t exist in the `Gemfile`. Add the `pg` gem in its place. 
+For new or existing apps where `--database=postgresql` wasn’t defined, confirm the `sqlite3` gem doesn’t exist in the `Gemfile`. Add the `pg` gem in its place.
 
 Within the `Gemfile` remove:
 
@@ -93,11 +93,11 @@ And replace it with:
 gem 'pg'
 ```
 
-> callout Heroku highly recommends using PostgreSQL locally during development. Maintaining [parity between development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of the differences in those environments. 
+> callout Heroku highly recommends using PostgreSQL locally during development. Maintaining [parity between development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of the differences in those environments.
 >
 > [Install Postgres locally](heroku-postgresql#local-setup) now if not present on the system, already. For more information on why Postgres is recommended instead of Sqlite3, see [why Sqlite3 is not compatible with Heroku](sqlite3).
 
-With the `Gemfile` updated, reinstall the dependencies: 
+With the `Gemfile` updated, reinstall the dependencies:
 
 ```ruby
 $ bundle install
@@ -164,13 +164,13 @@ end
 
 ## Specify the Ruby Version
 
-Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby buy default. Specify an exact version with the `ruby` DSL in `Gemfile` like the following example of defining Ruby 3.0.2:
+Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby buy default. Specify an exact version with the `ruby` DSL in `Gemfile` like the following example of defining Ruby 3.1.2:
 
 
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "3.0.2"
+ruby "3.1.2"
 ```
 
 Always use the same version of Ruby locally, too. Confirm the local version of ruby with `ruby -v`. Refer to the [Ruby Versions](ruby-versions) article for more details on defining a specific ruby version.
@@ -213,7 +213,7 @@ With the application committed to Git, it is ready to deploy to Heroku.
 Inside the Rails app’s root directory, use the Heroku CLI to create an app on Heroku:
 
 ```term
-:::>> $ heroku create
+:::>> $ heroku apps:create --stack=heroku-22
 ```
 
 The Heroku CLI adds the Git remote automatically. Verify it is set with `git config`:
@@ -222,7 +222,7 @@ The Heroku CLI adds the Git remote automatically. Verify it is set with `git con
 :::>> $ git config --list --local | grep heroku
 ```
 
-Git returns `fatal: not in a git directory` if the current directory is incorrect or Git is not [initialized](#store-the-app-in-git). If Git returns a list of remotes, it is ready to deploy. 
+Git returns `fatal: not in a git directory` if the current directory is incorrect or Git is not [initialized](#store-the-app-in-git). If Git returns a list of remotes, it is ready to deploy.
 
 >note
 >Following changes in the industry, Heroku [updated the default branch name](​​https://devcenter.heroku.com/changelog-items/1829) to `main`. If the project uses `master` as its default branch name, use `git push heroku master`.
@@ -233,13 +233,13 @@ Deploy the code:
 :::>> $ git push heroku main
 ```
 
-The output may display warnings or error messages. Check the output for these and make adjustments as necessary. 
+The output may display warnings or error messages. Check the output for these and make adjustments as necessary.
 
 If the deployment is successful, the application may need a few additional adjustments:
 
 * Migration of the database
 * Ensure proper dyno scaling
-* Reference the app’s logs if any issues arise 
+* Reference the app’s logs if any issues arise
 
 ## Migrate The Database
 
@@ -273,7 +273,7 @@ Use `heroku open` to launch the app in the browser.
 :::>> $ heroku open
 ```
 
-The browser should display the “Hello World” text defined previously. If it does not, or an error is present, [review and confirm the welcome page contents](#create-a-welcome-page). 
+The browser should display the “Hello World” text defined previously. If it does not, or an error is present, [review and confirm the welcome page contents](#create-a-welcome-page).
 
 Heroku provides a default web URL for every application during development. When the application is ready to scale up for production, add a [custom domain](https://devcenter.heroku.com/articles/custom-domains).
 
@@ -333,7 +333,7 @@ After adding the `puma` gem, install it:
 :::>- $ bundle install
 ```
 
-Rails 7 uses `config/puma.rb` to define Puma’s configuration and functionality with Puma installed. Heroku recommends reviewing [additional Puma configuration options](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) to maximize the app’s performance. 
+Rails 7 uses `config/puma.rb` to define Puma’s configuration and functionality with Puma installed. Heroku recommends reviewing [additional Puma configuration options](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) to maximize the app’s performance.
 
 If `config/puma.rb` doesn’t exist, create one using [Heroku’s Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
 
