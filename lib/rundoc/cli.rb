@@ -65,7 +65,7 @@ module Rundoc
       File.open(source_path, "w") { |f| f.write @output }
 
       puts "== Copying source"
-      source_path = project_dir.join("coppied-#{@path.to_s.split('/').last}")
+      source_path = project_dir.join("copied-#{@path.to_s.split('/').last}")
       File.open(source_path, "w") { |f| f.write source_contents }
 
       Dir.chdir(project_dir) do
