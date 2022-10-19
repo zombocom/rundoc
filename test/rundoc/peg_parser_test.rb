@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'parslet/convenience'
+require "test_helper"
+require "parslet/convenience"
 
 class PegParserTest < Minitest::Test
   def setup
@@ -7,10 +7,10 @@ class PegParserTest < Minitest::Test
   end
 
   def test_string
-    input = %Q{"hello world"}
+    input = %("hello world")
     parser = Rundoc::PegParser.new.string
     tree = parser.parse_with_debug(input)
-    expected = {:string => "hello world"}
+    expected = {string: "hello world"}
     assert_equal expected, tree
 
     actual = @transformer.apply(tree)
@@ -18,42 +18,42 @@ class PegParserTest < Minitest::Test
   end
 
   def test_keyword_args
-    input = %Q{foo: 'bar', baz: "boo"}
+    input = %(foo: 'bar', baz: "boo")
     parser = Rundoc::PegParser.new.named_args
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
-    expected = {foo: 'bar', baz: "boo"}
+    expected = {foo: "bar", baz: "boo"}
     assert_equal expected, actual
   end
 
   def test_method_call
-    input = %Q{sup(foo: 'bar')}
+    input = %{sup(foo: 'bar')}
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
     assert_equal :sup, actual.keyword
-    assert_equal({foo: 'bar'}, actual.original_args)
+    assert_equal({foo: "bar"}, actual.original_args)
 
     # seattle style
-    input = %Q{sup foo: 'bar' }
+    input = %(sup foo: 'bar' )
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
     assert_equal :sup, actual.keyword
-    assert_equal({foo: 'bar'}, actual.original_args)
+    assert_equal({foo: "bar"}, actual.original_args)
 
     # with a dot
-    input = %Q{sup.you foo: 'bar' }
+    input = %(sup.you foo: 'bar' )
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
     assert_equal :"sup.you", actual.keyword
-    assert_equal({foo: 'bar'}, actual.original_args)
+    assert_equal({foo: "bar"}, actual.original_args)
   end
 
   def test_with_string_arg
-    input = %Q{sup("hey")}
+    input = %{sup("hey")}
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -61,7 +61,7 @@ class PegParserTest < Minitest::Test
     assert_equal :sup, actual.keyword
     assert_equal("hey", actual.original_args)
 
-    input = %Q{sup "hey"}
+    input = %(sup "hey")
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -69,7 +69,7 @@ class PegParserTest < Minitest::Test
     assert_equal :sup, actual.keyword
     assert_equal("hey", actual.original_args)
 
-    input = %Q{sup hey}
+    input = %(sup hey)
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -77,7 +77,7 @@ class PegParserTest < Minitest::Test
     assert_equal :sup, actual.keyword
     assert_equal("hey", actual.original_args)
 
-    input = %Q{ $ cat foo.rb}
+    input = %( $ cat foo.rb)
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -87,28 +87,28 @@ class PegParserTest < Minitest::Test
   end
 
   def test_visability
-    input = %Q{>>}
+    input = %(>>)
     parser = Rundoc::PegParser.new.visability
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
     assert_equal true, actual.command?
     assert_equal true, actual.result?
 
-    input = %Q{->}
+    input = %(->)
     parser = Rundoc::PegParser.new.visability
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
     assert_equal false, actual.command?
     assert_equal true, actual.result?
 
-    input = %Q{--}
+    input = %(--)
     parser = Rundoc::PegParser.new.visability
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
     assert_equal false, actual.command?
     assert_equal false, actual.result?
 
-    input = %Q{>-}
+    input = %(>-)
     parser = Rundoc::PegParser.new.visability
     tree = parser.parse_with_debug(input)
     actual = @transformer.apply(tree)
@@ -117,7 +117,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_blerg_method_call
-    input = %Q{$ cat foo.rb}
+    input = %($ cat foo.rb)
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -127,7 +127,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_command
-    input = %Q{:::>> $ cat foo.rb\n}
+    input = %(:::>> $ cat foo.rb\n)
     parser = Rundoc::PegParser.new.command
     tree = parser.parse_with_debug(input)
 
@@ -137,7 +137,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_command_with_stdin
-    input = String.new
+    input = +""
     input << ":::>> file.write hello.txt\n"
     input << "world\n"
 
@@ -151,7 +151,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_command_with_stdin_no_string
-    input = String.new
+    input = +""
     input << ":::>> file.write hello.txt\n"
 
     parser = Rundoc::PegParser.new.command_with_stdin
@@ -164,7 +164,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_multiple_commands_stdin
-    input = String.new
+    input = +""
     input << ":::>> file.write hello.txt\n"
     input << "world\n"
     input << ":::>> file.write cinco.txt\n"
@@ -186,7 +186,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_multiple_commands_with_fence
-    input = String.new
+    input = +""
     input << "```\n"
     input << ":::>> file.write hello.txt\n"
     input << "world\n"
@@ -203,7 +203,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_raw
-    input = String.new
+    input = +""
     input << "hello.txt\n"
     input << "world\n"
     input << ":::>> $ cd foo\n"
@@ -218,9 +218,8 @@ class PegParserTest < Minitest::Test
     assert_equal("cd foo", actual.last.original_args)
   end
 
-
   def test_quotes_in_shell_commands
-    input = %Q{:::>- $ git commit -m "init"\n}
+    input = %(:::>- $ git commit -m "init"\n)
     parser = Rundoc::PegParser.new.code_block
     tree = parser.parse_with_debug(input)
 
@@ -231,7 +230,7 @@ class PegParserTest < Minitest::Test
   end
 
   def test_raises_on_syntax
-    input = %Q{:::> $ git commit -m "init"\n}
+    input = %(:::> $ git commit -m "init"\n)
     assert_raises(Rundoc::PegTransformer::TransformError) do
       parser = Rundoc::PegParser.new.code_block
       tree = parser.parse_with_debug(input)
@@ -239,7 +238,6 @@ class PegParserTest < Minitest::Test
       actual = @transformer.apply(tree)
     end
   end
-
 
   def test_no_args
     # input = String.new
@@ -258,10 +256,9 @@ class PegParserTest < Minitest::Test
     # assert_equal :rundoc, actual.keyword
     # assert_nil(actual.original_args)
 
-
-    input = String.new
-    input << %Q{:::-- rundoc\n}
-    input << %Q{email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`\n}
+    input = +""
+    input << %(:::-- rundoc\n)
+    input << %(email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`\n)
 
     parser = Rundoc::PegParser.new.command_with_stdin
     tree = parser.parse_with_debug(input)
@@ -272,8 +269,8 @@ class PegParserTest < Minitest::Test
   end
 
   def test_rundoc_sub_commands_no_quotes
-    input = String.new
-    input << %Q{:::-- rundoc.depend_on ../foo/bar.md\n}
+    input = +""
+    input << %(:::-- rundoc.depend_on ../foo/bar.md\n)
 
     parser = Rundoc::PegParser.new.command_with_stdin
     tree = parser.parse_with_debug(input)
@@ -283,8 +280,8 @@ class PegParserTest < Minitest::Test
   end
 
   def test_seattle_style_method_call
-    input = String.new
-    input << %Q{rundoc.depend_on '../foo/bar.md'}
+    input = +""
+    input << %(rundoc.depend_on '../foo/bar.md')
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
@@ -294,8 +291,8 @@ class PegParserTest < Minitest::Test
   end
 
   def test_rundoc_seattle_sub_command
-    input = String.new
-    input << %Q{:::>> rundoc.depend_on '../foo/bar.md'\n}
+    input = +""
+    input << %(:::>> rundoc.depend_on '../foo/bar.md'\n)
 
     parser = Rundoc::PegParser.new.command
     tree = parser.parse_with_debug(input)
@@ -307,7 +304,7 @@ class PegParserTest < Minitest::Test
 
   def test_positional_args
     input = +""
-    input << %Q{call("foo", "bar", biz: "baz")}
+    input << %{call("foo", "bar", biz: "baz")}
 
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
@@ -316,19 +313,19 @@ class PegParserTest < Minitest::Test
     #
     # Handles more than one value, but not only one value
     actual = @transformer.apply(tree)
-    assert_equal ["foo", "bar", { biz: "baz"}], actual.original_args
+    assert_equal ["foo", "bar", {biz: "baz"}], actual.original_args
 
     input = +""
-    input << %Q{call("foo", biz: "baz")}
+    input << %{call("foo", biz: "baz")}
 
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
-    assert_equal ["foo", { biz: "baz"}], actual.original_args
+    assert_equal ["foo", {biz: "baz"}], actual.original_args
 
     input = +""
-    input << %Q{call("rails server", name: "server")}
+    input << %{call("rails server", name: "server")}
 
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
@@ -350,7 +347,7 @@ class PegParserTest < Minitest::Test
     # ================
 
     input = +""
-    input << %Q{call("foo", "bar")}
+    input << %{call("foo", "bar")}
 
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
@@ -363,19 +360,18 @@ class PegParserTest < Minitest::Test
     # ======================
 
     input = +""
-    input << %Q{call("foo", "bar", biz: "baz")}
+    input << %{call("foo", "bar", biz: "baz")}
 
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
-    assert_equal ["foo", "bar", { biz: "baz"}], actual.original_args
+    assert_equal ["foo", "bar", {biz: "baz"}], actual.original_args
   end
 
   def test_positional_args_code_block
-
     input = +""
-    input << %Q{:::>> background.start("rails server", name: "server")\n}
+    input << %{:::>> background.start("rails server", name: "server")\n}
     # input << %Q{:::-- background.stop(name: "server")\n}
 
     parser = Rundoc::PegParser.new.command
@@ -386,6 +382,6 @@ class PegParserTest < Minitest::Test
 
     actual = @transformer.apply(tree)
     assert_equal :"background.start", actual.keyword
-    assert_equal ["rails server", {:name=>"server"}], actual.original_args
+    assert_equal ["rails server", {name: "server"}], actual.original_args
   end
 end

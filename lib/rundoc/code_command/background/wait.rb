@@ -1,8 +1,8 @@
 class Rundoc::CodeCommand::Background
   class Wait < Rundoc::CodeCommand
-    def initialize(name: , wait:, timeout: 5)
+    def initialize(name:, wait:, timeout: 5)
       @spawn = Rundoc::CodeCommand::Background::ProcessSpawn.find(name)
-      @wait  = wait
+      @wait = wait
       @timeout_value = Integer(timeout)
     end
 

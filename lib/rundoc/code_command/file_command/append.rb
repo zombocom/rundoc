@@ -3,11 +3,9 @@ class Rundoc::CodeCommand::FileCommand
     include FileUtil
 
     def initialize(filename)
-      @filename, line = filename.split('#')
-      if line
-        @line_number = Integer(line)
-      else
-        @line_number = nil
+      @filename, line = filename.split("#")
+      @line_number = if line
+        Integer(line)
       end
     end
 
@@ -16,16 +14,16 @@ class Rundoc::CodeCommand::FileCommand
 
       raise "must call write in its own code section" unless env[:commands].empty?
       before = env[:before]
-      if @line_number
-        env[:before] = "In file `#{filename}`, on line #{@line_number} add:\n\n#{before}"
+      env[:before] = if @line_number
+        "In file `#{filename}`, on line #{@line_number} add:\n\n#{before}"
       else
-        env[:before] = "At the end of `#{filename}` add:\n\n#{before}"
+        "At the end of `#{filename}` add:\n\n#{before}"
       end
       nil
     end
 
     def last_char_of(string)
-      string[-1,1]
+      string[-1, 1]
     end
 
     def ends_in_newline?(string)
@@ -67,13 +65,10 @@ class Rundoc::CodeCommand::FileCommand
         doc = concat_with_newline(doc, contents)
       end
 
-      File.open(filename, "w") do |f|
-        f.write(doc)
-      end
+      File.write(filename, doc)
       contents
     end
   end
 end
 
-
-Rundoc.register_code_command(:'file.append',  Rundoc::CodeCommand::FileCommand::Append)
+Rundoc.register_code_command(:"file.append", Rundoc::CodeCommand::FileCommand::Append)

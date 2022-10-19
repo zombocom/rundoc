@@ -1,7 +1,6 @@
 class ::Rundoc::CodeCommand
   class RundocCommand
     class Require < ::Rundoc::CodeCommand
-
       # Pass in the relative path of another rundoc document in order to
       # run all of it's commands. Resulting contents will be displayed
       # in current document
@@ -15,7 +14,7 @@ class ::Rundoc::CodeCommand
       end
 
       def call(env = {})
-        env[:replace] ||= String.new
+        env[:replace] ||= +""
         current_path = Pathname.new(env[:document_path]).dirname
         document_path = @path.expand_path(current_path)
 
@@ -24,7 +23,7 @@ class ::Rundoc::CodeCommand
         puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
 
         env[:replace] << output
-        return ""
+        ""
       end
 
       def hidden?

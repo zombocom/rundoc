@@ -1,7 +1,7 @@
 class Rundoc::CodeCommand::Website
   class Navigate < Rundoc::CodeCommand
-    def initialize(name: )
-      @name   = name
+    def initialize(name:)
+      @name = name
       @driver = Rundoc::CodeCommand::Website::Driver.find(name)
     end
 

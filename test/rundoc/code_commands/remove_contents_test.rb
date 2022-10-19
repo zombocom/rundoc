@@ -1,7 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
 class RemoveContentsTest < Minitest::Test
-
   def setup
     @gemfile = <<-RUBY
 
@@ -17,7 +16,6 @@ class RemoveContentsTest < Minitest::Test
   def test_appends_to_a_file
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
         @file = "foo.rb"
         `echo "#{@gemfile}" >> #{@file}`
 
@@ -31,7 +29,7 @@ class RemoveContentsTest < Minitest::Test
 
         env = {}
         env[:commands] = []
-        env[:before]   = "```ruby"
+        env[:before] = "```ruby"
         cc.to_md(env)
 
         assert_equal "In file `foo.rb` remove:\n\n```ruby", env[:before]

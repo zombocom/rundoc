@@ -1,12 +1,12 @@
-require 'fileutils'
-require 'pathname'
-require 'rundoc/version'
+require "fileutils"
+require "pathname"
+require "rundoc/version"
 
 module Rundoc
   extend self
 
   def code_command_from_keyword(keyword, args)
-    klass      = code_command(keyword.to_sym) || Rundoc::CodeCommand::NoSuchCommand
+    klass = code_command(keyword.to_sym) || Rundoc::CodeCommand::NoSuchCommand
     original_args = args.dup
     if args.is_a?(Array) && args.last.is_a?(Hash)
       kwargs = args.pop
@@ -73,14 +73,14 @@ module Rundoc
     @sensitive.each do |sensitive, replace|
       doc.gsub!(sensitive.to_s, replace)
     end
-    return doc
+    doc
   end
 
   attr_accessor :project_root
 end
 
-require 'rundoc/parser'
-require 'rundoc/code_section'
-require 'rundoc/code_command'
-require 'rundoc/peg_parser'
-require 'rundoc/cli'
+require "rundoc/parser"
+require "rundoc/code_section"
+require "rundoc/code_command"
+require "rundoc/peg_parser"
+require "rundoc/cli"

@@ -1,6 +1,6 @@
 class Rundoc::CodeCommand::Background::Log
   class Clear < Rundoc::CodeCommand
-    def initialize(name: )
+    def initialize(name:)
       @spawn = Rundoc::CodeCommand::Background::ProcessSpawn.find(name)
     end
 

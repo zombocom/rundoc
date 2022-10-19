@@ -1,6 +1,6 @@
-require 'shellwords'
-require 'timeout'
-require 'fileutils'
+require "shellwords"
+require "timeout"
+require "fileutils"
 
 class Rundoc::CodeCommand::Background
   # This class is responsible for running processes in the background
@@ -45,7 +45,7 @@ class Rundoc::CodeCommand::Background
 
     attr_reader :log, :pid
 
-    def initialize(command , timeout: 5, log: Tempfile.new("log"), out: "2>&1")
+    def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
       @command = command
       @timeout_value = timeout
       @log_reference = log # https://twitter.com/schneems/status/1285289971083907075
@@ -68,7 +68,7 @@ class Rundoc::CodeCommand::Background
         end
       end
     rescue Timeout::Error
-      raise "Timeout waiting for #{@command.inspect} to find a match using #{ wait_value.inspect } in \n'#{ log.read }'"
+      raise "Timeout waiting for #{@command.inspect} to find a match using #{wait_value.inspect} in \n'#{log.read}'"
       false
     end
 
@@ -81,7 +81,7 @@ class Rundoc::CodeCommand::Background
 
     def stop
       return unless alive?
-      Process.kill('TERM', -Process.getpgid(@pid))
+      Process.kill("TERM", -Process.getpgid(@pid))
       Process.wait(@pid)
     end
 

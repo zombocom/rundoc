@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class BackgroundTest < Minitest::Test
   def test_process_spawn_gc
@@ -9,8 +9,7 @@ class BackgroundTest < Minitest::Test
 
         background_start = Rundoc::CodeCommand::Background::Start.new("tail -f #{file}",
           name: "tail2",
-          wait: "f"
-        )
+          wait: "f")
 
         GC.start
 
@@ -30,14 +29,12 @@ class BackgroundTest < Minitest::Test
   def test_background_start
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
         file = "foo.txt"
         `echo 'foo' >> #{file}`
 
         background_start = Rundoc::CodeCommand::Background::Start.new("tail -f #{file}",
           name: "tail",
-          wait: "f"
-        )
+          wait: "f")
         output = background_start.call
 
         assert_match("foo", output)

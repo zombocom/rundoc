@@ -1,6 +1,6 @@
 class Rundoc::CodeCommand::Website
   class Screenshot < Rundoc::CodeCommand
-    def initialize(name: , upload: false)
+    def initialize(name:, upload: false)
       @driver = Rundoc::CodeCommand::Website::Driver.find(name)
       @upload = upload
     end

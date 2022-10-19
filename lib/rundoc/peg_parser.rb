@@ -1,53 +1,53 @@
-require 'parslet'
+require "parslet"
 
 module Rundoc
   class PegParser < Parslet::Parser
-    rule(:spaces)  { match('\s').repeat(1) }
+    rule(:spaces) { match('\s').repeat(1) }
     rule(:spaces?) { spaces.maybe }
-    rule(:comma)   { spaces? >> str(',') >> spaces? }
-    rule(:digit)   { match('[0-9]') }
-    rule(:lparen)  { str('(') >> spaces? }
-    rule(:rparen)  { str(')') }
-    rule(:newline)     { str("\r").maybe >> str("\n") }
+    rule(:comma) { spaces? >> str(",") >> spaces? }
+    rule(:digit) { match("[0-9]") }
+    rule(:lparen) { str("(") >> spaces? }
+    rule(:rparen) { str(")") }
+    rule(:newline) { str("\r").maybe >> str("\n") }
 
     rule(:singlequote_string) {
       str("'") >> (
         str("'").absnt? >> any
       ).repeat.as(:string) >>
-      str("'") >> spaces?
+        str("'") >> spaces?
     }
     rule(:doublequote_string) {
       str('"') >> (
         str('"').absnt? >> any
       ).repeat.as(:string) >>
-      str('"') >> spaces?
+        str('"') >> spaces?
     }
     rule(:string) { doublequote_string | singlequote_string }
 
     rule(:number) {
       (
-        str('-').maybe >> (
-          str('0') | (match('[1-9]') >> digit.repeat)
+        str("-").maybe >> (
+          str("0") | (match("[1-9]") >> digit.repeat)
         ) >> (
-          str('.') >> digit.repeat(1)
+          str(".") >> digit.repeat(1)
         ).maybe >> (
-          match('[eE]') >> (str('+') | str('-')).maybe >> digit.repeat(1)
+          match("[eE]") >> (str("+") | str("-")).maybe >> digit.repeat(1)
         ).maybe
       ).as(:number)
     }
 
     rule(:value) {
       string |
-      number |
-      str('true').as(:true) |
-      str('false').as(:false) |
-      str('nil').as(:nil)
+        number |
+        str("true").as(true) |
+        str("false").as(false) |
+        str("nil").as(:nil)
     }
 
     rule(:key) {
       spaces? >> (
-        str(':').absent? >> match('\s').absent? >> any
-      ).repeat.as(:key) >> str(':') >> spaces?
+        str(":").absent? >> match('\s').absent? >> any
+      ).repeat.as(:key) >> str(":") >> spaces?
     }
 
     rule(:key_value) {
@@ -60,16 +60,16 @@ module Rundoc
       spaces? >> (
         key_value >> (comma >> key_value).repeat
       ).as(:named_args) >>
-      spaces?
+        spaces?
     }
 
     rule(:unquoted_string) {
-      (newline.absent? >> any).repeat.as(:string) #>> newline
+      (newline.absent? >> any).repeat.as(:string) # >> newline
     }
 
     rule(:positional_args) {
       spaces? >> value.as(:val) >> (comma >> value.as(:val)).repeat >>
-      comma.maybe >> named_args.maybe
+        comma.maybe >> named_args.maybe
     }
 
     rule(:args) {
@@ -82,17 +82,17 @@ module Rundoc
 
     rule(:parens_method) {
       funcall >> lparen >>
-      args.as(:args) >>
-      rparen
+        args.as(:args) >>
+        rparen
     }
 
     rule(:seattle_method) {
       funcall >> spaces >>
-      (args).as(:args)
+        args.as(:args)
     }
 
     rule(:no_args_method) {
-      spaces? >> ( lparen.absent? >> rparen.absent? >> spaces.absent? >> any).repeat(1)
+      spaces? >> (lparen.absent? >> rparen.absent? >> spaces.absent? >> any).repeat(1)
     }
 
     rule(:method_call) {
@@ -105,13 +105,13 @@ module Rundoc
     # --
     rule(:visability) {
       (
-        match('>|-').maybe.as(:vis_command) >> match('>|-').maybe.as(:vis_result)
+        match(">|-").maybe.as(:vis_command) >> match(">|-").maybe.as(:vis_result)
       ).as(:visability)
     }
 
     # :::
     rule(:start_command) {
-      match(/\A:/) >> str('::')
+      match(/\A:/) >> str("::")
     }
 
     # :::>> $ cat foo.rb
@@ -119,7 +119,7 @@ module Rundoc
       (
         start_command >>
         visability.as(:cmd_visability) >> spaces? >>
-        method_call.as(:cmd_method_call) >> newline.maybe #>> match(/\z/)
+        method_call.as(:cmd_method_call) >> newline.maybe # >> match(/\z/)
       ).as(:command)
     }
 
@@ -134,7 +134,6 @@ module Rundoc
         ).repeat(1).as(:stdin) |
         command
     }
-
 
     # :::>> file.write hello.txt
     # world
@@ -152,13 +151,13 @@ module Rundoc
       code_fence >>
         match('\S').repeat >>
         newline >>
-      multiple_commands >>
-      code_fence >> newline
+        multiple_commands >>
+        code_fence >> newline
     }
 
     rule(:raw_code) {
       (start_command.absent? >> command.absent? >> any).repeat(1).as(:raw_code) >>
-      multiple_commands.maybe
+        multiple_commands.maybe
     }
 
     rule(:code_block) {
@@ -167,27 +166,26 @@ module Rundoc
   end
 end
 
-
 module Rundoc
   class PegTransformer < Parslet::Transform
-    rule(nill:   simple(:nu)) { nil }
-    rule(true:   simple(:tr)) { true }
-    rule(false:  simple(:fa)) { false }
+    rule(nill: simple(:nu)) { nil }
+    rule(true => simple(:tr)) { true }
+    rule(false => simple(:fa)) { false }
     rule(string: simple(:st)) { st.to_s }
 
-    rule(:number => simple(:nb)) {
-      nb.match(/[eE\.]/) ? Float(nb) : Integer(nb)
+    rule(number: simple(:nb)) {
+      /[eE.]/.match?(nb) ? Float(nb) : Integer(nb)
     }
 
     def self.convert_named_args(na)
-      (na.is_a?(Array) ? na : [ na ]).each_with_object({}) { |element, hash|
+      (na.is_a?(Array) ? na : [na]).each_with_object({}) { |element, hash|
         key = element[:key_value][:key].to_sym
         val = element[:key_value][:val]
         hash[key] = val
       }
     end
 
-    rule(:named_args => subtree(:na)) {
+    rule(named_args: subtree(:na)) {
       PegTransformer.convert_named_args(na)
     }
 
@@ -206,7 +204,7 @@ module Rundoc
         args = nil
       else
         keyword = mc[:funcall].to_sym
-        args    = mc[:args]
+        args = mc[:args]
       end
 
       Rundoc.code_command_from_keyword(keyword, args)
@@ -214,47 +212,47 @@ module Rundoc
 
     class Visability
       attr_reader :command, :result
-      alias :command? :command
-      alias :result? :result
+      alias_method :command?, :command
+      alias_method :result?, :result
       def initialize(command:, result:)
         @command = command
-        @result  = result
+        @result = result
       end
     end
 
     class TransformError < ::StandardError
       attr_reader :line_and_column
-      def initialize(message: , line_and_column:)
+      def initialize(message:, line_and_column:)
         @line_and_column = line_and_column || [1, 1]
         super message
       end
     end
 
-    rule(:visability => {
-            vis_command: simple(:command),
-            vis_result:  simple(:result)
-        }) {
+    rule(visability: {
+      vis_command: simple(:command),
+      vis_result: simple(:result)
+    }) {
       if result.nil? || command.nil?
         line_and_column = command&.line_and_column
         line_and_column ||= result&.line_and_column
 
         message = +""
         message << "You attempted to use a command that does not begin with two visibility indicators. Please replace: "
-        message << "`:::#{command}#{result}` with `:::#{command || '-'}#{result || '-'}`"
+        message << "`:::#{command}#{result}` with `:::#{command || "-"}#{result || "-"}`"
         raise TransformError.new(message: message, line_and_column: line_and_column)
       end
       Visability.new(
-        command: command.to_s == '>'.freeze,
-        result:  result.to_s  == '>'.freeze
+        command: command.to_s == ">".freeze,
+        result: result.to_s == ">".freeze
       )
     }
 
     rule(
-      cmd_visability: simple(:cmd_vis),      # Visibility#new
+      cmd_visability: simple(:cmd_vis), # Visibility#new
       cmd_method_call: simple(:code_command) # Rundoc::CodeCommand#new
-        ) {
+    ) {
       code_command.render_command = cmd_vis.command?
-      code_command.render_result  = cmd_vis.result?
+      code_command.render_result = cmd_vis.result?
       code_command
     }
 

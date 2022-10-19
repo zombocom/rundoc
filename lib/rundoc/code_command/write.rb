@@ -32,18 +32,15 @@ module Rundoc
       def call(env = {})
         puts "Writing to: '#{filename}'"
         mkdir_p
-        File.open(filename, "w") do |f|
-          f.write(contents)
-        end
+        File.write(filename, contents)
         contents
       end
     end
   end
 end
 
+Rundoc.register_code_command(:write, Rundoc::CodeCommand::Write)
+Rundoc.register_code_command(:"file.write", Rundoc::CodeCommand::Write)
 
-Rundoc.register_code_command(:write,        Rundoc::CodeCommand::Write)
-Rundoc.register_code_command(:'file.write', Rundoc::CodeCommand::Write)
-
-require 'rundoc/code_command/file_command/append'
-require 'rundoc/code_command/file_command/remove'
+require "rundoc/code_command/file_command/append"
+require "rundoc/code_command/file_command/remove"

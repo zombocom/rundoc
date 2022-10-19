@@ -1,7 +1,6 @@
 class ::Rundoc::CodeCommand
   class RundocCommand
     class DependOn < ::Rundoc::CodeCommand
-
       # Pass in the relative path of another rundoc document in order to
       # run all of it's commands (but not to )
       def initialize(path)

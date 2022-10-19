@@ -1,11 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class AppendFileTest < Minitest::Test
-
   def test_appends_to_a_file
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
         file = "foo.rb"
         `echo 'foo' >> #{file}`
 
@@ -22,7 +20,7 @@ class AppendFileTest < Minitest::Test
         cc << "baz"
         cc.call
 
-        actual   = File.read(file)
+        actual = File.read(file)
         expected = "foo\nbar\nbaz\n"
         assert_equal expected, actual
       end
@@ -32,10 +30,9 @@ class AppendFileTest < Minitest::Test
   def test_appends_to_a_file_at_line_number
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
-        contents = <<-CONTENTS
-source 'https://rubygems.org'
-gem 'rails', '4.0.0'
+        contents = <<~CONTENTS
+          source 'https://rubygems.org'
+          gem 'rails', '4.0.0'
         CONTENTS
 
         file = "foo.rb"

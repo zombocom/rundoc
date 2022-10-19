@@ -1,4 +1,4 @@
 source "http://rubygems.org"
-gem 'm'
+gem "m"
 
 gemspec
