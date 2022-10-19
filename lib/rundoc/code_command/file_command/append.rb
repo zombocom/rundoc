@@ -51,7 +51,7 @@ class Rundoc::CodeCommand::FileCommand
         end
         result << line
       end
-      doc = result.flatten.join("")
+      result.flatten.join("")
     end
 
     def call(env = {})
