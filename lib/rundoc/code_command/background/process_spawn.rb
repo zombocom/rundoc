@@ -69,7 +69,6 @@ class Rundoc::CodeCommand::Background
       end
     rescue Timeout::Error
       raise "Timeout waiting for #{@command.inspect} to find a match using #{wait_value.inspect} in \n'#{log.read}'"
-      false
     end
 
     def alive?
