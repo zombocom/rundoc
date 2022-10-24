@@ -235,7 +235,7 @@ class PegParserTest < Minitest::Test
       parser = Rundoc::PegParser.new.code_block
       tree = parser.parse_with_debug(input)
 
-      actual = @transformer.apply(tree)
+      @transformer.apply(tree)
     end
   end
 
