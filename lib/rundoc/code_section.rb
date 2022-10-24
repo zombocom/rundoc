@@ -64,7 +64,6 @@ module Rundoc
         tmp_result << code_output if code_command.render_result?
 
         result << tmp_result unless code_command.hidden?
-        result
       end
 
       return env[:replace] if env[:replace]
