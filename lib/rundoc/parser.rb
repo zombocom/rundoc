@@ -29,7 +29,7 @@ module Rundoc
         end
       end
       result.join("")
-    rescue Exception => e
+    rescue => e
       File.write("README.md", result.join(""))
       raise e
     end
