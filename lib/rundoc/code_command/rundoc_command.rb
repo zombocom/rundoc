@@ -11,7 +11,7 @@ module ::Rundoc
 
       def call(env = {})
         puts "Running: #{contents}"
-        eval(contents)
+        eval(contents) # rubocop:disable Security/Eval
         ""
       end
     end
