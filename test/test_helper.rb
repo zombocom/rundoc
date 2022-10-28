@@ -1,13 +1,11 @@
-require 'bundler'
+require "bundler"
 
 Bundler.require
 
-
-require 'rundoc'
+require "rundoc"
 require "minitest/autorun"
 require "mocha/setup"
-require 'tmpdir'
-
+require "tmpdir"
 
 def assert_tests_run
 end

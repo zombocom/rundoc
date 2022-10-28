@@ -1,4 +1,4 @@
-require 'capybara'
+require "capybara"
 
 Capybara::Selenium::Driver.load_selenium
 
@@ -6,11 +6,11 @@ class Rundoc::CodeCommand::Website
   class Driver
     attr_reader :session
 
-    def initialize(name: , url: , width: 1024, height: 720, visible: false)
+    def initialize(name:, url:, width: 1024, height: 720, visible: false)
       browser_options = ::Selenium::WebDriver::Chrome::Options.new
-      browser_options.args << '--headless' unless visible
-      browser_options.args << '--disable-gpu' if Gem.win_platform?
-      browser_options.args << '--hide-scrollbars'
+      browser_options.args << "--headless" unless visible
+      browser_options.args << "--disable-gpu" if Gem.win_platform?
+      browser_options.args << "--hide-scrollbars"
       # browser_options.args << "--window-size=#{width},#{height}"
       @width = width
       @height = height
@@ -51,7 +51,7 @@ class Rundoc::CodeCommand::Website
     def safe_eval(code)
       @driver.send(:eval, code)
     rescue => e
-      msg = String.new
+      msg = +""
       msg << "Error running code #{code.inspect} at #{current_url.inspect}\n"
       msg << "saving a screenshot to: `tmp/error.png`"
       puts msg
@@ -69,19 +69,19 @@ class Rundoc::CodeCommand::Website
       return file_path unless upload
 
       case upload
-      when 's3', 'aws'
+      when "s3", "aws"
         puts "Uploading screenshot to S3"
-        require 'aws-sdk-s3'
-        ENV.fetch('AWS_ACCESS_KEY_ID')
-        s3 = Aws::S3::Resource.new(region: ENV.fetch('AWS_REGION'))
+        require "aws-sdk-s3"
+        ENV.fetch("AWS_ACCESS_KEY_ID")
+        s3 = Aws::S3::Resource.new(region: ENV.fetch("AWS_REGION"))
 
         key = "#{timestamp}/#{file_name}"
-        obj = s3.bucket(ENV.fetch('AWS_BUCKET_NAME')).object(key)
+        obj = s3.bucket(ENV.fetch("AWS_BUCKET_NAME")).object(key)
         obj.upload_file(file_path)
 
         obj.client.put_object_acl(
-          acl: 'public-read' ,
-          bucket: ENV.fetch('AWS_BUCKET_NAME'),
+          acl: "public-read",
+          bucket: ENV.fetch("AWS_BUCKET_NAME"),
           key: key
         )
 
@@ -105,7 +105,7 @@ class Rundoc::CodeCommand::Website
     def self.next_screenshot_name
       @count ||= 0
       @count += 1
-      return "screenshot_#{@count}.png"
+      "screenshot_#{@count}.png"
     end
   end
 end

@@ -1,24 +1,23 @@
 module Rundoc
   class CLI
-    def build(path: )
+    def build(path:)
       @path = Pathname.new(path).expand_path
       raise "#{@path} does not exist" unless File.exist?(@path)
       raise "Expecting #{@path} to be a rundoc markdown file" unless File.file?(@path)
-      @working_dir  = Pathname.new(File.expand_path("../", @path))
-
+      @working_dir = Pathname.new(File.expand_path("../", @path))
 
       dot_env_path = File.expand_path("../.env", @path)
       if File.exist?(dot_env_path)
-        require 'dotenv'
+        require "dotenv"
         Dotenv.load(dot_env_path)
-        ENV['AWS_ACCESS_KEY_ID']     ||= ENV['BUCKETEER_AWS_ACCESS_KEY_ID']
-        ENV['AWS_REGION']            ||= ENV['BUCKETEER_AWS_REGION']
-        ENV['AWS_SECRET_ACCESS_KEY'] ||= ENV['BUCKETEER_AWS_SECRET_ACCESS_KEY']
-        ENV['AWS_BUCKET_NAME']       ||= ENV['BUCKETEER_BUCKET_NAME']
+        ENV["AWS_ACCESS_KEY_ID"] ||= ENV["BUCKETEER_AWS_ACCESS_KEY_ID"]
+        ENV["AWS_REGION"] ||= ENV["BUCKETEER_AWS_REGION"]
+        ENV["AWS_SECRET_ACCESS_KEY"] ||= ENV["BUCKETEER_AWS_SECRET_ACCESS_KEY"]
+        ENV["AWS_BUCKET_NAME"] ||= ENV["BUCKETEER_BUCKET_NAME"]
       end
 
       source_contents = File.read(@path)
-      tmp_dir         = @working_dir.join("tmp")
+      tmp_dir = @working_dir.join("tmp")
 
       FileUtils.remove_entry_secure(tmp_dir) if tmp_dir.exist?
       tmp_dir.mkdir
@@ -28,7 +27,7 @@ module Rundoc
 
           Instead modify the rundoc script and re-run it.
 
-          Command: #{ $0 } #{$*.join(' ')}
+          Command: #{$0} #{$*.join(" ")}
         STOP -->
       HEREDOC
 
@@ -41,12 +40,12 @@ module Rundoc
 
       puts "== Done, run was successful"
       project_name = if Rundoc.project_root
-        Rundoc.project_root.split('/').last
+        Rundoc.project_root.split("/").last
       else
-        'project'
+        "project"
       end
 
-      project_dir  = @working_dir.join(project_name)
+      project_dir = @working_dir.join(project_name)
 
       FileUtils.remove_entry_secure(project_dir) if project_dir.exist?
 
@@ -62,16 +61,15 @@ module Rundoc
 
       source_path = project_dir.join("README.md")
       puts "== Done, writing original source to #{source_path}"
-      File.open(source_path, "w") { |f| f.write @output }
+      File.write(source_path, @output)
 
       puts "== Copying source"
-      source_path = project_dir.join("copied-#{@path.to_s.split('/').last}")
-      File.open(source_path, "w") { |f| f.write source_contents }
+      source_path = project_dir.join("copied-#{@path.to_s.split("/").last}")
+      File.write(source_path, source_contents)
 
       Dir.chdir(project_dir) do
         Rundoc.run_after_build
       end
-
     ensure
       Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
         next unless task.alive?

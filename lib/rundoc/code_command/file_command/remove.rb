@@ -18,16 +18,13 @@ class Rundoc::CodeCommand::FileCommand
       raise "#{filename} does not exist" unless File.exist?(filename)
 
       regex = /^\s*#{Regexp.quote(contents)}/
-      doc   = File.read(filename)
-      doc.sub!(regex, '')
+      doc = File.read(filename)
+      doc.sub!(regex, "")
 
-      File.open(filename, "w") do |f|
-        f.write(doc)
-      end
+      File.write(filename, doc)
       contents
     end
   end
 end
 
-
-Rundoc.register_code_command(:'file.remove',  Rundoc::CodeCommand::FileCommand::Remove)
+Rundoc.register_code_command(:"file.remove", Rundoc::CodeCommand::FileCommand::Remove)

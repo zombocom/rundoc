@@ -1,7 +1,6 @@
 module Rundoc
   class CodeCommand
     class Pipe < Rundoc::CodeCommand
-
       # ::: ls
       # ::: | tail -n 2
       # => "test\ntmp.file\n"
@@ -33,7 +32,7 @@ module Rundoc
         actual = actual.first if actual.is_a?(Array)
 
         actual = Rundoc::CodeCommand::Bash.new(code) if actual.is_a?(Rundoc::CodeCommand::NoSuchCommand)
-        return actual
+        actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash
@@ -44,7 +43,5 @@ module Rundoc
   end
 end
 
-
 Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::Pipe)
-Rundoc.register_code_command(:|,    Rundoc::CodeCommand::Pipe)
-
+Rundoc.register_code_command(:|, Rundoc::CodeCommand::Pipe)

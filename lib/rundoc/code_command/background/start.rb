@@ -1,25 +1,25 @@
-require 'tempfile'
+require "tempfile"
 
 class Rundoc::CodeCommand::Background
   class Start < Rundoc::CodeCommand
-    def initialize(command, name: , wait: nil, timeout: 5, log: Tempfile.new("log"), out: "2>&1", allow_fail: false)
+    def initialize(command, name:, wait: nil, timeout: 5, log: Tempfile.new("log"), out: "2>&1", allow_fail: false)
       @command = command
-      @name    = name
-      @wait    = wait
+      @name = name
+      @wait = wait
       @allow_fail = allow_fail
       FileUtils.touch(log)
 
       @spawn = ProcessSpawn.new(
         @command,
         timeout: timeout,
-        log:     log,
-        out:     out
+        log: log,
+        out: out
       )
       ProcessSpawn.add(@name, @spawn)
     end
 
     def to_md(env = {})
-      return "$ #{@command}"
+      "$ #{@command}"
     end
 
     def call(env = {})

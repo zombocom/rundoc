@@ -1,13 +1,12 @@
 class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
-
   # line = "cd ..""
   # line = "pwd"
   # line = "ls"
   def initialize(line)
-    @line     = line
+    @line = line
     @contents = ""
-    @delegate = case @line.split(' ').first.downcase
-    when 'cd'
+    @delegate = case @line.split(" ").first.downcase
+    when "cd"
       Cd.new(@line)
     else
       false
@@ -28,13 +27,13 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
 
   # markdown doesn't understand bash color codes
   def sanitize_escape_chars(input)
-    input.gsub(/\e\[(\d+)m/, '')
+    input.gsub(/\e\[(\d+)m/, "")
   end
 
   def shell(cmd, stdin = nil)
     cmd = "(#{cmd}) 2>&1"
-    msg  = "Running: $ '#{cmd}'"
-    msg  << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
+    msg = "Running: $ '#{cmd}'"
+    msg << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
     puts msg
 
     result = ""
@@ -46,13 +45,12 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
     unless $?.success?
       raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.to_s.include?("fail")
     end
-    return result
+    result
   end
 end
 
-
 Rundoc.register_code_command(:bash, Rundoc::CodeCommand::Bash)
-Rundoc.register_code_command(:'$',  Rundoc::CodeCommand::Bash)
-Rundoc.register_code_command(:'fail.$',  Rundoc::CodeCommand::Bash)
+Rundoc.register_code_command(:"$", Rundoc::CodeCommand::Bash)
+Rundoc.register_code_command(:"fail.$", Rundoc::CodeCommand::Bash)
 
-require 'rundoc/code_command/bash/cd'
+require "rundoc/code_command/bash/cd"
