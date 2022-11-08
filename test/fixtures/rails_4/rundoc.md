@@ -12,8 +12,13 @@ end
   https://github.com/schneems/rundoc/blob/main/test/fixtures/rails_4/rundoc.md
 -->
 
+>warning
+>As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Data for Redis plans are [no longer available](https://blog.heroku.com/next-chapter).
+>
+>We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
+
 > warning
-> The latest version of Rails available is [Rails 6](https://devcenter.heroku.com/articles/getting-started-with-rails6). If you are starting a new application we recommend you use the most recently released version.
+> The latest version of Rails available is [Rails 7](https://devcenter.heroku.com/articles/getting-started-with-rails7). If you are starting a new application we recommend you use the most recently released version.
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
@@ -24,7 +29,8 @@ For this guide you will need:
 - Basic Ruby/Rails knowledge
 - Locally installed version of Ruby 2.0.0+, Rubygems, Bundler, and Rails 4+
 - Basic Git knowledge
-- A Heroku user account: [Signup is free and instant](https://signup.heroku.com/devcenter)
+- A [verified Heroku Account](https://devcenter.heroku.com/articles/account-verification)
+- A subscription to the [Eco dynos plan](eco-dyno-hours) (recommended)
 
 ## Local Workstation Setup
 
@@ -215,6 +221,9 @@ Now that your application is committed to git you can deploy to Heroku.
 
 ## Deploy your application to Heroku
 
+>warning
+>Using a dyno and a database to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done to control costs.
+
 Make sure you are in the directory that contains your Rails app, then create an app on Heroku:
 
 ```term
@@ -297,13 +306,13 @@ $ heroku logs --tail
 
 ## Dyno sleeping and scaling
 
-By default, your app is deployed on a free dyno. Free dynos will sleep after a half hour of inactivity and they can be active (receiving traffic) for no more than 18 hours a day before [going to sleep](dynos#dyno-sleeping).  If a free dyno is sleeping, and it hasn't exceeded the 18 hours, any web request will wake it. This causes a delay of a few seconds for the first request upon waking. Subsequent requests will perform normally.
+By default, your app is deployed on an eco dyno. Eco dynos will sleep after a half hour of inactivity and they can be active (receiving traffic) for no more than 18 hours a day before [going to sleep](dynos#dyno-sleeping).  If an eco dyno is sleeping, and it hasn't exceeded the 18 hours, any web request will wake it. This causes a delay of a few seconds for the first request upon waking. Subsequent requests will perform normally.
 
 ```term
 $ heroku ps:scale web=1
 ```
 
-To avoid dyno sleeping, you can upgrade to a hobby or professional dyno type as described in the [Dyno Types](dyno-types) article. For example, if you migrate your app to a professional dyno, you can easily scale it by running a command telling Heroku to execute a specific number of dynos, each running your web process type.
+To avoid dyno sleeping, you can upgrade to a Basic or Professional dyno type as described in the [Dyno Types](dyno-types) article. For example, if you migrate your app to a professional dyno, you can easily scale it by running a command telling Heroku to execute a specific number of dynos, each running your web process type.
 
 ## Console
 

@@ -17,6 +17,11 @@ end
   $ bin/rundoc build --path test/fixtures/rails_7/rundoc.md
 -->
 
+>warning
+>As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Data for Redis plans are [no longer available](https://blog.heroku.com/next-chapter).
+>
+>We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
+
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 7 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 6.x](getting-started-with-rails6) or [Rails 5.x](getting-started-with-rails5).
 
 ```
@@ -27,8 +32,9 @@ Before continuing, it’s helpful to have:
 
 - Basic familiarity with Ruby, Ruby on Rails, and Git
 - A locally installed version of Ruby 2.7.0+, Rubygems, Bundler, and Rails 7+
-- A Heroku user account: [Signup is free and instant](https://signup.heroku.com/devcenter).
 - A locally installed version of the [Heroku CLI](heroku-cli#download-and-install)
+- A [verified Heroku Account](https://devcenter.heroku.com/articles/account-verification)
+- A subscription to the [Eco dynos plan](eco-dyno-hours) (recommended)
 
 ## Local setup
 
@@ -210,6 +216,9 @@ With the application committed to Git, it is ready to deploy to Heroku.
 
 ## Deploy the Application to Heroku
 
+>warning
+>Using a dyno and a database to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done to control costs.
+
 Inside the Rails app’s root directory, use the Heroku CLI to create an app on Heroku:
 
 ```term
@@ -295,9 +304,9 @@ $ heroku logs --tail
 
 ## Dyno Sleeping and Scaling
 
-New applications are deployed to a free dyno by default. After a period of inactivity, free apps will "sleep" to conserve resources. For more on Heroku’s free dyno behavior, see [Free Dyno Hours](free-dyno-hours).
+New applications are deployed to an eco dyno by default. After a period of inactivity, eco apps will "sleep" to conserve resources. For more on Heroku’s eco dyno behavior, see [Eco Dyno Hours](eco-dyno-hours).
 
-Upgrade to a hobby or professional dyno type as described in the [Dyno Types](dyno-types) article to avoid dyno sleeping. For example, migrating an app to a production dyno allows for easy scaling by using the Heroku CLI `ps:scale` command to instruct the Heroku platform to start or stop additional dynos that run the same `web` process type.
+Upgrade to a Basic or Professional dyno type as described in the [Dyno Types](dyno-types) article to avoid dyno sleeping. For example, migrating an app to a progressional dyno allows for easy scaling by using the Heroku CLI `ps:scale` command to instruct the Heroku platform to start or stop additional dynos that run the same `web` process type.
 
 ## The Rails Console
 
