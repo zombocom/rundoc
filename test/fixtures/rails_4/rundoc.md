@@ -1,5 +1,5 @@
 ```
-:::- rundoc
+:::-- rundoc
 email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`
 
 Rundoc.configure do |config|
@@ -77,14 +77,14 @@ Then create a new app:
 -->
 
 ```term
-$ rails new myapp --database=postgresql
-:::- $ rails _4.2.9_ new myapp --database=postgresql
+$ rails _4.2.9_ new myapp --database=postgresql
+:::-- $ rails _4.2.9_ new myapp --database=postgresql
 ```
 
 Then move into your application directory.
 
 ```term
-:::> $ cd myapp
+:::>- $ cd myapp
 ```
 
 > callout If you experience problems or get stuck with this tutorial, your questions may be answered in a later part of this document. Once you experience a problem try reading through the entire document and then going back to your issue. It can also be useful to review your previous steps to ensure they all executed correctly.
@@ -116,7 +116,7 @@ In addition to using the `pg` gem, you'll also need to ensure the `config/databa
 The development section of your `config/database.yml` file should look something like this:
 
 ```term
-:::>  $ cat config/database.yml
+:::>-  $ cat config/database.yml
 :::>> | $ head -n 23
 ```
 
@@ -128,7 +128,7 @@ Rails 4 no longer has a static index page in production. When you're using a new
 
 
 ```term
-:::> $ rails generate controller welcome
+:::>- $ rails generate controller welcome
 ```
 
 Next we'll add an index page.
@@ -168,7 +168,7 @@ gem 'rails_12factor', group: :production
 Then run:
 
 ```term
-:::> $ bundle install
+:::>- $ bundle install
 ```
 
 We talk more about Rails integration on our [Ruby Support page](https://devcenter.heroku.com/articles/ruby-support#injected-plugins).
@@ -189,7 +189,7 @@ You should also be running the same version of Ruby locally. You can verify by r
 Heroku relies on [git](http://git-scm.com/), a distributed source control managment tool, for deploying your project. If your project is not already in git first verify that `git` is on your system:
 
 ```term
-:::> $ git --help
+:::>- $ git --help
 :::-> | $ head -n 5
 ```
 
@@ -206,9 +206,9 @@ The output should look like this:
 Now run these commands in your Rails app directory to initialize and commit your code to git:
 
 ```term
-:::> $ git init
-:::> $ git add .
-:::> $ git commit -m "init"
+:::>- $ git init
+:::>- $ git add .
+:::>- $ git commit -m "init"
 ```
 
 You can verify everything was committed correctly by running:
@@ -227,7 +227,7 @@ Now that your application is committed to git you can deploy to Heroku.
 Make sure you are in the directory that contains your Rails app, then create an app on Heroku:
 
 ```term
-:::>> $ heroku create
+:::>> $ heroku create --stack heroku-20
 ```
 
 You can verify that the remote was added to your project by running
@@ -267,7 +267,7 @@ You've deployed your code to Heroku. You can now instruct Heroku to execute a pr
 Let's ensure we have one dyno running the `web` process type:
 
 ```term
-:::> $ heroku ps:scale web=1
+:::>- $ heroku ps:scale web=1
 ```
 
 You can check the state of the app's dynos. The `heroku ps` command lists the running dynos of your application:
@@ -340,13 +340,13 @@ First, add Puma to your application `Gemfile`:
 
 ```ruby
 :::>> file.append Gemfile
-gem 'puma'
+#gem 'puma'
 ```
 
 Then run
 
 ```term
-:::> $ bundle install
+:::>- $ bundle install
 ```
 
 Now you are ready to configure your app to use Puma. For this tutorial we will use the default settings of Puma, but we recommend generating a `config/puma.rb` file and reading more about configuring your application for maximum performance by [reading the Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server)
@@ -378,15 +378,15 @@ Set the `RACK_ENV` to development in your environment and a `PORT` to connect to
 You'll also want to add `.env` to your `.gitignore` since this is for local enviroment setup.
 
 ```term
-:::> $ echo ".env" >> .gitignore
-:::> $ git add .gitignore
-:::> $ git commit -m "add .env to .gitignore"
+:::>- $ echo ".env" >> .gitignore
+:::>- $ git add .gitignore
+:::>- $ git commit -m "add .env to .gitignore"
 ```
 
 Test your Procfile locally using Foreman:
 
 ```term
-:::> $ gem install foreman
+:::>- $ gem install foreman
 ```
 
 You can now start your web server by running
@@ -404,9 +404,9 @@ $ foreman start
 Looks good, so press Ctrl-C to exit and you can deploy your changes to Heroku:
 
 ```term
-:::> $ git add .
-:::> $ git commit -m "use puma via procfile"
-:::> $ git push heroku main
+:::>- $ git add .
+:::>- $ git commit -m "use puma via procfile"
+:::>- $ git push heroku main
 ```
 
 Check `ps`, you'll see the web process uses your new command specifying Puma as the web server

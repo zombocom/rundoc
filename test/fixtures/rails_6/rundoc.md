@@ -222,7 +222,7 @@ Now that your application is committed to Git you can deploy to Heroku.
 Make sure you are in the directory that contains your Rails app, then create an app on Heroku:
 
 ```term
-:::>> $ heroku create
+:::>> $ heroku create --stack heroku-20
 ```
 
 You can verify that the remote was added to your project by running:
