@@ -219,7 +219,7 @@ You can verify everything was committed correctly by running:
 
 Now that your application is committed to git you can deploy to Heroku.
 
-## Deploy your application to Heroku
+## Create a Heroku app
 
 >warning
 >Using a dyno and a database to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done to control costs.
@@ -241,6 +241,28 @@ If you see `fatal: not in a git directory` then you are likely not in the correc
 >note
 >Following changes in the industry, Heroku has updated our default git branch name to `main`. If the project you’re deploying uses `master` as its default branch name, use `git push heroku master`.
 
+## Provision a Database
+
+Provision a Postgresql database using Add-ons.
+
+>note
+>A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, you will be prompted to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
+
+```term
+$ heroku addons:create heroku-postgresql:mini
+Creating heroku-postgresql:mini on ⬢ shrouded-anchorage-34700... $5/month
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pg:copy
+
+Created postgresql-encircled-75487 as DATABASE_URL
+Use heroku addons:docs heroku-postgresql to view documentation
+```
+
+Your Heroku app now has access to a Postgresql database. The credentials are stored in the `DATABASE_URL` environment variable, which Rails will connect to by convention.
+
+## Deploy your application to Heroku
+
 Deploy your code:
 
 ```term
@@ -251,7 +273,7 @@ It is always a good idea to check to see if there are any warnings or errors in 
 
 ## Migrate your database
 
-If you are using the database in your application you need to manually migrate the database by running:
+If you are using the database in your application, trigger a migration by using the Heroku CLI to start a one-off [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku, and run `db:migrate`:
 
 ```term
 $ heroku run rake db:migrate
