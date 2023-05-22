@@ -25,7 +25,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 7 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 6.x](getting-started-with-rails6) or [Rails 5.x](getting-started-with-rails5).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.2'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.4'"
 ```
 
 Before continuing, it’s helpful to have:
@@ -170,13 +170,13 @@ end
 
 ## Specify the Ruby Version
 
-Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby buy default. Specify an exact version with the `ruby` DSL in `Gemfile` like the following example of defining Ruby 3.1.2:
+Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby buy default. Specify an exact version with the `ruby` DSL in `Gemfile` like the following example of defining Ruby 3.1.4:
 
 
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "3.1.2"
+ruby "3.1.4"
 ```
 
 Always use the same version of Ruby locally, too. Confirm the local version of ruby with `ruby -v`. Refer to the [Ruby Versions](ruby-versions) article for more details on defining a specific ruby version.
@@ -222,7 +222,7 @@ With the application committed to Git, it is ready to deploy to Heroku.
 Inside the Rails app’s root directory, use the Heroku CLI to create an app on Heroku:
 
 ```term
-:::>> $ heroku apps:create --stack=heroku-22
+:::>> $ heroku apps:create
 ```
 
 The Heroku CLI adds the Git remote automatically. Verify it is set with `git config`:
@@ -481,3 +481,30 @@ Congratulations! You deployed your first Rails 7 application to Heroku. Review t
 
 * Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
 * The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.
+
+## Deleting your app and Add-on
+
+If you don't need this application and database, you can now remove them from your account. You'll only be charged for the resources you used.
+
+>warning
+>This will remove your add-on you'll lose any data saved in the database.
+
+```term
+$ heroku addons:destroy heroku-postgresql
+```
+
+>warning
+>This will delete your application
+
+```term
+$ heroku apps:destroy
+```
+
+You can confirm that your add-on and app are gone with the commands:
+
+```term
+$ heroku addons --all
+$ heroku apps -all
+```
+
+You're now ready to <a href= "https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment" target= "_blank">deploy your app</a>.
