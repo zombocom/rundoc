@@ -214,7 +214,7 @@ Verify everything was committed correctly with `git status`:
 
 With the application committed to Git, it is ready to deploy to Heroku.
 
-## Deploy the Application to Heroku
+## Create a Heroku app
 
 >warning
 >Using a dyno and a database to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done to control costs.
@@ -236,6 +236,21 @@ Git returns `fatal: not in a git directory` if the current directory is incorrec
 >note
 >Following changes in the industry, Heroku [updated the default branch name](​​https://devcenter.heroku.com/changelog-items/1829) to `main`. If the project uses `master` as its default branch name, use `git push heroku master`.
 
+## Provision a Database
+
+Provision a Postgresql database using Add-ons.
+
+>note
+>A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, you will be prompted to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
+
+```term
+:::>> $ heroku addons:create heroku-postgresql:mini
+```
+
+Your Heroku app now has access to a Postgresql database. The credentials are stored in the `DATABASE_URL` environment variable, which Rails will connect to by convention.
+
+## Deploy the Application to Heroku
+
 Deploy the code:
 
 ```term
@@ -252,7 +267,7 @@ If the deployment is successful, the application may need a few additional adjus
 
 ## Migrate The Database
 
-If the application uses a database, trigger a migration by using the Heroku CLI to start a one-off  [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku, and run `db:migrate`:
+If you are using the database in your application, trigger a migration by using the Heroku CLI to start a one-off [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku, and run `db:migrate`:
 
 ```term
 $ heroku run rake db:migrate
