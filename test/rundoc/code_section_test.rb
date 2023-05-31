@@ -7,11 +7,11 @@ class CodeSectionTest < Minitest::Test
   def test_does_not_render_if_all_contents_hidden
     contents = <<~RUBY
       sup
-      
+
       ```
       :::--  $ mkdir foo
       ```
-      
+
       yo
     RUBY
 
@@ -29,11 +29,12 @@ class CodeSectionTest < Minitest::Test
       ```ruby
       gem 'sqlite3'
       ```
+
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     result = Rundoc::CodeSection.new(match, keyword: ":::").render
-    assert_equal contents, result
+    assert_equal contents, result.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "\n")
   end
 
   def test_show_command_hide_render
