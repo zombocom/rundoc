@@ -47,7 +47,7 @@ gem 'rundoc'
 Run the `rundoc build` command on any markdown file
 
 ```sh
-$ bundle exec bin/rundoc build --path my/path/to/run_doc.md
+$ bin/rundoc build --path <test/fixtures/rails_7/rundoc.md>
 ```
 
 > Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
