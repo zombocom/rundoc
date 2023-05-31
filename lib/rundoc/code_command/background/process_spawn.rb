@@ -28,8 +28,8 @@ class Rundoc::CodeCommand::Background
   #   ProcessSpawn.find("muh_server") # => <# ProcessSpawn instance >
   #   ProcessSpawn.find("foo") # => RuntimeError "Could not find task with name 'foo', ..."
   class ProcessSpawn
-    def self.tasks
-      @tasks
+    class << self
+      attr_reader :tasks
     end
 
     @tasks = {}

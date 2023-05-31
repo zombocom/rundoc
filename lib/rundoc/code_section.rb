@@ -45,7 +45,7 @@ module Rundoc
       env = {}
       env[:commands] = []
       env[:before] = +"#{fence}#{lang}"
-      env[:after] = String.new("#{fence}#{AUTOGEN_WARNING}")
+      env[:after] = +"#{fence}#{AUTOGEN_WARNING}"
       env[:document_path] = @document_path
 
       @stack.each do |s|

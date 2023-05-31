@@ -44,8 +44,8 @@ class Rundoc::CodeCommand::Website
       session.reset_session!
     end
 
-    def self.tasks
-      @tasks
+    class << self
+      attr_reader :tasks
     end
 
     def safe_eval(code)
