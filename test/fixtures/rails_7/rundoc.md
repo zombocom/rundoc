@@ -75,11 +75,14 @@ Move into the application directly and add the `x86_64-linux` and `ruby` platfor
 ```term
 :::>- $ cd myapp
 :::>> $ bundle lock --add-platform x86_64-linux --add-platform ruby
+:::>- $ bundle install
 ```
+
+<!-- The `bundle install` after `bundle lock` can be removed after https://github.com/rails/rails/issues/48278 is closed -->
 
 Create a local database:
 
-```
+```term
 :::>> $ bin/rails db:create
 ```
 
@@ -477,7 +480,7 @@ Confirm it works locally, then push to Heroku.
 
 ## Next Steps
 
-Congratulations! You deployed your first Rails 7 application to Heroku. Review the following articles next:
+Congratulations on deploying a Rails 7 application! To continue exploring, review the following articles next:
 
 * Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
 * The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.

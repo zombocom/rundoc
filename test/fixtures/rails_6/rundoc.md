@@ -28,7 +28,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 6 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 5.x](getting-started-with-rails5) or [Rails 4.x](getting-started-with-rails4).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '2.7.2'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.0.6'"
 ```
 
 For this guide you will need:
@@ -47,7 +47,7 @@ Once installed, the `heroku` command is available from your terminal. Log in usi
 ```term
 $ heroku login
 heroku: Enter your Heroku credentials
-Email: schneems@example.com
+Email: developer@example.com
 Password:
 Could not find an existing public key.
 Would you like to generate one? [Yn]
@@ -62,13 +62,13 @@ Press Enter at the prompt to upload your existing `ssh` key or create a new one,
 To create a new app, first make sure that you're using Rails 6.x by running `rails -v`. If necessary, you can get the new version of rails by running the following:
 
 ```term
-:::>> $ gem install rails --no-document
+:::>> $ gem install rails -v 6.1.7.3 --no-document
 ```
 
 Then create a new app and move into its root directory:
 
 ```term
-:::>- $ rails new myapp --database=postgresql
+:::>- $ rails _6.1.7.3_ new myapp --database=postgresql
 ```
 
 Then move into your application directory.
@@ -174,7 +174,7 @@ Rails 6 requires Ruby 2.5.0 or above. Heroku has a recent version of Ruby instal
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "2.7.2"
+ruby "3.0.6"
 ```
 
 You should also be running the same version of Ruby locally. You can check this by running `$ ruby -v`. You can get more information on [specifying your Ruby version on Heroku here](https://devcenter.heroku.com/articles/ruby-versions).
@@ -482,9 +482,36 @@ end
 
 Confirm it works locally, then push to Heroku.
 
-## Next steps
+## Next Steps
 
-Congratulations! You have deployed your first Rails 6 application to Heroku. Here's some recommended reading:
+Congratulations on deploying a Rails 6 application! To continue exploring, review the following articles next:
 
 * Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
 * The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.
+
+## Deleting your app and Add-on
+
+If you don't need this application and database, you can now remove them from your account. You'll only be charged for the resources you used.
+
+>warning
+>This will remove your add-on you'll lose any data saved in the database.
+
+```term
+$ heroku addons:destroy heroku-postgresql
+```
+
+>warning
+>This will delete your application
+
+```term
+$ heroku apps:destroy
+```
+
+You can confirm that your add-on and app are gone with the commands:
+
+```term
+$ heroku addons --all
+$ heroku apps -all
+```
+
+You're now ready to <a href= "https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment" target= "_blank">deploy your app</a>.

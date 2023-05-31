@@ -12,13 +12,16 @@ end
   https://github.com/schneems/rundoc/blob/main/test/fixtures/rails_4/rundoc.md
 -->
 
+> warning
+> This article is archived. It is no longer receiving updates. It is presented here for historical reference only.
+> We cannot guarantee that any statements made are correct or that the instructions will still work.
+> This version of Rails is [no longer supported by Ruby core](https://guides.rubyonrails.org/maintenance_policy.html).
+> If you are starting a new application, we recommend you use the most recently released version of Rails.
+
 >warning
 >As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Data for Redis plans are [no longer available](https://blog.heroku.com/next-chapter).
 >
 >We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
-
-> warning
-> The latest version of Rails available is [Rails 7](https://devcenter.heroku.com/articles/getting-started-with-rails7). If you are starting a new application we recommend you use the most recently released version.
 
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 4 on Heroku. For information about running previous versions of Rails on Heroku, see [Getting Started with Rails 3.x on Heroku](getting-started-with-rails3).
 
@@ -496,6 +499,36 @@ end
 
 Confirm it works locally, then push to Heroku.
 
-## Done
+## Next Steps
 
-You now have your first application deployed to Heroku. The next step is to deploy your own application. If you're interested in reading more you can read more about [Ruby on Heroku at the Devcenter](https://devcenter.heroku.com/categories/ruby).
+Congratulations on deploying a Rails 5 application! To continue exploring, review the following articles next:
+
+* Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
+* The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.
+
+## Deleting your app and Add-on
+
+If you don't need this application and database, you can now remove them from your account. You'll only be charged for the resources you used.
+
+>warning
+>This will remove your add-on you'll lose any data saved in the database.
+
+```term
+$ heroku addons:destroy heroku-postgresql
+```
+
+>warning
+>This will delete your application
+
+```term
+$ heroku apps:destroy
+```
+
+You can confirm that your add-on and app are gone with the commands:
+
+```term
+$ heroku addons --all
+$ heroku apps -all
+```
+
+You're now ready to <a href= "https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment" target= "_blank">deploy your app</a>.
