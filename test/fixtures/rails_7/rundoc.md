@@ -27,7 +27,7 @@ The tutorial assumes that you have:
 
 - Basic familiarity with Ruby, Ruby on Rails, and Git
 - A locally installed version of Ruby 3.0.0+, Rubygems, Bundler, and Rails 7+
-- A locally installed version of the [Heroku CLI](heroku-cli#download-and-install)
+- A locally installed version of the [Heroku CLI](heroku-cli#install-the-heroku-cli)
 - A [verified Heroku Account](https://devcenter.heroku.com/articles/account-verification)
 - A subscription to the [Eco dynos plan](eco-dyno-hours) (recommended)
 
