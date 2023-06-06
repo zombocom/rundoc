@@ -17,48 +17,49 @@ end
   $ bin/rundoc build --path test/fixtures/rails_7/rundoc.md
 -->
 
->warning
->As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Data for Redis plans are [no longer available](https://blog.heroku.com/next-chapter).
->
->We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
-
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 7 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 6.x](getting-started-with-rails6) or [Rails 5.x](getting-started-with-rails5).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.2'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.4'"
 ```
 
-Before continuing, it’s helpful to have:
+The tutorial assumes that you have:
 
 - Basic familiarity with Ruby, Ruby on Rails, and Git
-- A locally installed version of Ruby 2.7.0+, Rubygems, Bundler, and Rails 7+
-- A locally installed version of the [Heroku CLI](heroku-cli#download-and-install)
+- A locally installed version of Ruby 3.0.0+, Rubygems, Bundler, and Rails 7+
+- A locally installed version of the [Heroku CLI](heroku-cli#install-the-heroku-cli)
 - A [verified Heroku Account](https://devcenter.heroku.com/articles/account-verification)
 - A subscription to the [Eco dynos plan](eco-dyno-hours) (recommended)
 
-## Local setup
 
-With the Heroku CLI installed, `heroku` is now an available command in the terminal. Log in to Heroku using the CLI:
+>note
+>Using dynos and databases to complete this tutorial counts towards your usage. We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
+
+
+## Local Setup
+
+After installing the [Heroku CLI](heroku-cli#install-the-heroku-cli), log in through your terminal:
 
 ```term
 $ heroku login
-heroku: Enter your Heroku credentials
-Email: schneems@example.com
-Password:
-Could not find an existing public key.
-Would you like to generate one? [Yn]
-Generating new SSH public key.
-Uploading ssh public key /Users/adam/.ssh/id_rsa.pub
+heroku: Press any key to open up the browser to login or q to exit
+ ›   Warning: If browser does not open, visit
+ ›   https://cli-auth.heroku.com/auth/browser/***
+heroku: Waiting for login...
+Logging in... done
+Logged in as developer@example.com
 ```
 
-Press Enter at the prompt to upload an existing `ssh` key or create a new one.
+This command opens your web browser to the Heroku login page. If your browser is already logged in to Heroku, click the **`Log in`** button on the page.
 
->info
->After November 30, 2021, Heroku [will no longer support the SSH Git transport](​​https://devcenter.heroku.com/changelog-items/2215). SSH keys will serve no purpose in pushing code to applications on the Heroku platform.
+This authentication is required for the `heroku` and `git` commands to work correctly.
+
+>note
+> If you're behind a firewall that uses a proxy to connect with external HTTP/HTTPS services, [set the `HTTP_PROXY` or `HTTPS_PROXY` environment variables](articles/using-the-cli#using-an-http-proxy) in your local development environment before running the `heroku` command.
 
 ## Create a New or Upgrade an Existing Rails App
 
-Ensure Rails 7 is installed with `rails -v` before creating an app. If necessary, install Rails 7 with `gem install`:
+Ensure you have Rails 7 installed by running `rails -v` before creating an app. If necessary, install Rails 7 with `gem install`:
 
 ```term
 :::>> $ gem install rails --no-document
@@ -70,22 +71,25 @@ Create a Rails app:
 :::>- $ rails new myapp --database=postgresql
 ```
 
-Move into the application directly and add the `x86_64-linux` and `ruby` platforms to `Gemfile.lock`.
+Move into the application directory and add the `x86_64-linux` and `ruby` platforms to `Gemfile.lock`.
 
 ```term
 :::>- $ cd myapp
 :::>> $ bundle lock --add-platform x86_64-linux --add-platform ruby
+:::-- $ bundle install
 ```
+
+<!-- The `bundle install` after `bundle lock` can be removed after https://github.com/rails/rails/issues/48278 is closed -->
 
 Create a local database:
 
-```
+```term
 :::>> $ bin/rails db:create
 ```
 
-## Add the pg gem
+## Add the pg Gem
 
-For new or existing apps where `--database=postgresql` wasn’t defined, confirm the `sqlite3` gem doesn’t exist in the `Gemfile`. Add the `pg` gem in its place.
+For new or existing apps where `--database=postgresql` isn’t defined, confirm the `sqlite3` gem doesn’t exist in the `Gemfile`. Add the `pg` gem in its place.
 
 Within the `Gemfile` remove:
 
@@ -93,15 +97,16 @@ Within the `Gemfile` remove:
 gem 'sqlite3'
 ```
 
-And replace it with:
+Replace it with:
 
 ```ruby
 gem 'pg'
 ```
 
-> callout Heroku highly recommends using PostgreSQL locally during development. Maintaining [parity between development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents subtle bugs from being introduced because of the differences in those environments.
+> callout
+>Heroku highly recommends using PostgreSQL locally during development. Maintaining [parity between development](http://www.12factor.net/dev-prod-parity) and deployment environments prevents introducing subtle bugs due to the differences in environments.
 >
-> [Install Postgres locally](heroku-postgresql#local-setup) now if not present on the system, already. For more information on why Postgres is recommended instead of Sqlite3, see [why Sqlite3 is not compatible with Heroku](sqlite3).
+> [Install Postgres locally](heroku-postgresql#local-setup). For more information on why Postgres is recommended instead of Sqlite3, see [why Sqlite3 is not compatible with Heroku](sqlite3).
 
 With the `Gemfile` updated, reinstall the dependencies:
 
@@ -109,19 +114,19 @@ With the `Gemfile` updated, reinstall the dependencies:
 $ bundle install
 ```
 
-Doing so updates `Gemfile.lock` with the changes made previously.
+The installation also updates `Gemfile.lock` with the changes.
 
-In addition to using the `pg` gem, ensure that `config/database.yml` defines the `postgresql` adapter. The development section of `config/database.yml` file will look something like this:
+In addition to the `pg` gem, ensure that `config/database.yml` defines the `postgresql` adapter. The development section of `config/database.yml` file looks something like this:
 
 ```term
 :::>>  $ cat config/database.yml
 ```
 
-Be careful here. If the value of `adapter` is `postgres` and not `postgresql` (note the `sql` at the end), the application won’t work.
+Be careful here. If the value of `adapter` is `postgres` and not `postgresql`, the application won’t work.
 
 ## Create a Welcome Page
 
-Rails 7 no longer has a static index page in production by default. Apps upgraded to Rails 7 keep their existing page configurations, but new Rails 7 apps do not have an automatically generated welcome page. Create a `welcome` controller to hold the homepage:
+Rails 7 no longer has a static index page in production by default. Apps upgraded to Rails 7 keep their existing page configurations, but new Rails 7 apps don't automatically generate a welcome page. Create a `welcome` controller to hold the homepage:
 
 ```term
 :::>- $ rails generate controller welcome
@@ -151,35 +156,39 @@ Verify the page is present by starting the Rails web server:
 :::-- background.stop(name: "server")
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) in a browser. If the page doesn’t display, [reference the logs](#view-logs) Rails outputs within the same terminal where `rails server` started to debug the error.
-
-## Heroku Gems
-
-Previous versions of Rails (Rails 4 and older) required the [rails_12factor](https://github.com/heroku/rails_12factor) gem to enable static asset serving and logging on Heroku. New Rails applications don’t need this gem. The gem can be removed from existing, upgraded applications provided the following code is present in `config/environments/production.rb`:
-
-```ruby
-# config/environments/production.rb
-config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-
-if ENV["RAILS_LOG_TO_STDOUT"].present?
-  logger           = ActiveSupport::Logger.new(STDOUT)
-  logger.formatter = config.log_formatter
-  config.logger = ActiveSupport::TaggedLogging.new(logger)
-end
-```
+Visit [http://localhost:3000](http://localhost:3000) in a browser. If the page doesn’t display, [reference the logs](#view-application-logs) to debug the error. Rails outputs logs in the same terminal where `rails server` started.
 
 ## Specify the Ruby Version
 
-Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby buy default. Specify an exact version with the `ruby` DSL in `Gemfile` like the following example of defining Ruby 3.1.2:
-
+Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby by default. Specify an exact version with the `ruby` DSL in `Gemfile`. For example:
 
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "3.1.2"
+ruby "3.1.4"
 ```
 
-Always use the same version of Ruby locally, too. Confirm the local version of ruby with `ruby -v`. Refer to the [Ruby Versions](ruby-versions) article for more details on defining a specific ruby version.
+Always use the same version of Ruby locally. Confirm the local version of ruby with `ruby -v`. Refer to the [Ruby Versions](ruby-versions) article for more details on defining a specific ruby version.
+
+## Create a Procfile
+
+Use a [Procfile](procfile), a text file in the root directory of your application, to explicitly declare what command to execute to start your app.
+
+This Procfile declares a single process type, `web`, and the command needed to run it.  The name `web` is important here.  It declares that this process type is attached to Heroku's [HTTP routing](http-routing) stack and receives web traffic when deployed.
+
+By default, a Rails app’s web process runs `rails server`, which uses Puma in Rails 7. When you deploy a Rails 7 application without a Procfile, this command executes. However, we recommend explicitly declaring how to boot your server process via a Procfile. For example:
+
+```
+:::>> file.write Procfile
+web: bundle exec puma -C config/puma.rb
+```
+
+>note
+>The `Procfile` filename is case sensitive. There is no file extension.
+
+If `config/puma.rb` doesn’t exist, create one using [Heroku’s Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
+
+A Procfile can contain additional process types.  For example, you can declare a [background worker process](background-jobs-queueing#process-model) that processes items off a queue.
 
 ## Store The App in Git
 
@@ -190,9 +199,9 @@ Heroku relies on [Git](http://git-scm.com/), a distributed source control manage
 :::>> | $ head -n 5
 ```
 
-Git is not present if the command produces no output or `command not found`. Install Git on the system.
+If the command produces no output or `command not found`, [install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
-After verifying Git is functional, navigate to the root directory of the Rails app. The contents of the Rails app looks something like this when using `ls`:
+Navigate to the root directory of the Rails app. Use the `ls` command to see its contents:
 
 ```term
 :::>> $ ls
@@ -206,106 +215,113 @@ Within the Rails app directly, initialize a local empty Git repository and commi
 :::>- $ git commit -m "init"
 ```
 
-Verify everything was committed correctly with `git status`:
+Verify everything committed correctly with `git status`:
 
 ```term
 :::>> $ git status
 ```
 
-With the application committed to Git, it is ready to deploy to Heroku.
+With the application committed to Git, it's ready to deploy to Heroku.
 
-## Create a Heroku app
+## Create a Heroku App
 
 >warning
 >Using a dyno and a database to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done to control costs.
 
-Inside the Rails app’s root directory, use the Heroku CLI to create an app on Heroku:
+To create an app on Heroku, use the Heroku CLI Inside the Rails app’s root directory:
 
 ```term
-:::>> $ heroku apps:create --stack=heroku-22
+:::>> $ heroku apps:create
 ```
 
-The Heroku CLI adds the Git remote automatically. Verify it is set with `git config`:
+When you create an app, a git remote called `heroku` is also created and associated with your local git repository. Git remotes are versions of your repository that live on other servers. You deploy your app by pushing its code to that special Heroku-hosted remote associated with your app. Verify the remote is set with `git config`:
 
 ```term
 :::>> $ git config --list --local | grep heroku
 ```
 
-Git returns `fatal: not in a git directory` if the current directory is incorrect or Git is not [initialized](#store-the-app-in-git). If Git returns a list of remotes, it is ready to deploy.
+If the current directory is incorrect or Git isn't [initialized](#store-the-app-in-git), Git returns `fatal: not in a git directory`. If Git returns a list of remotes, it's ready to deploy.
 
 >note
 >Following changes in the industry, Heroku [updated the default branch name](​​https://devcenter.heroku.com/changelog-items/1829) to `main`. If the project uses `master` as its default branch name, use `git push heroku master`.
 
 ## Provision a Database
 
-Provision a Postgresql database using Add-ons.
+Provision a [Heroku Postgres](https://devcenter.heroku.com/articles/heroku-postgresql) database, one of the add-ons available through the [Elements Marketplace](https://www.heroku.com/elements/addons). Add-ons are cloud services that provide out-of-the-box additional services for your application, such as logging, monitoring, databases, and more.
 
 >note
->A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, you will be prompted to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
+>A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, we prompt you to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
 
 ```term
 :::>> $ heroku addons:create heroku-postgresql:mini
 ```
 
-Your Heroku app now has access to a Postgresql database. The credentials are stored in the `DATABASE_URL` environment variable, which Rails will connect to by convention.
+Your Heroku app can now access this Postgres database. The `DATABASE_URL` environment variable stores your credentials, which Rails connects to by convention.
 
-## Deploy the Application to Heroku
+## Deploy the App to Heroku
 
-Deploy the code:
+>warning
+>Using a dyno to complete this tutorial counts towards your usage. [Delete your app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy) as soon as you're done to control costs.
+
+Deploy your code. This command pushes the `main` branch of the sample repo to your `heroku` remote, which then deploys to Heroku:
 
 ```term
 :::>> $ git push heroku main
 ```
 
-The output may display warnings or error messages. Check the output for these and make adjustments as necessary.
+If the output displays warnings or error messages, check the output and make adjustments.
 
-If the deployment is successful, the application may need a few additional adjustments:
+After a successful deployment, complete these tasks as necessary:
 
-* Migration of the database
-* Ensure proper dyno scaling
-* Reference the app’s logs if any issues arise
+* Database migrations
+* Scale your dynos
+* Check the app’s logs if issues arise
 
 ## Migrate The Database
 
-If you are using the database in your application, trigger a migration by using the Heroku CLI to start a one-off [dyno](dynos), which is a lightweight container that is the basic unit of composition on Heroku, and run `db:migrate`:
+If you're using a database in your application, trigger a migration by using the Heroku CLI to start a one-off [dyno](dynos). You can run commands, typically scripts and applications that are part of your app, in one-off dynos using the `heroku run` command. You can trigger a database migration with this command:
 
 ```term
 $ heroku run rake db:migrate
 ```
 
-Obtain an interactive shell session, instead, with `heroku run bash`.
+To use an interactive shell session instead, you can execute `heroku run bash`.
 
-## Access the Application
+## Scale and Access the Application
 
-The application is successfully deployed to Heroku. Heroku runs application code using defined processes and [process types](procfile). New applications will not have a process type active by default. Scale the `web` process type using the Heroku CLI’s `ps:scale` command:
+Heroku runs application code using defined processes and [process types](procfile). New applications don't a process type active by default. The following command scales your app up to one dyno, running the `web` process:
 
 ```term
 :::>- $ heroku ps:scale web=1
 ```
 
-Use the Heroku CLI’s `ps` command to display the state of all of an app’s dynos in the terminal:
+Use the Heroku CLI’s `ps` command to display the state of all app dynos in the terminal:
 
 ```term
 :::>> $ heroku ps
 ```
 
-In the previous example, a single `web` process is running.
+In this example, a single `web` process is running.
 
-Use `heroku open` to launch the app in the browser.
+By default, apps use Eco dynos if you're subscribed to [Eco](eco-dyno-hours). Otherwise, it defaults to Basic dynos. The Eco dynos plan is shared across all Eco dynos in your account and is recommended if you plan on deploying many small apps to Heroku. Eco dynos sleep if they don't receive any traffic for half an hour.  This sleep behavior causes a few seconds delay for the first request upon waking. Eco dynos consume from a monthly, account-level quota of [eco dyno hours](eco-dyno-hours). As long as you haven't exhausted the quota, your apps can continue to run.
+
+To avoid dyno sleeping, upgrade to a Basic or higher dyno type as described in the [Dyno Types](dyno-types) article. Upgrading to at least Standard dynos also allows you to scale up to multiple dynos per process type.
+
+To launch the app in the browser, run `heroku open`:
 
 ```term
 :::>> $ heroku open
 ```
 
-The browser should display the “Hello World” text defined previously. If it does not, or an error is present, [review and confirm the welcome page contents](#create-a-welcome-page).
+The browser displays the “Hello World” text. If it doesn't, or there's an error, [review and confirm the welcome page contents](#create-a-welcome-page).
 
-Heroku provides a default web URL for every application during development. When the application is ready to scale up for production, add a [custom domain](https://devcenter.heroku.com/articles/custom-domains).
+Heroku provides a [default web URL](app-names-and-subdomains) for every application during development. When the application is ready for production, add a [custom domain](https://devcenter.heroku.com/articles/custom-domains).
 
 ## View Application Logs
 
 The app logs are a valuable tool if the app is not performing correctly or generating errors.
 
-View information about a running app using the Heroku CLI [logging command](logging), `heroku logs`. Here is example output:
+View information about a running app using the Heroku CLI [logging command](logging), `heroku logs`. Here's example output:
 
 ```term
 :::>> $ heroku logs
@@ -317,13 +333,11 @@ Append `-t`/`--tail` to the command to see a full, live stream of the app’s lo
 $ heroku logs --tail
 ```
 
-## Dyno Sleeping and Scaling
+By default, Heroku stores 1500 lines of logs from your application, but the full log stream is available as a service. Several [add-on providers](https://elements.heroku.com/addons/#logging) have logging services that provide things such as log persistence, search, and email and SMS alerts.
 
-New applications are deployed to an eco dyno by default. After a period of inactivity, eco apps will "sleep" to conserve resources. For more on Heroku’s eco dyno behavior, see [Eco Dyno Hours](eco-dyno-hours).
+## Optional Steps
 
-Upgrade to a Basic or Professional dyno type as described in the [Dyno Types](dyno-types) article to avoid dyno sleeping. For example, migrating an app to a progressional dyno allows for easy scaling by using the Heroku CLI `ps:scale` command to instruct the Heroku platform to start or stop additional dynos that run the same `web` process type.
-
-## The Rails Console
+### Use The Rails Console
 
 Use the Heroku CLI `run` command to trigger [one-off dynos](one-off-dynos) to run scripts and applications only when necessary. Use the command to launch a Rails console process attached to the local terminal for experimenting in the app's environment:
 
@@ -335,49 +349,19 @@ irb(main):001:0> puts 1+1
 
 The `run bash` Heroku CLI command is also helpful for debugging. The command starts a new one-off dyno with an interactive bash session.
 
-## Rake Commands
+### Run Rake Commands
 
-Run `rake` commands (`db:migrate`, for example) using the `run` command exactly like the Rails console:
+Run `rake` commands, such as `db:migrate`, using the `run` command exactly like the Rails console:
 
 ```term
 $ heroku run rake db:migrate
 ```
 
-## Configure The Web Server
+### Use a Procfile locally
 
-By default, a Rails app's web process runs `rails server`, which uses Puma in Rails 7. Apps upgraded to Rails 7 need the `puma` gem added to the app’s `Gemfile`:
+To use the `Procfile` locally, use the `heroku local` CLI command.
 
-```ruby
-gem 'puma'
-```
-
-After adding the `puma` gem, install it:
-
-```term
-:::>- $ bundle install
-```
-
-Rails 7 uses `config/puma.rb` to define Puma’s configuration and functionality with Puma installed. Heroku recommends reviewing [additional Puma configuration options](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) to maximize the app’s performance.
-
-If `config/puma.rb` doesn’t exist, create one using [Heroku’s Puma documentation](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server) for maximum performance.
-
-With Puma installed, use the `Procfile` to instruct Heroku on how to launch the Rails app on a dyno.
-
-### Create a Procfile
-
-Change the command used to launch your web process by creating a file called [Procfile](procfile) inside the app’s root directory. Add the following line:
-
-```
-:::>> file.write Procfile
-web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
-```
-
->note
->This file must be named `Procfile` exactly with a capital `P`, lowercase `rocfile`, and no file extension.
-
-To use the Procfile locally, use the `local` Heroku CLI command.
-
-In addition to running commands in the `Procfile`, `heroku local` can also manage environment variables locally through a `.env` file. Set `RACK_ENV` to `development` for the local environment and the `PORT` for Puma. Test with the `RACK_ENV` set to `production` before pushing to Heroku; `production` is the environment in which the Heroku app will run.
+In addition to running commands in the `Procfile`, the `heroku local` command can also manage environment variables locally through a `.env` file. Set `RACK_ENV` to `development` for the local environment and the `PORT` for Puma.
 
 ```term
 :::>> $ echo "RACK_ENV=development" >>.env
@@ -385,9 +369,9 @@ In addition to running commands in the `Procfile`, `heroku local` can also manag
 ```
 
 >note
->Another alternative to using environment variables locally with a `.env` file is the [dotenv](https://github.com/bkeepers/dotenv) gem.
+> Another alternative to using environment variables locally with a `.env` file is the [dotenv](https://github.com/bkeepers/dotenv) gem.
 
-Add `.env` to `.gitignore` since this is for local environment setup only.
+Add `.env` to `.gitignore` as these variables are for local environment setup only.
 
 ```term
 :::>- $ echo ".env" >> .gitignore
@@ -395,42 +379,24 @@ Add `.env` to `.gitignore` since this is for local environment setup only.
 :::>- $ git commit -m "add .env to .gitignore"
 ```
 
-Test the Procfile locally using [Foreman](run-your-app-locally-using-foreman)​​. Start the web server with `local`:
+Test the Procfile locally using [Foreman](heroku-local#run-your-app-locally-using-foreman)​​. Start the web server with `local`:
 
 ```term
 :::>> background.start("heroku local", name: "local", wait: "Ctrl-C to stop", timeout: 15)
 :::-- background.stop(name: "local")
 ```
 
-A successful test will look similar to the previous example. Press `Ctrl+C` or `CMD+C` to exit and deploy the changes to Heroku:
+Press `Ctrl+C` or `Cmd+C` to exit.
 
-```term
-:::>- $ git add .
-:::>- $ git commit -m "use puma via procfile"
-:::>- $ git push heroku main || git push heroku master
-```
+### Rails asset pipeline
 
-Check `ps`. The `web` process is now using the new command specifying Puma as the web server:
+When deploying to Heroku, there are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html). See the [Rails 3.1+ Asset Pipeline on Heroku](rails-asset-pipeline) article for general information on the asset pipeline.
 
-```term
-:::>> $ heroku ps
-```
-
-The logs also reflect that Puma is in use.
-
-```term
-$ heroku logs
-```
-
-## Rails asset pipeline
-
-When deploying to Heroku, there are several options for invoking the [Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html). Please review the [Rails 3.1+ Asset Pipeline on Heroku Cedar](rails-asset-pipeline) article for general information on the asset pipeline.
-
-Rails 7 removed the `config.assets.initialize_on_precompile` option because it is no longer needed. Additionally, any failure in asset compilation will now cause the push to fail. For Rails 7 asset pipeline support, see the [Ruby Support](ruby-support#rails-5-x-applications) page.
+Rails 7 removed the `config.assets.initialize_on_precompile` option because it's no longer needed. Additionally, any failure in asset compilation now causes the push to fail. For Rails 7 asset pipeline support, see the [Ruby Support](ruby-support#rails-7-x-applications) page.
 
 ## Troubleshooting
 
-If an app deployed to Heroku crashes (`heroku ps` shows state `crashed`), review the app’s logs to determine what went wrong. The following section covers common causes of app crashes.
+If an app deployed to Heroku crashes, for example, `heroku ps` shows the state `crashed`, review the app’s logs. The following section covers common causes of app crashes.
 
 ### Runtime Dependencies on Development or Test Gems
 
@@ -455,7 +421,7 @@ no such file to load -- rspec/core/rake_task
 ```
 
 >note
->The `--without` option on bundler is sticky. To get rid of this option, run `bundle config --delete without`.
+>The `--without` option on `bundler` is persistent. To remove this option, run `bundle config --delete without`.
 
 Fix the error by making these Rake tasks conditional during gem load. For example:
 
@@ -473,11 +439,41 @@ rescue LoadError
 end
 ```
 
-Confirm it works locally, then push to Heroku.
+Confirm it works locally, then push it to Heroku.
 
 ## Next Steps
 
-Congratulations! You deployed your first Rails 7 application to Heroku. Review the following articles next:
+Congratulations on deploying a Rails 7 application! To continue exploring, review the following articles next:
 
 * Visit the [Ruby support category](/categories/ruby-support) to learn more about using Ruby and Rails on Heroku.
 * The [Deployment category](/categories/deployment) provides a variety of powerful integrations and features to help streamline and simplify your deployments.
+
+>note
+>Remember to [delete your example app](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-apps-destroy), and [database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) as soon as you're done with the tutorial, to control costs.
+
+## Delete Your App and Add-on
+
+Remove the app and database from your account. You're only charged for the resources you used.
+
+>warning
+>This action removes your add-on and any data saved in the database.
+
+```term
+$ heroku addons:destroy heroku-postgresql
+```
+
+>warning
+>This action permanently deletes your application
+
+```term
+$ heroku apps:destroy
+```
+
+You can confirm that your add-on and app are gone with these commands:
+
+```term
+$ heroku addons --all
+$ heroku apps --all
+```
+
+You're now ready to <a href= "https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment" target= "_blank">deploy your app</a>.
