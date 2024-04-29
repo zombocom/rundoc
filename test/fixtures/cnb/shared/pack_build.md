@@ -4,8 +4,8 @@ Now build an image named `my-image-name` by executing the heroku builder against
 `pack build` command:
 
 ```
-:::-- $ docker rmi -f my-image-name
 $ pack build my-image-name --path .
+:::-- $ docker rmi -f my-image-name
 :::-- $ pack build my-image-name --path . &> build_output.txt
 :::-> $ cat build_output.txt
 ```

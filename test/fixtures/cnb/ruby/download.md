@@ -14,3 +14,9 @@ Verify you're in the correct directory:
 ```
 :::>> $ ls
 ```
+
+This tutorial was built using the following commit SHA:
+
+```
+:::>> $ git log --oneline | head -n1
+```

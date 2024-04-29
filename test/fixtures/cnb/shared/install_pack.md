@@ -6,7 +6,7 @@ We assume you have [docker installed](https://docs.docker.com/engine/install/) a
 :::>- $ brew install buildpacks/tap/pack
 ```
 
-Ensure that it is installed correctly:
+Ensure that `pack` is installed correctly:
 
 ```
 :::>> $ pack --version
