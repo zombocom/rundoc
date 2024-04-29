@@ -8,13 +8,13 @@ If you’re an advanced `Dockerfile` user you might be interested in learning mo
 If you view the root directory `/` you’ll see there is a `layers` folder. Every buildpack that executes gets a unique folder. For example:
 
 ```
-:::>> $ docker run --rm --platform linux/amd64 my-image-name "ls /layers | grep ruby"
+:::>> $ docker run --rm my-image-name "ls /layers | grep ruby"
 ```
 
 Individual buildpacks can compose multiple layers from their buildpack directory. For example you can see that `ruby` binary is present within that ruby buildpack directory:
 
 ```
-:::>> $ docker run --rm --platform linux/amd64 my-image-name "which ruby"
+:::>> $ docker run --rm my-image-name "which ruby"
 ```
 
 OCI images are represented as sequential modifications to disk. By scoping buildpack disk modifications to their own directory, the CNB API guarantees that changes to a layer in one buildpack will not affect the contents of disk to another layer. This means that OCI images produced by CNBs are rebaseable by default, while those produced by Dockerfile are not.

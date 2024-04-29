@@ -31,12 +31,13 @@ Ensure that a `requirements.txt` file, a `package.json` file and a `Gemfile.lock
 
 ```
 :::>> $ touch requirements.txt
-:::>> $ pack build multiple-languages-app --path .
+:::>> $ pack build my-image-name --path .
 ```
 
-You can run the image and inspect the dependencies:
+You can run the image and inspect everything is installed as expected:
 
 ```
-$ docker run -it --rm --platform linux/amd64 multiple-languages-app bash
-:::>- $ docker run --rm --platform linux/amd64 multiple-languages-app python --version
+$ docker run -it --rm my-image-name bash
+$ which python
+:::-> $ docker run --rm my-image-name "which python"
 ```

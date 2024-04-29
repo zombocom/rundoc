@@ -5,8 +5,8 @@ Even though we used `pack` and CNBs to build our image, it can be run with your 
 By default, images will be booted into a web server configuration. You can launch the app we just built by running:
 
 ```
-$ docker run -it --rm --platform linux/amd64 --env PORT=9292 -p 9292:9292 my-image-name
-:::-> background.start("docker run --rm --platform linux/amd64 --env PORT=9292 -p 9292:9292 my-image-name", name: "docker_server")
+$ docker run -it --rm --env PORT=9292 -p 9292:9292 my-image-name
+:::-> background.start("docker run --rm --env PORT=9292 -p 9292:9292 my-image-name", name: "docker_server")
 :::-- $ sleep 10
 :::-> background.log.read(name: "docker_server")
 ```
@@ -46,7 +46,7 @@ Now you can inspect the container interactively. For example, you can see the fi
 
 ```
 $ ls
-:::-> $ docker run --rm --platform linux/amd64 my-image-name ls
+:::-> $ docker run --rm my-image-name ls
 ```
 
 And anything else you would typically do via an interactive container session.

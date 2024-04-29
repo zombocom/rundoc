@@ -16,12 +16,3 @@ You can view the contents of a builder via the command `pack builder inspect`. F
 > Your output version numbers may differ.
 
 This output shows the various buildpacks that represent the different languages that are supported by this builder such as `heroku/go` and `heroku/nodejs-engine`.
-
-
-<!--
-Debug: Output the SHA of the builder:
-
-```
-:::>> $ docker inspect --format='{{index .RepoDigests 0}}' heroku/builder:22
-```
--->
