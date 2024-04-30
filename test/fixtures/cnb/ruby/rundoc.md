@@ -33,7 +33,7 @@ end
 ```
 
 ```
-:::>> rundoc.require "../shared/what_is_pack_build.md"
+:::>> rundoc.require "./what_is_pack_build.md"
 ```
 
 ```
