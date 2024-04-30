@@ -1,4 +1,14 @@
 ```
+:::-- rundoc.configure
+Rundoc.configure do |config|
+  config.filter_sensitive(
+    "tmp/rundoc_screenshots/screenshot_1.png" =>
+      "assets/images/ruby-getting-started-screenshot.png"
+  )
+end
+```
+
+```
 :::>> rundoc.require "./intro.md"
 ```
 
