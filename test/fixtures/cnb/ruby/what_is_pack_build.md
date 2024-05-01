@@ -3,7 +3,7 @@
 > [!NOTE]
 > Skip ahead if you want to run the application first and get into the details later.
 
-When you run `pack build` with a builder, each shared runs a detection script to determine if it should be eligible to build the application. In our case the `heroku/ruby` buildpack found a `Gemfile.lock` file and `heroku/nodejs-engine` buildpack found a `package.json` file on disk. As a result, both buildpacks have enough information to install Ruby and Node dependencies. You can view a list of the buildpacks used in the output above:
+When you run `pack build` with a builder, each buildpack runs a detection script to determine if it should be eligible to build the application. In our case the `heroku/ruby` buildpack found a `Gemfile.lock` file and `heroku/nodejs-engine` buildpack found a `package.json` file on disk. As a result, both buildpacks have enough information to install Ruby and Node dependencies. You can view a list of the buildpacks used in the output above:
 
 ```
 :::-> $ grep DETECTING -A5 ./build_output.txt

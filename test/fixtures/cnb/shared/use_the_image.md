@@ -11,7 +11,7 @@ $ docker run -it --rm --env PORT=9292 -p 9292:9292 my-image-name
 :::-> background.log.read(name: "docker_server")
 ```
 
-Now when you visit http://localhost:9292 you should see a working web application:
+Now when you visit [http://localhost:9292](http://localhost:9292) you should see a working web application:
 
 ```
 :::>> website.visit(name: "localhost", url: "http://localhost:9292")
