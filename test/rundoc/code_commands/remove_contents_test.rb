@@ -29,10 +29,11 @@ class RemoveContentsTest < Minitest::Test
 
         env = {}
         env[:commands] = []
-        env[:before] = "```ruby"
+        env[:before] = []
+        env[:fence_start] = "```ruby"
         cc.to_md(env)
 
-        assert_equal "In file `foo.rb` remove:\n\n```ruby", env[:before]
+        assert_equal ["In file `foo.rb` remove:", Rundoc::CodeCommand::NEWLINE], env[:before]
       end
     end
   end

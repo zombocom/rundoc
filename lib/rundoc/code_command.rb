@@ -2,6 +2,18 @@ module Rundoc
   # Generic CodeCommand class to be inherited
   #
   class CodeCommand
+
+    # Newlines are stripped and re-added, this tells the project that
+    # we're intentionally wanting an extra newline
+    NEWLINE = Object.new
+    def NEWLINE.to_s
+      ""
+    end
+
+    def NEWLINE.empty?
+      false
+    end
+
     attr_accessor :render_result, :render_command,
       :command, :contents, :keyword,
       :original_args

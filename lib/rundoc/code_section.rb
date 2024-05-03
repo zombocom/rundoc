@@ -44,8 +44,10 @@ module Rundoc
       result = []
       env = {}
       env[:commands] = []
-      env[:before] = +"#{fence}#{lang}"
-      env[:after] = +"#{fence}#{AUTOGEN_WARNING}"
+      env[:fence_start] = +"#{fence}#{lang}"
+      env[:fence_end] = "#{fence}#{AUTOGEN_WARNING}"
+      env[:before] = []
+      env[:after] = []
       env[:document_path] = @document_path
 
       @stack.each do |s|
@@ -71,11 +73,12 @@ module Rundoc
 
       return "" if hidden?
 
-      array = [env[:before], result, env[:after]]
+      array = [env[:before], env[:fence_start], result, env[:fence_end], env[:after]]
       array.flatten!
       array.compact!
-      array.map!(&:rstrip)
+      array.map! {|s| s.respond_to?(:rstrip) ? s.rstrip : s }
       array.reject!(&:empty?)
+      array.map!(&:to_s)
 
       array.join("\n") << "\n"
     end
