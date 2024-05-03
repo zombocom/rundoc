@@ -8,8 +8,8 @@ class Rundoc::CodeCommand::FileCommand
 
     def to_md(env)
       raise "must call write in its own code section" unless env[:commands].empty?
-      before = env[:before]
-      env[:before] = "In file `#{filename}` remove:\n\n#{before}"
+      env[:before] << "In file `#{filename}` remove:"
+      env[:before] << NEWLINE
       nil
     end
 
