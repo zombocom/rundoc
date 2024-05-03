@@ -20,7 +20,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 7 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 6.x](getting-started-with-rails6) or [Rails 5.x](getting-started-with-rails5).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.1.4'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.2.4'"
 ```
 
 The tutorial assumes that you have:
@@ -31,10 +31,8 @@ The tutorial assumes that you have:
 - A [verified Heroku Account](https://devcenter.heroku.com/articles/account-verification)
 - A subscription to the [Eco dynos plan](eco-dyno-hours) (recommended)
 
-
 >note
 >Using dynos and databases to complete this tutorial counts towards your usage. We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
-
 
 ## Local Setup
 
@@ -132,17 +130,17 @@ Rails 7 no longer has a static index page in production by default. Apps upgrade
 :::>- $ rails generate controller welcome
 ```
 
-Create `app/views/welcome/index.html.erb` and add the following snippet:
+Create `app/views/welcome/index.html.erb` and add the following code:
 
 ```html
-:::>> file.write app/views/welcome/index.html.erb
+:::-> file.write app/views/welcome/index.html.erb
 <h2>Hello World</h2>
 <p>
   The time is now: <%= Time.now %>
 </p>
 ```
 
-With a welcome page created, create a route to map to this action. Edit `config/routes.rb` to set the index page to the new method:
+With a welcome page created, create a route to map to this action.
 
 ```ruby
 :::>> file.append config/routes.rb#2
@@ -156,7 +154,7 @@ Verify the page is present by starting the Rails web server:
 :::-- background.stop(name: "server")
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) in a browser. If the page doesn’t display, [reference the logs](#view-application-logs) to debug the error. Rails outputs logs in the same terminal where `rails server` started.
+Visit [http://localhost:3000](http://localhost:3000) in a browser. If the page doesn’t display, [reference the logs](#view-application-logs) to debug the error. Rails outputs logs in the same terminal where `rails server` was started.
 
 ## Specify the Ruby Version
 
@@ -165,7 +163,7 @@ Rails 7 requires Ruby 2.7.0 or above. Heroku installs a recent version of Ruby b
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "3.1.4"
+ruby "3.2.4"
 ```
 
 Always use the same version of Ruby locally. Confirm the local version of ruby with `ruby -v`. Refer to the [Ruby Versions](ruby-versions) article for more details on defining a specific ruby version.
@@ -176,10 +174,10 @@ Use a [Procfile](procfile), a text file in the root directory of your applicatio
 
 This Procfile declares a single process type, `web`, and the command needed to run it.  The name `web` is important here.  It declares that this process type is attached to Heroku's [HTTP routing](http-routing) stack and receives web traffic when deployed.
 
-By default, a Rails app’s web process runs `rails server`, which uses Puma in Rails 7. When you deploy a Rails 7 application without a Procfile, this command executes. However, we recommend explicitly declaring how to boot your server process via a Procfile. For example:
+By default, a Rails app’s web process runs `rails server`, which uses Puma in Rails 7. When you deploy a Rails 7 application without a `Procfile`, this command executes. However, we recommend explicitly declaring how to boot your server process via a `Procfile`. For example:
 
 ```
-:::>> file.write Procfile
+:::-> file.write Procfile
 web: bundle exec puma -C config/puma.rb
 ```
 
