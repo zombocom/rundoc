@@ -73,7 +73,21 @@ module Rundoc
 
       return "" if hidden?
 
-      array = [env[:before], env[:fence_start], result, env[:fence_end], env[:after]]
+      array = [env[:before]]
+
+      result.flatten!
+      result.compact!
+      result.map! {|s| s.respond_to?(:rstrip) ? s.rstrip : s }
+      result.reject!(&:empty?)
+      result.map!(&:to_s)
+
+      if !result.empty?
+        array << env[:fence_start]
+        array << result
+        array << env[:fence_end]
+      end
+      array << env[:after]
+
       array.flatten!
       array.compact!
       array.map! {|s| s.respond_to?(:rstrip) ? s.rstrip : s }
