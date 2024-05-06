@@ -12,13 +12,13 @@ module Rundoc
 
     rule(:singlequote_string) {
       str("'") >> (
-        str("'").absnt? >> any
+        str("'").absent? >> any
       ).repeat.as(:string) >>
         str("'") >> spaces?
     }
     rule(:doublequote_string) {
       str('"') >> (
-        str('"').absnt? >> any
+        str('"').absent? >> any
       ).repeat.as(:string) >>
         str('"') >> spaces?
     }
