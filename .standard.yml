@@ -1,6 +1,6 @@
 fix: true               # default: false
 parallel: true          # default: false
 format: progress        # default: Standard::Formatter
-ruby_version: 2.7       # default: RUBY_VERSION
+ruby_version: 3.1       # default: RUBY_VERSION
 ignore:                 # default: []
   - 'test/fixtures/**/*'

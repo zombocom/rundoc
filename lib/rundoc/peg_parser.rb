@@ -224,7 +224,7 @@ module Rundoc
       attr_reader :line_and_column
       def initialize(message:, line_and_column:)
         @line_and_column = line_and_column || [1, 1]
-        super message
+        super(message)
       end
     end
 
