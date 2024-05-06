@@ -17,8 +17,8 @@ class ParserTest < Minitest::Test
         env = {}
         env[:before] = []
         expected = <<~EOF
-        one
-        #{key}
+          one
+          #{key}
         EOF
         parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
@@ -41,7 +41,7 @@ class ParserTest < Minitest::Test
         env = {}
         env[:before] = []
         expected = <<~EOF
-        one
+          one
         EOF
         parsed = Rundoc::Parser.new(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
@@ -75,7 +75,6 @@ class ParserTest < Minitest::Test
       end
     end
   end
-
 
   def test_erb_with_default_binding
     contents = <<~RUBY

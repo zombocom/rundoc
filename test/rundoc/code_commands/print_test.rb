@@ -5,7 +5,7 @@ class PrintTest < Minitest::Test
     env = {}
     env[:before] = []
 
-    input = %Q{$ rails new myapp # Not a command since it's missing the ":::>>"}
+    input = %($ rails new myapp # Not a command since it's missing the ":::>>")
     cmd = Rundoc::CodeCommand::PrintText.new(input)
     cmd.render_command = false
     cmd.render_result = true
@@ -19,7 +19,7 @@ class PrintTest < Minitest::Test
     env = {}
     env[:before] = []
 
-    input = %Q{$ rails new myapp # Not a command since it's missing the ":::>>"}
+    input = %($ rails new myapp # Not a command since it's missing the ":::>>")
     cmd = Rundoc::CodeCommand::PrintText.new(input)
     cmd.render_command = true
     cmd.render_result = true
@@ -34,7 +34,7 @@ class PrintTest < Minitest::Test
     env = {}
     env[:before] = []
 
-    input = %Q{$ rails new <%= 'myapp' %> # Not a command since it's missing the ":::>>"}
+    input = %($ rails new <%= 'myapp' %> # Not a command since it's missing the ":::>>")
     cmd = Rundoc::CodeCommand::PrintERB.new(input)
     cmd.render_command = false
     cmd.render_result = true
@@ -49,8 +49,8 @@ class PrintTest < Minitest::Test
     env = {}
     env[:before] = []
 
-    cmd = Rundoc::CodeCommand::PrintERB.new()
-    cmd.contents = %Q{<%= "foo" %>}
+    cmd = Rundoc::CodeCommand::PrintERB.new
+    cmd.contents = %(<%= "foo" %>)
     cmd.render_command = true
     cmd.render_result = true
 
@@ -62,8 +62,8 @@ class PrintTest < Minitest::Test
   def test_binding_is_preserved
     env = {}
     env[:before] = []
-    cmd = Rundoc::CodeCommand::PrintERB.new()
-    cmd.contents = %Q{<%= @foo = SecureRandom.hex(16) %>}
+    cmd = Rundoc::CodeCommand::PrintERB.new
+    cmd.contents = %{<%= @foo = SecureRandom.hex(16) %>}
     cmd.render_command = true
     cmd.render_result = true
 
@@ -73,8 +73,8 @@ class PrintTest < Minitest::Test
 
     assert !expected.empty?
 
-    cmd = Rundoc::CodeCommand::PrintERB.new()
-    cmd.contents = %Q{<%= @foo %>}
+    cmd = Rundoc::CodeCommand::PrintERB.new
+    cmd.contents = %(<%= @foo %>)
     cmd.render_command = true
     cmd.render_result = true
 
@@ -83,7 +83,7 @@ class PrintTest < Minitest::Test
     assert_equal [], env[:before]
 
     cmd = Rundoc::CodeCommand::PrintERB.new(binding: "different")
-    cmd.contents = %Q{<%= @foo %>}
+    cmd.contents = %(<%= @foo %>)
     cmd.render_command = true
     cmd.render_result = true
 

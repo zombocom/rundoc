@@ -2,7 +2,6 @@ module Rundoc
   # Generic CodeCommand class to be inherited
   #
   class CodeCommand
-
     # Newlines are stripped and re-added, this tells the project that
     # we're intentionally wanting an extra newline
     NEWLINE = Object.new

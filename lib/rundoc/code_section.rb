@@ -20,7 +20,7 @@ module Rundoc
         msg << "registered commands: #{Rundoc.known_commands.inspect}\n\n"
         msg << block
         msg << "\n"
-        super msg
+        super(msg)
       end
     end
 
@@ -77,7 +77,7 @@ module Rundoc
 
       result.flatten!
       result.compact!
-      result.map! {|s| s.respond_to?(:rstrip) ? s.rstrip : s }
+      result.map! { |s| s.respond_to?(:rstrip) ? s.rstrip : s }
       result.reject!(&:empty?)
       result.map!(&:to_s)
 
@@ -90,7 +90,7 @@ module Rundoc
 
       array.flatten!
       array.compact!
-      array.map! {|s| s.respond_to?(:rstrip) ? s.rstrip : s }
+      array.map! { |s| s.respond_to?(:rstrip) ? s.rstrip : s }
       array.reject!(&:empty?)
       array.map!(&:to_s)
 

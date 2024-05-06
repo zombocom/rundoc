@@ -1,7 +1,6 @@
 require "test_helper"
 
 class ParserTest < Minitest::Test
-
   def test_parse_bash
     contents = <<~RUBY
       sup

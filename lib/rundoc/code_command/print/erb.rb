@@ -1,9 +1,8 @@
-
 require "erb"
 
 class EmptyBinding
   def self.create
-    self.new.empty_binding
+    new.empty_binding
   end
 
   def empty_binding
@@ -11,11 +10,10 @@ class EmptyBinding
   end
 end
 
-RUNDOC_ERB_BINDINGS = Hash.new {|h, k| h[k] = EmptyBinding.create }
+RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
 
 class Rundoc::CodeCommand
   class PrintERB < Rundoc::CodeCommand
-
     def initialize(line = nil, binding: "default")
       @line = line
       @binding = RUNDOC_ERB_BINDINGS[binding]
@@ -33,7 +31,7 @@ class Rundoc::CodeCommand
       @render ||= ERB.new([@line, contents].compact.join("\n")).result(@binding)
     end
 
-    def call(erb={})
+    def call(erb = {})
       if render_before?
         ""
       else

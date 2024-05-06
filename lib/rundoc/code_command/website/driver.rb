@@ -16,7 +16,7 @@ class Rundoc::CodeCommand::Website
       @height = height
 
       @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options)
-      driver_name = "rundoc_driver_#{name}".to_sym
+      driver_name = :"rundoc_driver_#{name}"
       Capybara.register_driver(driver_name) do |app|
         @driver
       end
