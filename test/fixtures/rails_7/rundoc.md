@@ -287,7 +287,7 @@ To use an interactive shell session instead, you can execute `heroku run bash`.
 
 ## Scale and Access the Application
 
-Heroku runs application code using defined processes and [process types](procfile). New applications don't a process type active by default. The following command scales your app up to one dyno, running the `web` process:
+Heroku runs application code using defined processes and [process types](procfile). New applications don't have a process type active by default. The following command scales your app up to one dyno, running the `web` process:
 
 ```term
 :::>- $ heroku ps:scale web=1
