@@ -251,7 +251,7 @@ Provision a [Heroku Postgres](https://devcenter.heroku.com/articles/heroku-postg
 >A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, we prompt you to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
 
 ```term
-:::>> $ heroku addons:create heroku-postgresql:mini
+:::>> $ heroku addons:create heroku-postgresql:essential-0
 ```
 
 Your Heroku app can now access this Postgres database. The `DATABASE_URL` environment variable stores your credentials, which Rails connects to by convention.
