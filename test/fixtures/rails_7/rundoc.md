@@ -251,7 +251,7 @@ Provision a [Heroku Postgres](https://devcenter.heroku.com/articles/heroku-postg
 >A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, we prompt you to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
 
 ```term
-:::>> $ heroku addons:create heroku-postgresql:mini
+:::>> $ heroku addons:create heroku-postgresql:essential-0
 ```
 
 Your Heroku app can now access this Postgres database. The `DATABASE_URL` environment variable stores your credentials, which Rails connects to by convention.
@@ -287,7 +287,7 @@ To use an interactive shell session instead, you can execute `heroku run bash`.
 
 ## Scale and Access the Application
 
-Heroku runs application code using defined processes and [process types](procfile). New applications don't a process type active by default. The following command scales your app up to one dyno, running the `web` process:
+Heroku runs application code using defined processes and [process types](procfile). New applications don't have a process type active by default. The following command scales your app up to one dyno, running the `web` process:
 
 ```term
 :::>- $ heroku ps:scale web=1
