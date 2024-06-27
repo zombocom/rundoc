@@ -190,4 +190,26 @@ class RegexTest < Minitest::Test
 
     assert_equal contents.strip, match.to_s.strip
   end
+
+  def test_codeblock_optional_newline_regex
+    code_block_with_newline = <<~MD
+      hi
+      ```
+      :::>> $ echo "hello"
+      ```
+    MD
+    code_block_without_newline = code_block_with_newline.strip
+
+    expected = <<~MD.strip
+      ```
+      :::>> $ echo "hello"
+      ```
+    MD
+    regex = Rundoc::Parser::CODEBLOCK_REGEX
+    match = code_block_with_newline.match(regex)
+    assert_equal expected, match.to_s.strip
+
+    match = code_block_without_newline.match(regex)
+    assert_equal expected, match.to_s.strip
+  end
 end
