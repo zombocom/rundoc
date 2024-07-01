@@ -1,5 +1,7 @@
 ## HEAD
 
+- Bugfix: Code blocks without a following newline are now being recognized and executed (https://github.com/zombocom/rundoc/pull/51)
+
 ## 2.0.0
 
 - Change: Ruby 2.7 and 3.0 are no longer supported
