@@ -455,7 +455,6 @@ The result of the screenshot command will be to replace the code section with a 
 
 Once you've visited a website you can further navigate using `website.nav` or `website.navigate`:
 
-
 ```
 :::>> website.visit(name: "localhost", url: "http://localhost:3000")
 :::>> website.navigate(name: "localhost")
