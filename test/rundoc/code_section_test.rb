@@ -1,9 +1,6 @@
 require "test_helper"
 
 class CodeSectionTest < Minitest::Test
-  def setup
-  end
-
   def test_does_not_render_if_all_contents_hidden
     contents = <<~RUBY
       sup

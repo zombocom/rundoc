@@ -65,6 +65,9 @@ This will generate a project folder with your project in it, and a markdown READ
 - Execute Bash Commands
   - [$](#shell-commands)
   - [fail.$](#shell-commands)
+- Printing
+  - [print.text](#print)
+  - [print.erb](#print)
 - Chain commands
   - [pipe](#pipe)
   - [|](#pipe)
@@ -181,7 +184,7 @@ RunDOC only cares about things that come after a `:::` section. If you have a "r
 You can mix non-command code and commands, as long as the things that aren't rendering come first. This can be used to "fake" a command, for example:
 
 ```
-$ rails new myapp # Not a command since it's missing the ":::>>""
+$ rails new myapp # Not a command since it's missing the ":::>>"
 :::-> $ rails new myapp --skip-test --skip-yarn --skip-sprockets
 :::>> | $ head -n 5
 ```
@@ -197,12 +200,11 @@ $ rails new myapp # Not a command since it's missing the ":::>>""
       create  config.ru
 ```
 
-It looks like the command was run without any flags, but in reality `rails new myapp --skip-test --skip-yarn --skip-sprockets | head -n 5` was executed.
+In this example it looks like the command was run without any flags, but in reality `rails new myapp --skip-test --skip-yarn --skip-sprockets | head -n 5` was executed. Though it's more explicit to use a `print.text` block, see [#print.text](#print) for more info.
 
 ## Rendering Cheat Sheet
 
 An arrow `>` is shorthand for "render this" and a dash `-` is shorthand for skip this section. The two positions are **command** first and **result** second.
-
 
 - `:::>-` (YES command output, not result output)
 - `:::>>` (YES command output, YES result output)
@@ -249,6 +251,64 @@ However this command would fall on its face:
 These custom commands are kept to a minimum, and for the most part behave as you would expect them to. Write your docs as you normally would and check the output frequently.
 
 Running shell commands like this can be very powerful, you'll likely want more control of how you manipulate files in your project. To do this you can use the `file.` namespace:
+
+## Print
+
+Current commands:
+
+- `print.text`
+- `print.erb`
+
+Behaves slightly differently than other commands. The "command" portion of the control character i.e. `:::>` controls whether the contents will be rendered inside the block or before the block (versus usually this is used to control if the command such as `$ cd` is shown).
+
+- `:::>>` Print inside the code block
+- `:::->` Print BEFORE the code block, if multiple calls are made, they will be displayed in order.
+- `:::--` Nothing will be rendered, can be used to pass data to another rundoc command via the pipe operator.
+- `:::>-` Same behavior as `:::--`.
+
+This functionality is present to allow body text to be generated (versus only allowing generated text in code blocks).
+
+Use the `print.text` keyword followed by what you want to print:
+
+    ```
+    :::-> print.text
+    I will render BEFORE the code block, use :::>> to render in it.
+
+    It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness,
+    it was the epoch of belief, it was the epoch ...
+    ```
+
+Specifying `:::->` with `print.text` will render text without a code block (or before the code block if there are other rundoc commands). If you want to render text with a code block you can do it via `:::>>`.
+
+To dynamically change the contents of the thing you're printing you can use `print.erb`:
+
+    ```
+    :::-> print.erb
+    I will render BEFORE the code block, use :::>> to render in it.
+
+    What a week!
+    Captain it's only <%= Time.now.strftime("%A") %>!
+    ```
+
+This will evaluate the context of ERB and write it to the file. Like `print.text` use `:::->` to write the contents without a code block (or before the code block if there are other rundoc commands). If you want to render text with a code block you can do it via `:::>>`.
+
+ERB commands share a default context. That means you can set a value in one `print.erb` section and view it from another. If you want to isolate your erb blocks you can provide a custom name via the `binding:` keyword:
+
+    ```
+    :::>> print.erb(binding: "mc_hammer")
+    I will render IN a code block, use `:::->` to render before.
+
+    <%= @stop = true %>
+
+    :::>> print.erb(binding: "different")
+    <% if @stop %>
+    Hammer time
+    <% else %>
+    Can't touch this
+    <% end %>
+    ```
+
+In this example setting `@stop` in one `print.erb` will have no effect on the other.
 
 ## File Commands
 
@@ -502,6 +562,39 @@ Sometimes sensitive info like usernames, email addresses, or passwords may be in
     ```
 
 This command `filter_sensitive` can be called multiple times with different values. Since the config is in Ruby you could iterate over an array of sensitive data
+
+## Writing a new command
+
+Rundoc does not have a stable internal command interface. You can define your own commands, but unless it is committed in this repo, it may break on a minor version change.
+
+To add a new command it needs to be parsed and called. Examples of commands being implemented are seen in `lib/rundoc/code_command`.
+
+A new command needs to be registered:
+
+```
+Rundoc.register_code_command(:lol, Rundoc::CodeCommand::Lol)
+```
+
+They should inherit from Rundoc::CodeCommand:
+
+```
+class Rundoc::CodeCommand::Lol < Rundoc::CodeCommand
+  def initialize(line)
+  end
+end
+```
+
+The initialize method is called with input from the document. The command is rendered (`:::>-`) by the output of the `def call` method. The contents produced by the command (`:::->`) are rendered by the `def to_md` method.
+
+The syntax for commands is ruby-ish but it is a custom grammar implemented in `lib/peg_parser.rb` for more info on manipulating the grammar see this tutorial on how I added keword-like/hash-like syntax https://github.com/schneems/implement_ruby_hash_syntax_with_parslet_example.
+
+Command initialize methods natively support:
+
+- Barewords as a single string input
+- Keyword arguments
+- A combination of the two
+
+Anything that is passed to the command via "stdin" is available via a method `self.contents`. The interplay between the input and `self.contents` is not strongly defined.
 
 ## Copyright
 

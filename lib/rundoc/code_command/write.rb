@@ -23,9 +23,11 @@ module Rundoc
       end
 
       def to_md(env)
-        raise "must call write in its own code section" unless env[:commands].empty?
-        before = env[:before]
-        env[:before] = "In file `#{filename}` write:\n\n#{before}"
+        if render_command?
+          raise "must call write in its own code section" unless env[:commands].empty?
+          env[:before] << "In file `#{filename}` write:"
+          env[:before] << NEWLINE
+        end
         nil
       end
 

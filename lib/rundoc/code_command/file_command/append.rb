@@ -13,12 +13,13 @@ class Rundoc::CodeCommand::FileCommand
       return unless render_command?
 
       raise "must call write in its own code section" unless env[:commands].empty?
-      before = env[:before]
-      env[:before] = if @line_number
-        "In file `#{filename}`, on line #{@line_number} add:\n\n#{before}"
+
+      env[:before] << if @line_number
+        "In file `#{filename}`, on line #{@line_number} add:"
       else
-        "At the end of `#{filename}` add:\n\n#{before}"
+        "At the end of `#{filename}` add:"
       end
+      env[:before] << NEWLINE
       nil
     end
 

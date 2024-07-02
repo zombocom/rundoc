@@ -12,13 +12,13 @@ module Rundoc
 
     rule(:singlequote_string) {
       str("'") >> (
-        str("'").absnt? >> any
+        str("'").absent? >> any
       ).repeat.as(:string) >>
         str("'") >> spaces?
     }
     rule(:doublequote_string) {
       str('"') >> (
-        str('"').absnt? >> any
+        str('"').absent? >> any
       ).repeat.as(:string) >>
         str('"') >> spaces?
     }
@@ -224,7 +224,7 @@ module Rundoc
       attr_reader :line_and_column
       def initialize(message:, line_and_column:)
         @line_and_column = line_and_column || [1, 1]
-        super message
+        super(message)
       end
     end
 

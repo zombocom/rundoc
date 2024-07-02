@@ -252,13 +252,11 @@ Provision a Postgresql database using Add-ons.
 >A `mini` Postgres size costs [$5 a month, prorated to the minute](https://elements.heroku.com/addons/heroku-postgresql). At the end of this tutorial, you will be prompted to [delete your database](https://devcenter.heroku.com/articles/heroku-postgresql#removing-the-add-on) to minimize costs.
 
 ```term
-$ heroku addons:create heroku-postgresql:mini
-Creating heroku-postgresql:mini on ⬢ shrouded-anchorage-34700... $5/month
-Database has been created and is available
- ! This database is empty. If upgrading, you can transfer
- ! data from another database with pg:copy
-
-Created postgresql-encircled-75487 as DATABASE_URL
+$ heroku addons:create heroku-postgresql:essential-0
+Creating heroku-postgresql:essential-0 on ⬢ shrouded-anchorage-34700... ~$0.007/hour (max $5/month)
+Database should be available soon
+postgresql-encircled-75487 is being created in the background. The app will restart when complete...
+Use heroku addons:info postgresql-encircled-75487 to check creation progress
 Use heroku addons:docs heroku-postgresql to view documentation
 ```
 

@@ -17,9 +17,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "thor"
-  gem.add_dependency "parslet", "~> 1"
+  gem.add_dependency "parslet", "~> 2"
   gem.add_dependency "capybara", "~> 3"
   gem.add_dependency "selenium-webdriver", "~> 4"
+  gem.add_dependency "base64", "~> 0"
 
   gem.add_dependency "aws-sdk-s3", "~> 1"
   gem.add_dependency "dotenv"

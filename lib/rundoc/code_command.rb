@@ -2,6 +2,17 @@ module Rundoc
   # Generic CodeCommand class to be inherited
   #
   class CodeCommand
+    # Newlines are stripped and re-added, this tells the project that
+    # we're intentionally wanting an extra newline
+    NEWLINE = Object.new
+    def NEWLINE.to_s
+      ""
+    end
+
+    def NEWLINE.empty?
+      false
+    end
+
     attr_accessor :render_result, :render_command,
       :command, :contents, :keyword,
       :original_args
@@ -47,3 +58,5 @@ require "rundoc/code_command/no_such_command"
 require "rundoc/code_command/raw"
 require "rundoc/code_command/background"
 require "rundoc/code_command/website"
+require "rundoc/code_command/print/text"
+require "rundoc/code_command/print/erb"
