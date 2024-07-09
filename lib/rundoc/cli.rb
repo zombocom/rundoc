@@ -2,9 +2,18 @@ module Rundoc
   class CLI
     def build(path:)
       @path = Pathname.new(path).expand_path
+
       raise "#{@path} does not exist" unless File.exist?(@path)
       raise "Expecting #{@path} to be a rundoc markdown file" unless File.file?(@path)
       @working_dir = Pathname.new(File.expand_path("../", @path))
+      tmp_dir = @working_dir.join("tmp")
+      screenshots_path = if Rundoc.project_root
+        tmp_dir.join(Rundoc.project_root, "screenshots")
+      else
+        tmp_dir.join("screenshots")
+      end
+
+      tmp_dir.join("screenshots")
 
       dot_env_path = File.expand_path("../.env", @path)
       if File.exist?(dot_env_path)
@@ -17,7 +26,6 @@ module Rundoc
       end
 
       source_contents = File.read(@path)
-      tmp_dir = @working_dir.join("tmp")
 
       FileUtils.remove_entry_secure(tmp_dir) if tmp_dir.exist?
       tmp_dir.mkdir
@@ -33,7 +41,11 @@ module Rundoc
 
       puts "== Running your docs"
       Dir.chdir(tmp_dir) do
-        @output = Rundoc::Parser.new(source_contents, document_path: @path).to_md
+        @output = Rundoc::Parser.new(
+          source_contents,
+          document_path: @path,
+          screenshots_path: screenshots_path
+        ).to_md
         Rundoc.sanitize(@output)
         @output = "#{banner}\n#{@output}"
       end

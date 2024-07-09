@@ -33,6 +33,7 @@ module Rundoc
       @commands = []
       @stack = []
       @keyword = options[:keyword] or raise "keyword is required"
+      @screenshots_path = options[:screenshots_path]
       @document_path = options[:document_path]
       @fence = match[:fence]
       @lang = match[:lang]
@@ -49,6 +50,7 @@ module Rundoc
       env[:before] = []
       env[:after] = []
       env[:document_path] = @document_path
+      env[:screenshots_path] = @screenshots_path
 
       @stack.each do |s|
         unless s.respond_to?(:call)
