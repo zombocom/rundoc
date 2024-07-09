@@ -1,6 +1,6 @@
 ## HEAD
 
-
+- Fix: Bash commands now stream their outputs while they're running (https://github.com/zombocom/rundoc/pull/57)
 - Change: Minimum selenium-webdriver is now 4.x. (https://github.com/zombocom/rundoc/pull/41)
 
 ## 2.0.1

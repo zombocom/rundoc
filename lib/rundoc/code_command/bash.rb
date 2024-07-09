@@ -40,8 +40,15 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
     IO.popen(cmd, "w+") do |io|
       io << stdin if stdin
       io.close_write
-      result = sanitize_escape_chars io.read
+
+      until io.eof?
+        buffer = io.gets
+        puts "    #{buffer}"
+
+        result << sanitize_escape_chars(buffer)
+      end
     end
+
     unless $?.success?
       raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.to_s.include?("fail")
     end
