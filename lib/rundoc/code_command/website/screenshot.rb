@@ -17,7 +17,7 @@ class Rundoc::CodeCommand::Website
       )
 
       relative_filename = filename.relative_path_from(env[:context].output_dir)
-      env[:replace] = "![Screenshot of #{@driver.current_url}](#{relative_filename})"
+      env[:before] << "![Screenshot of #{@driver.current_url}](#{relative_filename})"
       ""
     end
 

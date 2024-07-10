@@ -14,8 +14,6 @@ class ::Rundoc::CodeCommand
       end
 
       def call(env = {})
-        env[:replace] ||= +""
-
         document_path = @path.expand_path(env[:context].source_dir)
 
         puts "rundoc.require: Start executing #{@path.to_s.inspect}"
@@ -23,14 +21,19 @@ class ::Rundoc::CodeCommand
           document_path.read,
           context: env[:context]
         ).to_md
-        puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
 
-        env[:replace] << output
+        if render_result?
+          puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
+          env[:before] << output
+        else
+          puts "rundoc.require: Done executing #{@path.to_s.inspect}, quietly"
+        end
+
         ""
       end
 
       def hidden?
-        true
+        !render_result?
       end
 
       def not_hidden?

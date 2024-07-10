@@ -13,13 +13,7 @@ class ::Rundoc::CodeCommand
       end
 
       def call(env = {})
-        current_path = Pathname.new(env[:document_path]).dirname
-        document_path = @path.expand_path(current_path)
-        # Run the commands, but do not
-        puts "rundoc.depend_on: Start executing #{@path.to_s.inspect}"
-        output = Rundoc::Parser.new(document_path.read, context: env[:context]).to_md
-        puts "rundoc.depend_on: Done executing #{@path.to_s.inspect}, discarding intermediate document"
-        output
+        raise "rundoc.depend_on has been removed, use `:::-- rundoc.require` instead"
       end
 
       def hidden?

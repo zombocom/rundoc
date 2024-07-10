@@ -1,5 +1,6 @@
 ## HEAD
 
+- Change: `rundoc.depend_on` is removed in favor of `:::-- rundoc.require` (https://github.com/zombocom/rundoc/pull/57)
 - Change: `Rundoc.project_root=` is removed, please use `Rundoc.after_build` instead (https://github.com/zombocom/rundoc/pull/57)
 - Change: Location of screenshots is now consistent (https://github.com/zombocom/rundoc/pull/57)
 - Fix: Bash commands now stream their outputs while they're running (https://github.com/zombocom/rundoc/pull/57)

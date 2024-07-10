@@ -72,8 +72,6 @@ module Rundoc
         result << tmp_result unless code_command.hidden?
       end
 
-      return env[:replace] if env[:replace]
-
       return "" if hidden?
 
       array = [env[:before]]

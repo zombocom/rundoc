@@ -486,23 +486,19 @@ The bucketeer addon on Heroku is supported out of the box. To specify project sp
 
 ## Compose multiple RunDOC documents
 
-If you're writing multiple tutorials that all are used together to build one larger project then you can declare dependencies inside of your RunDOC document.
-
-For example on day two (`day_two/rundoc.md`) of the tutorials you could:
+You can also break up your document into smaller components using `rundoc.require`:
 
 ```
-:::-- rundoc.depend_on "../day_one/rundoc.md"
+:::>> rundoc.require"../day_one/rundoc.md"
 ```
 
-Now when you build `day_two/rundoc.md` it will also run the steps in `day_one/rundoc.md` first. This way you don't have to copy and paste previous commands.
+This will prepend the code section with the generated contents of `rundoc.require`.
 
-You can also break up your document into smaller components:
+If you want to execute another tutorial as a pre-requisite but not embed the results you can use `:::--`:
 
 ```
-:::>> rundoc.require "../shared/rails_new.md"
+:::-- rundoc.require"../day_one/rundoc.md"
 ```
-
-This will replace the code section with the generated contents of `rundoc.require`.
 
 ## Dotenv support
 
