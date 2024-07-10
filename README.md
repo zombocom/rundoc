@@ -87,7 +87,6 @@ This will generate a project folder with your project in it, and a markdown READ
 - Configure RunDOC
   - [rundoc.configure](#configure)
 - Import and compose documents
-  - [rundoc.depend_on](#compose-multiple-rundoc-documents)
   - [rundoc.require](#compose-multiple-rundoc-documents)
 
 ## RunDOC Syntax

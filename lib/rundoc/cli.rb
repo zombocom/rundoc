@@ -1,5 +1,9 @@
 module Rundoc
   class CLI
+    module Defaults
+      OUTPUT_FILENAME = "README.md"
+      SCREENSHOTS_DIR = "screenshots"
+    end
     attr_reader :io, :on_success_dir, :on_failure_dir, :dotenv_path, :cli_cmd, :cli_args
     attr_reader :execution_context, :after_build_context
 
@@ -11,8 +15,8 @@ module Rundoc
         dotenv_path: nil,
         on_success_dir: nil,
         on_failure_dir: nil,
-        output_filename: "README.md",
-        screenshots_dir: "screenshots"
+        output_filename: Defaults::OUTPUT_FILENAME,
+        screenshots_dir: Defaults::SCREENSHOTS_DIR
       )
       @io = io
       @execution_context = Rundoc::Context::Execution.new(
