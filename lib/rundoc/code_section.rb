@@ -49,9 +49,6 @@ module Rundoc
       env[:before] = []
       env[:after] = []
       env[:context] = @context
-      # env[:output_dir] = @output_dir
-      # env[:document_path] = @document_path
-      # env[:screenshots_path] = @screenshots_path
 
       @stack.each do |s|
         unless s.respond_to?(:call)
