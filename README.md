@@ -47,12 +47,12 @@ gem 'rundoc'
 Run the `rundoc build` command on any markdown file
 
 ```sh
-$ bin/rundoc build --path <test/fixtures/rails_7/rundoc.md>
+$ rundoc build --path <test/fixtures/rails_7/rundoc.md>
 ```
 
 > Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
 
-This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
+This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs. See `rundoc --help` for more configuration options.
 
 ## Quick docs
 
@@ -162,7 +162,6 @@ Different commands will do different things with this input. For example the `ru
       end
     end
     ```
-
 
 And the `website.visit` command allows you to navigate and manipulate a webpage via a Capybara API:
 
