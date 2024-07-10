@@ -3,9 +3,9 @@ module Rundoc
     attr_reader :io, :on_success_dir, :on_failure_dir, :dotenv_path, :cli_cmd, :cli_args
     attr_reader :execution_context, :after_build_context
 
-    def new(
-        io: $stdout,
+    def initialize(
         source_path:,
+        io: $stdout,
         cli_cmd: $0,
         cli_args: $*,
         dotenv_path: nil,
@@ -28,9 +28,9 @@ module Rundoc
       @on_failure_dir = on_failure_dir || @execution_context.source_dir.join("tmp")
 
       @after_build_context = Context::AfterBuild.new(
-        output_dir: context.output_dir,
-        screenshot_dir: context.screenshot_dir,
-        output_markdown_path: output_markdown_path,
+        output_dir: execution_context.output_dir,
+        screenshots_dir: execution_context.screenshots_dir,
+        output_markdown_path: @execution_context.output_dir.join(relative_path(output_filename)),
       )
     end
 
@@ -63,7 +63,7 @@ module Rundoc
         ENV["AWS_ACCESS_KEY_ID"] ||= ENV["BUCKETEER_AWS_ACCESS_KEY_ID"]
         ENV["AWS_SECRET_ACCESS_KEY"] ||= ENV["BUCKETEER_AWS_SECRET_ACCESS_KEY"]
       else
-        io.puts("No .env file found #{dotenv_path}, skipping dotenv loading")
+        io.puts("## No .env file found #{dotenv_path}, skipping dotenv loading")
       end
     end
 
@@ -121,7 +121,11 @@ module Rundoc
     private def on_fail
       io.puts "## Rundoc failed, debug contents are in #{on_failure_dir}"
       on_failure_dir.mkpath
-      FileUtils.cp_r(execution_context.output_dir , on_failure_dir)
+
+      copy_dir_contents(
+        from: execution_context.output_dir,
+        to: on_failure_dir
+      )
     end
 
     private def on_success(output)
@@ -129,12 +133,12 @@ module Rundoc
       Rundoc.sanitize!(output)
       output = prepend_cli_banner(output)
 
-      io.puts "## Writing RUNdoc output to #{after_build.output_markdown_path}"
-      after_build.output_markdown_path.write(output)
+      io.puts "## Writing RUNdoc output to #{after_build_context.output_markdown_path}"
+      after_build_context.output_markdown_path.write(output)
 
       begin
         io.puts "## Running after build scripts "
-        Rundoc.run_after_build(after_build)
+        Rundoc.run_after_build(after_build_context)
       rescue => e
         on_fail
         raise e
@@ -145,9 +149,19 @@ module Rundoc
         FileUtils.remove_entry_secure(on_success_dir)
       end
       on_success_dir.mkpath
-      FileUtils.cp_r(execution_context.output_dir, on_success_dir)
+
+      FileUtils.cp_r(File.join(execution_context.output_dir, "."), on_success_dir)
+      copy_dir_contents(
+        from: execution_context.output_dir,
+        to: on_success_dir
+      )
 
       io.puts "## RUNdoc is done"
+    end
+
+    def copy_dir_contents(from: , to:)
+      # Cannot use Pathname.join(".")
+      FileUtils.cp_r(File.join(from, "."), to)
     end
   end
 end

@@ -13,11 +13,11 @@ module Rundoc
       # Directory to store screenshots, relative to output_dir
       :screenshots_dir
 
-      def initialize(source_path: , output_dir:, screenshots_dir: nil)
+      def initialize(source_path: , output_dir:, screenshots_dir:)
         @source_path = Pathname(source_path).expand_path
         @source_dir = @source_path.parent
         @output_dir = Pathname(output_dir).expand_path
-        @screenshots_dir = output_dir.join(screenshots_dir)
+        @screenshots_dir = @output_dir.join(screenshots_dir)
       end
     end
   end
