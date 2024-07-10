@@ -4,7 +4,6 @@ class IntegrationRequireTest < Minitest::Test
   def test_require_embeds_results
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
         dir = Pathname(dir)
         source_path = dir.join("RUNDOC.md")
         source_path.write <<~EOF
@@ -21,7 +20,7 @@ class IntegrationRequireTest < Minitest::Test
 
         parsed = parse_contents(
           source_path.read,
-          source_path: source_path,
+          source_path: source_path
         )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal "Hello World!", actual.strip
@@ -32,7 +31,6 @@ class IntegrationRequireTest < Minitest::Test
   def test_require_runs_code_but_embeds_nothing_if_hidden
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-
         dir = Pathname(dir)
         source_path = dir.join("RUNDOC.md")
         source_path.write <<~EOF
@@ -50,7 +48,7 @@ class IntegrationRequireTest < Minitest::Test
 
         parsed = parse_contents(
           source_path.read,
-          source_path: source_path,
+          source_path: source_path
         )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         # Command was run

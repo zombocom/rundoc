@@ -16,10 +16,10 @@ class IntegrationAfterBuildTest < Minitest::Test
 
         io = StringIO.new
 
-        Rundoc::CLI::new(
+        Rundoc::CLI.new(
           io: io,
           source_path: source_path,
-          on_success_dir: dir.join("project"),
+          on_success_dir: dir.join("project")
         ).call
 
         assert dir.join("project").join("lol").exist?
@@ -47,10 +47,10 @@ class IntegrationAfterBuildTest < Minitest::Test
 
         io = StringIO.new
 
-        Rundoc::CLI::new(
+        Rundoc::CLI.new(
           io: io,
           source_path: source_path,
-          on_success_dir: dir.join("project"),
+          on_success_dir: dir.join("project")
         ).call
 
         assert dir.join("project").join("rofl.txt").exist?
