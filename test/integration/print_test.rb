@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ParserTest < Minitest::Test
+class IntegrationPrintTest < Minitest::Test
   def test_erb_shared_binding_persists_values
     key = SecureRandom.hex
     contents = <<~RUBY
@@ -20,7 +20,7 @@ class ParserTest < Minitest::Test
           one
           #{key}
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -43,7 +43,7 @@ class ParserTest < Minitest::Test
         expected = <<~EOF
           one
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -69,7 +69,7 @@ class ParserTest < Minitest::Test
           there
           ```
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -93,7 +93,7 @@ class ParserTest < Minitest::Test
           Hello
           there
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -117,7 +117,7 @@ class ParserTest < Minitest::Test
           Hello
           there
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -141,7 +141,7 @@ class ParserTest < Minitest::Test
           Hello
           there
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -162,7 +162,7 @@ class ParserTest < Minitest::Test
         expected = <<~EOF
           Hello there
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -185,7 +185,7 @@ class ParserTest < Minitest::Test
           Hello there
           ```
         EOF
-        parsed = Rundoc::Parser.new(contents)
+        parsed = parse_contents(contents)
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end

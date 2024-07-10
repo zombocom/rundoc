@@ -1,6 +1,7 @@
 ## HEAD
 
-- Change: Location of screenshots is now consistent(https://github.com/zombocom/rundoc/pull/57)
+- Change: `Rundoc.project_root=` is removed, please use `Rundoc.after_build` instead (https://github.com/zombocom/rundoc/pull/57)
+- Change: Location of screenshots is now consistent (https://github.com/zombocom/rundoc/pull/57)
 - Fix: Bash commands now stream their outputs while they're running (https://github.com/zombocom/rundoc/pull/57)
 - Change: Minimum selenium-webdriver is now 4.x. (https://github.com/zombocom/rundoc/pull/41)
 

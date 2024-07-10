@@ -8,12 +8,10 @@ module Rundoc
       /^#{keyword}(?<tag>(\s|=|-|>)?(=|-|>)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
     }
 
-    attr_reader :contents, :keyword, :stack
+    attr_reader :contents, :keyword, :stack, :context
 
-    def initialize(contents, output_dir:, screenshots_path:, keyword: DEFAULT_KEYWORD, document_path: nil)
-      @output_dir = output_dir
-      @document_path = document_path
-      @screenshots_path = screenshots_path
+    def initialize(contents, context:, keyword: DEFAULT_KEYWORD)
+      @context = context
       @contents = contents
       @original = contents.dup
       @keyword = keyword
@@ -46,9 +44,7 @@ module Rundoc
           @stack << CodeSection.new(
             match,
             keyword: keyword,
-            output_dir: @output_dir,
-            document_path: @document_path,
-            screenshots_path: @screenshots_path
+            context: context
           )
         end
         @contents = tail

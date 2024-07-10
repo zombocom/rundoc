@@ -522,13 +522,12 @@ Note: Make sure you run this as a hidden command (with `-`).
 
 **After Build**
 
-This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
-
+This will eval any code you put under that line (in Ruby) when the build was successful but before the contents are finalized on disk. If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
 
     ```
     :::-- rundoc.configure
     Rundoc.configure do |config|
-      config.after_build do
+      config.after_build do |context|
         puts "you could push to GitHub here"
         puts "You could do anything here"
         puts "This code will run after the docs are done building"
@@ -536,19 +535,11 @@ This will eval any code you put under that line (in Ruby). If you want to run so
     end
     ```
 
+The `context` object will have details about the structure of the output directory structure. The stable API is:
 
-**Project Root**
-
-By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell RunDOC to output contents in `./myapp` instead.
-
-    ```
-    :::-- rundoc.configure
-    Rundoc.configure do |config|
-      config.project_root = "myapp"
-    end
-    ```
-
-This will also be the root directory that the `after_build` is executed in.
+- `context.output_dir`: A Pathname containing the absolute path to the top level directory where all commands are were executed. If your script runs `rails new myapp` then this directory would contain another directory named `myapp`. Only modifications to this directory will be persisted to the final `--output-dir`.
+- `context.screenshots_dir`: A Pathname containing the absolute path to the directory where screenshots were saved. It is guaranteed to be somewhere within the `context.output_dir`
+- `context.output_markdown_path`: A Pathname containing the absolute path to the final markdown file. This is guaranteed to be in the `context.output_dir`
 
 **Filter Sensitive Info**
 

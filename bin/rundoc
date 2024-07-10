@@ -26,8 +26,18 @@ class RundocThorCLI < Thor
 
   desc "build", "turns rundoc file into docs and a project"
   class_option  :path,   banner: "path/to/file.md",          optional: true, default: 'rundoc.md'
+  # class_option  :output_dir,   banner: "path/to/output_dir", optional: true, default: 'rundoc.md'
+
   def build
-    Rundoc::CLI.new.build(path: @path)
+    if !File.exist?(@path)
+      raise "#{@path} does not exist"
+    elsif !File.file?(@path)
+      raise "Expecting #{@path} to be a rundoc markdown file"
+    end
+
+    Rundoc::CLI.new(
+      source_path: @path
+    ).call()
   end
 end
 

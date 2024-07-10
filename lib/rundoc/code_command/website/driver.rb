@@ -59,11 +59,11 @@ class Rundoc::CodeCommand::Website
       raise e
     end
 
-    def screenshot(screenshots_path:, upload: false)
+    def screenshot(screenshots_dir:, upload: false)
       @driver.resize_window_to(@driver.current_window_handle, @width, @height)
-      FileUtils.mkdir_p(screenshots_path)
+      FileUtils.mkdir_p(screenshots_dir)
       file_name = self.class.next_screenshot_name
-      file_path = screenshots_path.join(file_name)
+      file_path = screenshots_dir.join(file_name)
       session.save_screenshot(file_path)
       puts "Screenshot saved to #{file_path}"
 

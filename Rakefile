@@ -11,5 +11,6 @@ Rake::TestTask.new(:test) do |t|
   t.libs << "lib"
   t.libs << "test"
   t.pattern = "test/rundoc/**/*_test.rb"
+  t.pattern = "test/integration/**/*_test.rb"
   t.verbose = false
 end
