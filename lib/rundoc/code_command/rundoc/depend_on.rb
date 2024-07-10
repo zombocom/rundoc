@@ -17,7 +17,7 @@ class ::Rundoc::CodeCommand
         document_path = @path.expand_path(current_path)
         # Run the commands, but do not
         puts "rundoc.depend_on: Start executing #{@path.to_s.inspect}"
-        output = Rundoc::Parser.new(document_path.read, document_path: document_path.to_s).to_md
+        output = Rundoc::Parser.new(document_path.read, context: env[:context]).to_md
         puts "rundoc.depend_on: Done executing #{@path.to_s.inspect}, discarding intermediate document"
         output
       end

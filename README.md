@@ -498,13 +498,11 @@ Now when you build `day_two/rundoc.md` it will also run the steps in `day_one/ru
 
 You can also break up your document into smaller components:
 
-
 ```
 :::>> rundoc.require "../shared/rails_new.md"
 ```
 
 This will replace the code section with the generated contents of `rundoc.require`.
-
 
 ## Dotenv support
 

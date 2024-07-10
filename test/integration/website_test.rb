@@ -2,7 +2,6 @@ require "test_helper"
 
 class IntegrationWebsiteTest < Minitest::Test
   def test_screenshot_command
-    key = SecureRandom.hex
     contents = <<~RUBY
       ```
       :::>> website.visit(name: "example", url: "http://example.com")
