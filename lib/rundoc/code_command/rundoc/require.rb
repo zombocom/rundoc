@@ -19,7 +19,12 @@ class ::Rundoc::CodeCommand
         document_path = @path.expand_path(current_path)
 
         puts "rundoc.require: Start executing #{@path.to_s.inspect}"
-        output = Rundoc::Parser.new(document_path.read, document_path: document_path.to_s, screenshots_path: env[:screenshots_path]).to_md
+        output = Rundoc::Parser.new(
+          document_path.read,
+          output_dir: env[:output_dir],
+          document_path: document_path.to_s,
+          screenshots_path: env[:screenshots_path]
+        ).to_md
         puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
 
         env[:replace] << output

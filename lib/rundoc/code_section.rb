@@ -33,6 +33,7 @@ module Rundoc
       @commands = []
       @stack = []
       @keyword = options[:keyword] or raise "keyword is required"
+      @output_dir = options[:output_dir]
       @screenshots_path = options[:screenshots_path]
       @document_path = options[:document_path]
       @fence = match[:fence]
@@ -49,6 +50,7 @@ module Rundoc
       env[:fence_end] = "#{fence}#{AUTOGEN_WARNING}"
       env[:before] = []
       env[:after] = []
+      env[:output_dir] = @output_dir
       env[:document_path] = @document_path
       env[:screenshots_path] = @screenshots_path
 
