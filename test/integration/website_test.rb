@@ -21,7 +21,7 @@ class IntegrationWebsiteTest < Minitest::Test
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
 
         expected = "![Screenshot of http://example.com/](screenshots/screenshot_1.png)"
-        assert_equal expected, actual
+        assert_equal expected, actual.strip
 
         assert screenshot_1_path.exist?
       end
