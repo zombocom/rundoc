@@ -10,8 +10,10 @@ module Rundoc
 
     attr_reader :contents, :keyword, :stack
 
-    def initialize(contents, keyword: DEFAULT_KEYWORD, document_path: nil)
+    def initialize(contents, output_dir:, screenshots_path:, keyword: DEFAULT_KEYWORD, document_path: nil)
+      @output_dir = output_dir
       @document_path = document_path
+      @screenshots_path = screenshots_path
       @contents = contents
       @original = contents.dup
       @keyword = keyword
@@ -41,7 +43,13 @@ module Rundoc
         @stack << head unless head.empty?
         unless code.empty?
           match = code.match(CODEBLOCK_REGEX)
-          @stack << CodeSection.new(match, keyword: keyword, document_path: @document_path)
+          @stack << CodeSection.new(
+            match,
+            keyword: keyword,
+            output_dir: @output_dir,
+            document_path: @document_path,
+            screenshots_path: @screenshots_path
+          )
         end
         @contents = tail
       end

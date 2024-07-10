@@ -16,7 +16,11 @@ class ParserTest < Minitest::Test
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         expected = "sup\n\n```\n$ mkdir foo\n$ ls\nfoo\n```\n\nyo\n"
-        parsed = Rundoc::Parser.new(contents)
+        parsed = Rundoc::Parser.new(
+          contents,
+          output_dir: Pathname("/dev/null"),
+          screenshots_path: Pathname("/dev/null")
+        )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -38,7 +42,11 @@ class ParserTest < Minitest::Test
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         expected = "sup\n\nIn file `foo/code.rb` write:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
-        parsed = Rundoc::Parser.new(contents)
+        parsed = Rundoc::Parser.new(
+          contents,
+          output_dir: Pathname("/dev/null"),
+          screenshots_path: Pathname("/dev/null")
+        )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
@@ -56,7 +64,11 @@ class ParserTest < Minitest::Test
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         expected = "\nIn file `foo/newb.rb` write:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
-        parsed = Rundoc::Parser.new(contents)
+        parsed = Rundoc::Parser.new(
+          contents,
+          output_dir: Pathname("/dev/null"),
+          screenshots_path: Pathname("/dev/null")
+        )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
