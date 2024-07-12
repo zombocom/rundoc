@@ -12,7 +12,6 @@ class SystemsCliTest < Minitest::Test
 
   def test_force_fail_dir_protection
     Dir.mktmpdir do |dir|
-      key = SecureRandom.hex
       dir = Pathname(dir)
       rundoc = dir.join("RUNDOC.md")
       rundoc.write "Done"
@@ -33,7 +32,6 @@ class SystemsCliTest < Minitest::Test
 
   def test_force_success_dir_protection
     Dir.mktmpdir do |dir|
-      key = SecureRandom.hex
       dir = Pathname(dir)
 
       rundoc = dir.join("RUNDOC.md")
@@ -102,7 +100,7 @@ class SystemsCliTest < Minitest::Test
 
       run!("#{exe_path} #{rundoc} --screenshots-dir #{screenshots_dirname}")
 
-      screenshots_dir = dir.join("project")
+      dir.join("project")
         .tap { |p| assert p.exist? }
         .join(screenshots_dirname)
         .tap { |p| assert p.exist? }
