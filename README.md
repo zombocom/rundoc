@@ -487,7 +487,7 @@ The bucketeer addon on Heroku is supported out of the box. To specify project sp
 You can also break up your document into smaller components using `rundoc.require`:
 
 ```
-:::>> rundoc.require"../day_one/rundoc.md"
+:::>> rundoc.require "../day_one/rundoc.md"
 ```
 
 This will prepend the code section with the generated contents of `rundoc.require`.
@@ -495,7 +495,7 @@ This will prepend the code section with the generated contents of `rundoc.requir
 If you want to execute another tutorial as a pre-requisite but not embed the results you can use `:::--`:
 
 ```
-:::-- rundoc.require"../day_one/rundoc.md"
+:::-- rundoc.require "../day_one/rundoc.md"
 ```
 
 ## Dotenv support
