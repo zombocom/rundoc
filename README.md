@@ -534,9 +534,9 @@ This will eval any code you put under that line (in Ruby) when the build was suc
 
 The `context` object will have details about the structure of the output directory structure. The stable API is:
 
-- `context.output_dir`: A Pathname containing the absolute path to the top level directory where all commands are were executed. If your script runs `rails new myapp` then this directory would contain another directory named `myapp`. Only modifications to this directory will be persisted to the final `--output-dir`.
-- `context.screenshots_dir`: A Pathname containing the absolute path to the directory where screenshots were saved. It is guaranteed to be somewhere within the `context.output_dir`
-- `context.output_markdown_path`: A Pathname containing the absolute path to the final markdown file. This is guaranteed to be in the `context.output_dir`
+- `context.output_dir`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the top level directory where all commands are were executed. If your script runs `rails new myapp` then this directory would contain another directory named `myapp`. Only modifications to this directory will be persisted to the final `--output-dir`.
+- `context.screenshots_dir`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the directory where screenshots were saved. It is guaranteed to be somewhere within the `context.output_dir`
+- `context.output_markdown_path`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the final markdown file. This is guaranteed to be in the `context.output_dir`
 
 **Filter Sensitive Info**
 
