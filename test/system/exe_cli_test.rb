@@ -73,9 +73,9 @@ class SystemsCliTest < Minitest::Test
       run!("#{exe_path} #{rundoc} --dotenv-path #{dotenv}")
 
       readme = dir.join("project")
-        .tap {|p| assert p.exist? }
+        .tap { |p| assert p.exist? }
         .join("README.md")
-        .tap {|p| assert p.exist? }
+        .tap { |p| assert p.exist? }
 
       actual = strip_autogen_warning(readme.read)
       expected = <<~EOF
@@ -103,10 +103,9 @@ class SystemsCliTest < Minitest::Test
       run!("#{exe_path} #{rundoc} --screenshots-dir #{screenshots_dirname}")
 
       screenshots_dir = dir.join("project")
-        .tap {|p| assert p.exist? }
+        .tap { |p| assert p.exist? }
         .join(screenshots_dirname)
-        .tap {|p| assert p.exist? }
-
+        .tap { |p| assert p.exist? }
 
       readme = dir.join("project").join("README.md").read
       actual = strip_autogen_warning(readme)
@@ -128,9 +127,9 @@ class SystemsCliTest < Minitest::Test
       run!("#{exe_path} #{rundoc} --output-filename tutorial.md")
 
       tutorial_md = dir.join("project")
-        .tap {|p| assert p.exist? }
+        .tap { |p| assert p.exist? }
         .join("tutorial.md")
-        .tap {|p| assert p.exist? }
+        .tap { |p| assert p.exist? }
 
       actual = strip_autogen_warning(tutorial_md.read)
       expected = "Done"
@@ -182,7 +181,6 @@ class SystemsCliTest < Minitest::Test
       assert_equal expected.strip, actual.strip
     end
   end
-
 
   def test_simple_file
     Dir.mktmpdir do |dir|

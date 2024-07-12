@@ -66,7 +66,7 @@ module Rundoc
     end
 
     def force?
-      self.force
+      force
     end
 
     # Ensures that the value passed in cannot escape the current directory

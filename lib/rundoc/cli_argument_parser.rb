@@ -15,11 +15,11 @@ module Rundoc
     attr_reader :io, :env, :exit_obj, :options, :argv
 
     def initialize(
-        argv:,
-        io: $stderr,
-        env: ENV,
-        exit_obj: Kernel
-      )
+      argv:,
+      io: $stderr,
+      env: ENV,
+      exit_obj: Kernel
+    )
       @io = io
       @env = env
       @argv = argv
@@ -140,4 +140,4 @@ module Rundoc
   end
 end
 
-require_relative "./cli"
+require_relative "cli"

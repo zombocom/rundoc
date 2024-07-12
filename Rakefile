@@ -13,7 +13,7 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = [
     "test/rundoc/**/*_test.rb",
     "test/system/**/*_test.rb",
-    "test/integration/**/*_test.rb",
+    "test/integration/**/*_test.rb"
   ]
   t.verbose = false
 end

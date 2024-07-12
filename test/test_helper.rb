@@ -11,12 +11,11 @@ require "mocha/minitest"
 require "tmpdir"
 
 class Minitest::Test
-
   def default_context(
-      output_dir: nil,
-      source_path: nil,
-      screenshots_dir:nil
-    )
+    output_dir: nil,
+    source_path: nil,
+    screenshots_dir: nil
+  )
 
     Rundoc::Context::Execution.new(
       output_dir: output_dir || Pathname("/dev/null"),
@@ -29,7 +28,7 @@ class Minitest::Test
     contents,
     output_dir: nil,
     source_path: nil,
-    screenshots_dir:nil
+    screenshots_dir: nil
   )
     context = default_context(
       output_dir: output_dir,
