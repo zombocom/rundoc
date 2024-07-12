@@ -131,6 +131,10 @@ module Rundoc
         opts.on("--dotenv-path <path>", "Path to a `.env` file to load environment variable, relative to current working directory.") do |v|
           options[:dotenv_path] = v
         end
+
+        opts.on("--force", "Delete contents of the success/failure dirs even if they're not empty") do |v|
+          options[:force] = v
+        end
       end
     end
   end

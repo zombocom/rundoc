@@ -21,5 +21,5 @@ $ bundle exec standardrb
 ## Run the local cli
 
 ```
-$ bin/rundoc build --path <path/to/rundoc.md>
+$ bin/rundoc <path/to/rundoc.md>
 ```

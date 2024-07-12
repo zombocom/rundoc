@@ -25,6 +25,8 @@ class IntegrationAfterBuildTest < Minitest::Test
         assert dir.join("project").join("lol").exist?
         assert dir.join("project").join("lol").join("rofl.txt").exist?
 
+        FileUtils.remove_entry_secure(dir.join("project"))
+
         source_path.write <<~EOF
           ```
           :::-- rundoc.configure

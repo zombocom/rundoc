@@ -10,7 +10,8 @@ module Rundoc
       OUTPUT_FILENAME = "README.md"
       SCREENSHOTS_DIR = "screenshots"
     end
-    attr_reader :io, :on_success_dir, :on_failure_dir, :dotenv_path, :cli_cmd, :cli_args
+
+    attr_reader :io, :on_success_dir, :on_failure_dir, :dotenv_path, :cli_cmd, :cli_args, :force
     attr_reader :execution_context, :after_build_context
 
     def initialize(
@@ -18,6 +19,7 @@ module Rundoc
       io: $stderr,
       cli_cmd: $0,
       cli_args: $*,
+      force: false,
       dotenv_path: nil,
       on_success_dir: nil,
       on_failure_dir: nil,
@@ -25,6 +27,7 @@ module Rundoc
       screenshots_dir: nil
     )
       @io = io
+      @force = force
       @cli_cmd = cli_cmd
       @cli_args = cli_args
 
@@ -60,6 +63,10 @@ module Rundoc
       else
         @execution_context.source_dir.join(DEFAULTS::ON_FAILURE_DIR)
       end
+    end
+
+    def force?
+      self.force
     end
 
     # Ensures that the value passed in cannot escape the current directory
@@ -108,13 +115,30 @@ module Rundoc
       HEREDOC
     end
 
+    def check_directories_empty!
+      [on_success_dir, on_failure_dir].each do |dir|
+        dir.mkpath
+
+        next if Dir.empty?(dir)
+
+        if force?
+          io.puts "## WARNING: #{dir} is not empty, it may be cleared due to running with the `--force` flag"
+        else
+          raise "## ABORTING: #{dir} is not empty, clear it or re-run with `--force` flag"
+        end
+      end
+    end
+
     def call
       io.puts "## Running your docs"
       load_dotenv
+      check_directories_empty!
 
       source_contents = execution_context.source_path.read
-      io.puts "## Clearing on failure directory #{on_failure_dir}"
-      FileUtils.remove_entry_secure(on_failure_dir) if on_failure_dir.exist?
+      if on_failure_dir.exist? && !Dir.empty?(on_failure_dir)
+        io.puts "## Clearing on failure directory #{on_failure_dir}"
+        FileUtils.remove_entry_secure(on_failure_dir)
+      end
 
       io.puts "## Working dir is #{execution_context.output_dir}"
       Dir.chdir(execution_context.output_dir) do
@@ -147,7 +171,7 @@ module Rundoc
     end
 
     private def on_fail
-      io.puts "## Rundoc failed, debug contents are in #{on_failure_dir}"
+      io.puts "## Failed, debug contents are in #{on_failure_dir}"
       on_failure_dir.mkpath
 
       copy_dir_contents(
@@ -157,7 +181,7 @@ module Rundoc
     end
 
     private def on_success(output)
-      io.puts "## Rundoc was successful, sanitizing output"
+      io.puts "## Success! sanitizing output"
       Rundoc.sanitize!(output)
       output = prepend_cli_banner(output)
 
@@ -184,7 +208,7 @@ module Rundoc
         to: on_success_dir
       )
 
-      io.puts "## RUNdoc is done"
+      io.puts "## Finished"
     end
 
     def copy_dir_contents(from:, to:)
