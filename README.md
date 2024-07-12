@@ -4,29 +4,37 @@
 
 ## What
 
-This library allows you to "run" your docs and embed the code as well as results back into the documentation. Here's a quick example:
+Turn your tutorials into tests and never let your docs be out of date again.
 
-Write documentation:
+Start off by writing your tutorial in modified-markdown, then execute it with `rundoc`. If there's a problem with following the directions, then your tutorial will fail to build. When it succeeds, the  real world output is embedded in the output markdown file. That means your tutorials will have the EXACT output that your readers will see.
 
-    Install by running:
+## Quickstart
 
+Install the Ruby library:
+
+    $ gem install rundoc
+
+Make a rundoc file:
+
+    $ mkdir /tmp/rundoc-demo
+    $ cd /tmp/rundoc-demo
+    $ cat <<'EOF' > ./RUNDOC.md
     ```
-    :::>> $ gem install rails --no-document
+    :::>> $ echo Hello World
     ```
+    EOF
 
-Now if you "run" this document you'll get this output:
+Run it:
 
-    Install by running:
+    $ rundoc --on-success-dir=project ./RUNDOC.md
 
+View the output
+
+    $ cat project/README.md
     ```
-    $ gem install rails --no-document
-    Successfully installed rails-5.2.2
-    1 gem installed
+    $ echo Hello World
+    Hello World
     ```
-
-The idea is that as your documentation "runs" it builds a working tutorial. It also acts as tests since if your docs become incorrect due to a typo or bit-rot then when you try to generate them, the process will fail.
-
-Think of RunDOC as your ever-vigilant tech editor and writing partner.
 
 ## Install
 
@@ -44,15 +52,15 @@ gem 'rundoc'
 
 ## Use It
 
-Run the `rundoc build` command on any markdown file
+Run the `rundoc` command on any rundoc-flavored markdown file:
 
 ```sh
-$ rundoc build --path <test/fixtures/rails_7/rundoc.md>
+$ rundoc <test/fixtures/rails_7/rundoc.md>
 ```
 
 > Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
 
-This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs. See `rundoc --help` for more configuration options.
+This will generate a project folder with your project in it, and a markdown `README.md` with the parsed output of the markdown docs. See `rundoc --help` for more configuration options.
 
 ## Quick docs
 
@@ -218,13 +226,11 @@ Current Commands:
 
 Anything you pass to `$` will be run in a shell. If a shell command returns a non-zero exit status an error will be raised. If you expect a non-zero exit status use `fail.$` instead:
 
-
     ```
     :::>> fail.$ cat /dev/null/foo
     ```
 
 Even though this command returns a non zero exit status, the contents of the command will be written since we're stating that we don't care if the command fails. This would be the output:
-
 
     ```
     $ cat /dev/null/foo
@@ -232,7 +238,6 @@ Even though this command returns a non zero exit status, the contents of the com
     ```
 
 Some commands may be custom, for example when running `cd` you likely want to change the working directory that your script is running in. To do this we need to run `Dir.chdir` instead of shelling out. So this works as you would expect:
-
 
     ```
     :::>> $ cd myapp/config

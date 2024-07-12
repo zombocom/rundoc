@@ -1,5 +1,6 @@
 ## HEAD
 
+- Change: The CLI command `rundoc build --path <path>` is now `rundoc <path>`
 - Change: `rundoc.depend_on` is removed in favor of `:::-- rundoc.require` (https://github.com/zombocom/rundoc/pull/58)
 - Change: `Rundoc.project_root=` is removed, please use `Rundoc.after_build` instead (https://github.com/zombocom/rundoc/pull/58)
 - Change: Location of screenshots is now consistent (https://github.com/zombocom/rundoc/pull/57)

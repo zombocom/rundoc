@@ -1,6 +1,12 @@
 module Rundoc
   class CLI
-    module Defaults
+    module DEFAULTS
+      ON_FAILURE_DIR = # <path/to/rundoc.md/..> +
+        "tmp"
+      ON_SUCCESS_DIR = # <path/to/rundoc.md/..> +
+        "project"
+      DOTENV_PATH = # <path/to/rundoc.md/..> +
+        ".env"
       OUTPUT_FILENAME = "README.md"
       SCREENSHOTS_DIR = "screenshots"
     end
@@ -9,33 +15,51 @@ module Rundoc
 
     def initialize(
       source_path:,
-      io: $stdout,
+      io: $stderr,
       cli_cmd: $0,
       cli_args: $*,
       dotenv_path: nil,
       on_success_dir: nil,
       on_failure_dir: nil,
-      output_filename: Defaults::OUTPUT_FILENAME,
-      screenshots_dir: Defaults::SCREENSHOTS_DIR
+      output_filename: nil,
+      screenshots_dir: nil
     )
       @io = io
+      @cli_cmd = cli_cmd
+      @cli_args = cli_args
+
+      screenshots_dir = check_relative_path(screenshots_dir || DEFAULTS::SCREENSHOTS_DIR)
+      output_filename = check_relative_path(output_filename || DEFAULTS::OUTPUT_FILENAME)
+
       @execution_context = Rundoc::Context::Execution.new(
         output_dir: Dir.mktmpdir,
         source_path: source_path,
-        screenshots_dir: relative_path(screenshots_dir)
+        screenshots_dir: screenshots_dir
       )
-
-      @cli_cmd = cli_cmd
-      @cli_args = cli_args
-      @dotenv_path = dotenv_path || @execution_context.source_dir.join(".env")
-      @on_success_dir = on_success_dir || @execution_context.source_dir.join("project")
-      @on_failure_dir = on_failure_dir || @execution_context.source_dir.join("tmp")
 
       @after_build_context = Context::AfterBuild.new(
         output_dir: execution_context.output_dir,
         screenshots_dir: execution_context.screenshots_dir,
-        output_markdown_path: @execution_context.output_dir.join(relative_path(output_filename))
+        output_markdown_path: @execution_context.output_dir.join(output_filename)
       )
+
+      @dotenv_path = if dotenv_path
+        Pathname(dotenv_path)
+      else
+        @execution_context.source_dir.join(DEFAULTS::DOTENV_PATH)
+      end
+
+      @on_success_dir = if on_success_dir
+        Pathname(on_success_dir)
+      else
+        @execution_context.source_dir.join(DEFAULTS::ON_SUCCESS_DIR)
+      end
+
+      @on_failure_dir = if on_failure_dir
+        Pathname(on_failure_dir)
+      else
+        @execution_context.source_dir.join(DEFAULTS::ON_FAILURE_DIR)
+      end
     end
 
     # Ensures that the value passed in cannot escape the current directory
@@ -45,7 +69,7 @@ module Rundoc
     # - `/tmp/whatever` is invalid
     # - `whatever/../..` is invalid
     #
-    private def relative_path(path)
+    private def check_relative_path(path)
       path = Pathname(path)
       if path.absolute?
         raise "Path must be relative but it is not: #{path}"

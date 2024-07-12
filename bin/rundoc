@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 $stdout.sync = true
+$stderr.sync = true
 
 unless File.respond_to? :realpath
   class File #:nodoc:
@@ -13,64 +14,6 @@ end
 $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
 
 require 'rundoc'
-require 'thor'
 
-class RundocThorCLI < Thor
-
-  def initialize(*args)
-    super
-    @path = options[:path]
-    @dotenv_path = options[:dotenv_path]
-    @on_success_dir = options[:on_success_dir]
-    @on_failure_dir = options[:on_failure_dir]
-    @output_filename = options[:output_filename]
-    @screenshots_dir = options[:screenshots_dir]
-  end
-
-  default_task :help
-
-  desc "build", "turns rundoc file into docs and a project"
-  class_option :path,
-    banner: "<path/to/file/RUNDOC.md>"
-
-  class_option :on_success_dir,
-    banner: "<save/on/success/>",
-    optional: true
-
-  class_option :on_failure_dir,
-    banner: "<save/on/failure/>",
-    optional: true
-
-  class_option :output_filename,
-    banner: "Filename for the compiled output",
-    optional: true,
-    default: Rundoc::CLI::Defaults::OUTPUT_FILENAME
-
-  class_option :screenshots_dir,
-    banner: "Dirname for screenshots",
-    optional: true,
-    default: Rundoc::CLI::Defaults::SCREENSHOTS_DIR
-
-  class_option :dotenv_path,
-    banner: "<path/to/.env>",
-    optional: true
-
-  def build
-    if !File.exist?(@path)
-      raise "#{@path} does not exist"
-    elsif !File.file?(@path)
-      raise "Expecting #{@path} to be a rundoc markdown file"
-    end
-
-    Rundoc::CLI.new(
-      source_path: @path,
-      dotenv_path: @dotenv_path,
-      on_failure_dir: @on_failure_dir,
-      on_success_dir: @on_success_dir,
-      output_filename: @output_filename,
-      screenshots_dir: @screenshots_dir
-    ).call()
-  end
-end
-
-RundocThorCLI.start(ARGV)
+cli = Rundoc::CLIArgumentParser.new(argv: ARGV).to_cli
+cli.call
