@@ -28,7 +28,8 @@ module Rundoc
     end
 
     def to_cli
-      if argv.empty?
+      source_file = argv.first
+      if source_file.nil? || source_file == "help"
         parser.parse! ["--help"]
         return
       else
@@ -36,7 +37,6 @@ module Rundoc
         return if options[:exit]
       end
 
-      source_file = argv.first
       if source_file.nil?
         @io.puts "No file given, run with `--help` for usage options."
         exit_obj.exit(1)
@@ -44,10 +44,10 @@ module Rundoc
 
       source_path = Pathname(source_file)
       if !source_path.exist?
-        @io.puts "No such file #{source_path}."
+        @io.puts "No such file `#{source_path.expand_path}`"
         exit_obj.exit(1)
       elsif !source_path.file?
-        @io.puts "Expected #{source_path} to be a file, but it was not."
+        @io.puts "Expected `#{source_path.expand_path}` to be a file, but it was not."
         exit_obj.exit(1)
       end
 
