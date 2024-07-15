@@ -15,5 +15,7 @@ $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
 
 require 'rundoc'
 
-cli = Rundoc::CLIArgumentParser.new(argv: ARGV).to_cli
+options = Rundoc::CLIArgumentParser.new(argv: ARGV).call.options
+
+cli = Rundoc::CLI.new(**options)
 cli.call

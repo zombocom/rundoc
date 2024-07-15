@@ -27,7 +27,7 @@ module Rundoc
       @exit_obj = exit_obj
     end
 
-    def to_cli
+    def call
       source_file = argv.first
       if source_file.nil? || source_file == "help"
         parser.parse! ["--help"]
@@ -40,21 +40,24 @@ module Rundoc
       if source_file.nil?
         @io.puts "No file given, run with `--help` for usage options."
         exit_obj.exit(1)
+        return
       end
 
       source_path = Pathname(source_file)
       if !source_path.exist?
         @io.puts "No such file `#{source_path.expand_path}`"
         exit_obj.exit(1)
+        return
       elsif !source_path.file?
-        @io.puts "Expected `#{source_path.expand_path}` to be a file, but it was not."
+        @io.puts "Path is not a file. Expected `#{source_path.expand_path}` to be a file, but it was not."
         exit_obj.exit(1)
+        return
       end
 
       options[:io] = io
       options[:source_path] = source_path
 
-      CLI.new(**options)
+      self
     end
 
     private def parser
@@ -129,7 +132,7 @@ module Rundoc
         end
 
         opts.on("--screenshots-dirname <name>", "Name of screenshot dir i.e. `#{CLI::DEFAULTS::SCREENSHOTS_DIR}`.") do |v|
-          options[:screenshots_dir] = v
+          options[:screenshots_dirname] = v
         end
 
         opts.on("--force", "Delete contents of the success/failure dirs even if they're not empty.") do |v|
