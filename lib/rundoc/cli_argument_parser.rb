@@ -37,12 +37,6 @@ module Rundoc
         return if options[:exit]
       end
 
-      if source_file.nil?
-        @io.puts "No file given, run with `--help` for usage options."
-        exit_obj.exit(1)
-        return
-      end
-
       source_path = Pathname(source_file)
       if !source_path.exist?
         @io.puts "No such file `#{source_path.expand_path}`"

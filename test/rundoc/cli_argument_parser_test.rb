@@ -17,6 +17,21 @@ class CliArgumentParserTest < Minitest::Test
     assert output.include?("Prints this help output")
   end
 
+  def test_help_no_flag
+    io = StringIO.new
+    exit_obj = FakeExit.new
+    parser = Rundoc::CLIArgumentParser.new(
+      io: io,
+      argv: ["help"],
+      env: {},
+      exit_obj: exit_obj
+    )
+    parser.call
+    output = io.string
+
+    assert output.include?("Prints this help output")
+  end
+
   def test_no_such_file
     io = StringIO.new
     exit_obj = FakeExit.new
@@ -51,7 +66,7 @@ class CliArgumentParserTest < Minitest::Test
     end
   end
 
-  def test_dir_not_file
+  def test_valid_inputs
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         tmp = Pathname(dir)
