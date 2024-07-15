@@ -6,6 +6,7 @@ test/fixtures/*/*/project/
 test/fixtures/*/*/tmp/
 test/fixtures/*/*/myapp/
 
+coverage/
 
 *.gem
 
