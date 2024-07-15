@@ -1,7 +1,6 @@
 require "test_helper"
 
 class CliArgumentParserTest < Minitest::Test
-
   def test_help
     io = StringIO.new
     exit_obj = FakeExit.new
@@ -84,7 +83,7 @@ class CliArgumentParserTest < Minitest::Test
             "--dotenv-path=./lol/.env",
             "--screenshots-dirname=pics",
             "--output-filename=OUTPUT.md",
-            "--force",
+            "--force"
           ],
           env: {},
           exit_obj: exit_obj

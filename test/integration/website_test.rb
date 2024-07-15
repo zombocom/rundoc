@@ -21,7 +21,7 @@ class IntegrationWebsiteTest < Minitest::Test
         parsed = parse_contents(
           contents,
           output_dir: screenshots_dir.parent,
-          screenshots_dirname: screenshots_dirname,
+          screenshots_dirname: screenshots_dirname
         )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
 

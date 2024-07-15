@@ -64,7 +64,6 @@ class Minitest::Test
     string
   end
 
-
   class FakeExit
     def initialize
       @called = false
