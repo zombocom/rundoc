@@ -48,6 +48,10 @@ class Minitest::Test
     Pathname(__dir__).join("..").expand_path
   end
 
+  def fixture_path(dir = "")
+    root_dir.join("test").join("fixtures").join(dir)
+  end
+
   def run!(cmd, raise_on_nonzero_exit: true)
     out = `#{cmd} 2>&1`
     raise "Command: #{cmd} failed: #{out}" if !$?.success? && raise_on_nonzero_exit

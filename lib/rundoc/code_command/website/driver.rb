@@ -48,7 +48,7 @@ class Rundoc::CodeCommand::Website
       attr_reader :tasks
     end
 
-    def safe_eval(code, env={})
+    def safe_eval(code, env = {})
       @driver.send(:eval, code)
     rescue => e
       msg = +""

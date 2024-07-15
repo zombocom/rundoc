@@ -136,8 +136,11 @@ module Rundoc
 
       source_contents = execution_context.source_path.read
       if on_failure_dir.exist? && !Dir.empty?(on_failure_dir)
-        io.puts "## Clearing on failure directory #{on_failure_dir}"
-        FileUtils.remove_entry_secure(on_failure_dir)
+        io.puts "## earing on failure directory #{on_failure_dir}"
+        clean_dir(
+          dir: on_failure_dir,
+          description: "on failure directory"
+        )
       end
 
       io.puts "## Working dir is #{execution_context.output_dir}"
@@ -165,16 +168,24 @@ module Rundoc
       end
 
       if execution_context.output_dir.exist?
-        io.puts "## Cleaning working directory #{execution_context.output_dir}"
-        FileUtils.remove_entry_secure(execution_context.output_dir) if on_failure_dir.exist?
+        clean_dir(
+          dir: execution_context.output_dir,
+          description: "tmp working directory"
+        )
       end
+    end
+
+    private def clean_dir(dir:, description:)
+      io.puts "## Cleaning #{description}, #{dir}"
+
+      FileUtils.remove_entry_secure(dir)
     end
 
     private def on_fail
       io.puts "## Failed, debug contents are in #{on_failure_dir}"
       on_failure_dir.mkpath
 
-      copy_dir_contents(
+      move_dir_contents(
         from: execution_context.output_dir,
         to: on_failure_dir
       )
@@ -198,12 +209,14 @@ module Rundoc
 
       io.puts "## Saving to #{on_success_dir}"
       if on_success_dir.exist?
-        FileUtils.remove_entry_secure(on_success_dir)
+        clean_dir(
+          dir: on_success_dir,
+          description: "on success directory"
+        )
       end
       on_success_dir.mkpath
 
-      FileUtils.cp_r(File.join(execution_context.output_dir, "."), on_success_dir)
-      copy_dir_contents(
+      move_dir_contents(
         from: execution_context.output_dir,
         to: on_success_dir
       )
@@ -211,9 +224,14 @@ module Rundoc
       io.puts "## Finished"
     end
 
-    def copy_dir_contents(from:, to:)
-      # Cannot use Pathname.join(".")
-      FileUtils.cp_r(File.join(from, "."), to)
+    def move_dir_contents(from:, to:)
+      io.puts("## Moving contents from #{from} to #{to}")
+
+      Dir.glob(File.join(from, "{*,.*}")).each do |item|
+        next if item.end_with?(".", "..")
+
+        FileUtils.mv(item, to)
+      end
     end
   end
 end

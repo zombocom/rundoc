@@ -1,7 +1,6 @@
 require "test_helper"
 
 class IntegrationAfterBuildTest < Minitest::Test
-
   def test_modifies_directory_structure
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do

@@ -5,6 +5,30 @@ class SystemsCliTest < Minitest::Test
     root_dir.join("bin").join("rundoc")
   end
 
+  def test_git
+    Dir.mktmpdir do |dir|
+      dir = Pathname(dir)
+      contents = fixture_path("simple_git").join("rundoc.md").read
+
+      dir.join("rundoc.md").write(contents)
+      run!("#{exe_path} #{dir.join("rundoc.md")}")
+
+      output_dir = dir.join(SUCCESS_DIRNAME)
+        .tap { |p| assert p.exist? }
+
+      assert output_dir.join(".git").exist?
+
+      readme = output_dir
+        .join("README.md")
+        .tap { |p| assert p.exist? }
+
+      assert readme.exist?
+
+      actual = strip_autogen_warning(readme.read)
+      assert actual.include?("$ echo \"hello world\"")
+    end
+  end
+
   def test_help
     output = run!("#{exe_path} --help")
     assert output.include?("Usage:")
