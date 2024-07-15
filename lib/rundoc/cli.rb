@@ -24,20 +24,20 @@ module Rundoc
       on_success_dir: nil,
       on_failure_dir: nil,
       output_filename: nil,
-      screenshots_dir: nil
+      screenshots_dirname: nil
     )
       @io = io
       @force = force
       @cli_cmd = cli_cmd
       @cli_args = cli_args
 
-      screenshots_dir = check_relative_path(screenshots_dir || DEFAULTS::SCREENSHOTS_DIR)
+      screenshots_dirname = check_relative_path(screenshots_dirname || DEFAULTS::SCREENSHOTS_DIR)
       output_filename = check_relative_path(output_filename || DEFAULTS::OUTPUT_FILENAME)
 
       @execution_context = Rundoc::Context::Execution.new(
         output_dir: Dir.mktmpdir,
         source_path: source_path,
-        screenshots_dir: screenshots_dir
+        screenshots_dirname: screenshots_dirname
       )
 
       @after_build_context = Context::AfterBuild.new(
@@ -56,13 +56,13 @@ module Rundoc
         Pathname(on_success_dir)
       else
         @execution_context.source_dir.join(DEFAULTS::ON_SUCCESS_DIR)
-      end
+      end.expand_path
 
       @on_failure_dir = if on_failure_dir
         Pathname(on_failure_dir)
       else
         @execution_context.source_dir.join(DEFAULTS::ON_FAILURE_DIR)
-      end
+      end.expand_path
     end
 
     def force?

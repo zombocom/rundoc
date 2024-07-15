@@ -17,13 +17,13 @@ class Minitest::Test
   def default_context(
     output_dir: nil,
     source_path: nil,
-    screenshots_dir: nil
+    screenshots_dirname: nil
   )
 
     Rundoc::Context::Execution.new(
       output_dir: output_dir || Pathname("/dev/null"),
       source_path: source_path || Pathname("/dev/null"),
-      screenshots_dir: screenshots_dir || Pathname("/dev/null")
+      screenshots_dirname: screenshots_dirname || Pathname("/dev/null")
     )
   end
 
@@ -31,12 +31,12 @@ class Minitest::Test
     contents,
     output_dir: nil,
     source_path: nil,
-    screenshots_dir: nil
+    screenshots_dirname: nil
   )
     context = default_context(
       output_dir: output_dir,
       source_path: source_path,
-      screenshots_dir: screenshots_dir
+      screenshots_dirname: screenshots_dirname
     )
     Rundoc::Parser.new(
       contents,
@@ -62,5 +62,23 @@ class Minitest::Test
     string.gsub!(Rundoc::CodeSection::AUTOGEN_WARNING, "")
     string.gsub!(/<!-- STOP.*STOP -->/m, "")
     string
+  end
+
+  class FakeExit
+    def initialize
+      @called = false
+      @value = nil
+    end
+
+    def exit(value = nil)
+      @called = true
+      @value = value
+    end
+
+    def called?
+      @called
+    end
+
+    attr_reader :value
   end
 end

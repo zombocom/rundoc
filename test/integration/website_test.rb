@@ -14,10 +14,15 @@ class IntegrationWebsiteTest < Minitest::Test
         env = {}
         env[:before] = []
 
-        screenshots_dir = Pathname(dir).join("screenshots")
+        screenshots_dirname = "screenshots"
+        screenshots_dir = Pathname(dir).join(screenshots_dirname)
         screenshot_1_path = screenshots_dir.join("screenshot_1.png")
 
-        parsed = parse_contents(contents, screenshots_dir: screenshots_dir, output_dir: screenshots_dir.parent)
+        parsed = parse_contents(
+          contents,
+          output_dir: screenshots_dir.parent,
+          screenshots_dirname: screenshots_dirname
+        )
         actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
 
         expected = "![Screenshot of http://example.com/](screenshots/screenshot_1.png)"

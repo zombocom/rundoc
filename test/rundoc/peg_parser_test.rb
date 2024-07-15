@@ -270,36 +270,36 @@ class PegParserTest < Minitest::Test
 
   def test_rundoc_sub_commands_no_quotes
     input = +""
-    input << %(:::-- rundoc.depend_on ../foo/bar.md\n)
+    input << %(:::-- rundoc.require ../foo/bar.md\n)
 
     parser = Rundoc::PegParser.new.command_with_stdin
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
-    assert_equal :"rundoc.depend_on", actual.keyword
+    assert_equal :"rundoc.require", actual.keyword
   end
 
   def test_seattle_style_method_call
     input = +""
-    input << %(rundoc.depend_on '../foo/bar.md')
+    input << %(rundoc.require '../foo/bar.md')
     parser = Rundoc::PegParser.new.method_call
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
 
-    assert_equal :"rundoc.depend_on", actual.keyword
+    assert_equal :"rundoc.require", actual.keyword
   end
 
   def test_rundoc_seattle_sub_command
     input = +""
-    input << %(:::>> rundoc.depend_on '../foo/bar.md'\n)
+    input << %(:::>> rundoc.require '../foo/bar.md'\n)
 
     parser = Rundoc::PegParser.new.command
     tree = parser.parse_with_debug(input)
 
     actual = @transformer.apply(tree)
 
-    assert_equal :"rundoc.depend_on", actual.keyword
+    assert_equal :"rundoc.require", actual.keyword
   end
 
   def test_positional_args
