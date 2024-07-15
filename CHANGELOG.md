@@ -1,5 +1,6 @@
 ## HEAD
 
+- Change: Default directories are now `rundoc_output` (instead of `project`) and `rundoc_failure` (instead of `tmp`).
 - Change: Non-empty directories for success or failure paths will now halt execution unless `--force` is used
 - Change: The CLI command `rundoc build --path <path>` is now `rundoc <path>`
 - Change: `rundoc.depend_on` is removed in favor of `:::-- rundoc.require` (https://github.com/zombocom/rundoc/pull/58)

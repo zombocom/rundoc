@@ -106,33 +106,33 @@ module Rundoc
 
         EOF
 
-        opts.on("--help", "Prints this help") do |_|
+        opts.on("--help", "Prints this help output.") do |_|
           @io.puts opts
           options[:exit] = true
           @exit_obj.exit(0)
         end
 
-        opts.on("--on-success-dir <dir>", "Output files saved here on success, relative to CWD") do |v|
+        opts.on("--on-success-dir <dir>", "Success dir, relative to CWD. i.e. `<rundoc.md/dir>/#{CLI::DEFAULTS::ON_SUCCESS_DIR}/`.") do |v|
           options[:on_success_dir] = v
         end
 
-        opts.on("--on-failure-dir <dir>", "Output files saved here on failure, relative to CWD") do |v|
+        opts.on("--on-failure-dir <dir>", "Failure dir, relative to CWD i.e. `<rundoc.md/dir>/#{CLI::DEFAULTS::ON_FAILURE_DIR}/`.") do |v|
           options[:on_failure_dir] = v
         end
 
-        opts.on("--output-filename <filename>", "Name of the generated markdown file e.g. `#{CLI::DEFAULTS::OUTPUT_FILENAME}`") do |v|
-          options[:output_filename] = v
-        end
-
-        opts.on("--screenshots-dir <dirname>", "Name of screenshot dir e.g. #{CLI::DEFAULTS::SCREENSHOTS_DIR}") do |v|
-          options[:screenshots_dir] = v
-        end
-
-        opts.on("--dotenv-path <path>", "Path to a `.env` file to load environment variable, relative to current working directory.") do |v|
+        opts.on("--dotenv-path <path>", "Environment variable file, relative to CWD. i.e. `<rundoc.md/dir>/.env`.") do |v|
           options[:dotenv_path] = v
         end
 
-        opts.on("--force", "Delete contents of the success/failure dirs even if they're not empty") do |v|
+        opts.on("--output-filename <name>", "Name of the generated markdown file i.e. `#{CLI::DEFAULTS::OUTPUT_FILENAME}`.") do |v|
+          options[:output_filename] = v
+        end
+
+        opts.on("--screenshots-dirname <name>", "Name of screenshot dir i.e. `#{CLI::DEFAULTS::SCREENSHOTS_DIR}`.") do |v|
+          options[:screenshots_dir] = v
+        end
+
+        opts.on("--force", "Delete contents of the success/failure dirs even if they're not empty.") do |v|
           options[:force] = v
         end
       end

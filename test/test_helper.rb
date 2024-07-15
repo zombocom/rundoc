@@ -11,6 +11,9 @@ require "mocha/minitest"
 require "tmpdir"
 
 class Minitest::Test
+  SUCCESS_DIRNAME = Rundoc::CLI::DEFAULTS::ON_SUCCESS_DIR
+  FAILURE_DIRNAME = Rundoc::CLI::DEFAULTS::ON_FAILURE_DIR
+
   def default_context(
     output_dir: nil,
     source_path: nil,

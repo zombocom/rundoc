@@ -26,11 +26,11 @@ Make a rundoc file:
 
 Run it:
 
-    $ rundoc --on-success-dir=project ./RUNDOC.md
+    $ rundoc --on-success-dir=rundoc_output ./RUNDOC.md
 
 View the output
 
-    $ cat project/README.md
+    $ cat rundoc_output/README.md
     ```
     $ echo Hello World
     Hello World

@@ -1,6 +1,7 @@
 require "test_helper"
 
 class IntegrationAfterBuildTest < Minitest::Test
+
   def test_modifies_directory_structure
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
@@ -19,13 +20,13 @@ class IntegrationAfterBuildTest < Minitest::Test
         Rundoc::CLI.new(
           io: io,
           source_path: source_path,
-          on_success_dir: dir.join("project")
+          on_success_dir: dir.join(SUCCESS_DIRNAME)
         ).call
 
-        assert dir.join("project").join("lol").exist?
-        assert dir.join("project").join("lol").join("rofl.txt").exist?
+        assert dir.join(SUCCESS_DIRNAME).join("lol").exist?
+        assert dir.join(SUCCESS_DIRNAME).join("lol").join("rofl.txt").exist?
 
-        FileUtils.remove_entry_secure(dir.join("project"))
+        FileUtils.remove_entry_secure(dir.join(SUCCESS_DIRNAME))
 
         source_path.write <<~EOF
           ```
@@ -52,10 +53,10 @@ class IntegrationAfterBuildTest < Minitest::Test
         Rundoc::CLI.new(
           io: io,
           source_path: source_path,
-          on_success_dir: dir.join("project")
+          on_success_dir: dir.join(SUCCESS_DIRNAME)
         ).call
 
-        assert dir.join("project").join("rofl.txt").exist?
+        assert dir.join(SUCCESS_DIRNAME).join("rofl.txt").exist?
       end
     end
   end

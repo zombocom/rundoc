@@ -2,9 +2,9 @@ module Rundoc
   class CLI
     module DEFAULTS
       ON_FAILURE_DIR = # <path/to/rundoc.md/..> +
-        "tmp"
+        "rundoc_failure"
       ON_SUCCESS_DIR = # <path/to/rundoc.md/..> +
-        "project"
+        "rundoc_output"
       DOTENV_PATH = # <path/to/rundoc.md/..> +
         ".env"
       OUTPUT_FILENAME = "README.md"

@@ -16,7 +16,7 @@ class SystemsCliTest < Minitest::Test
       rundoc = dir.join("RUNDOC.md")
       rundoc.write "Done"
 
-      not_empty = dir.join("tmp").tap(&:mkpath).join("not_empty.txt")
+      not_empty = dir.join(FAILURE_DIRNAME).tap(&:mkpath).join("not_empty.txt")
       not_empty.write("Not empty")
 
       run!("#{exe_path} #{rundoc}", raise_on_nonzero_exit: false)
@@ -37,7 +37,7 @@ class SystemsCliTest < Minitest::Test
       rundoc = dir.join("RUNDOC.md")
       rundoc.write "Done"
 
-      not_empty = dir.join("project").tap(&:mkpath).join("not_empty.txt")
+      not_empty = dir.join(SUCCESS_DIRNAME).tap(&:mkpath).join("not_empty.txt")
       not_empty.write("Not empty")
 
       run!("#{exe_path} #{rundoc}", raise_on_nonzero_exit: false)
@@ -70,7 +70,7 @@ class SystemsCliTest < Minitest::Test
 
       run!("#{exe_path} #{rundoc} --dotenv-path #{dotenv}")
 
-      readme = dir.join("project")
+      readme = dir.join(SUCCESS_DIRNAME)
         .tap { |p| assert p.exist? }
         .join("README.md")
         .tap { |p| assert p.exist? }
@@ -100,12 +100,12 @@ class SystemsCliTest < Minitest::Test
 
       run!("#{exe_path} #{rundoc} --screenshots-dir #{screenshots_dirname}")
 
-      dir.join("project")
+      dir.join(SUCCESS_DIRNAME)
         .tap { |p| assert p.exist? }
         .join(screenshots_dirname)
         .tap { |p| assert p.exist? }
 
-      readme = dir.join("project").join("README.md").read
+      readme = dir.join(SUCCESS_DIRNAME).join("README.md").read
       actual = strip_autogen_warning(readme)
 
       expected = "![Screenshot of http://example.com/](#{screenshots_dirname}/screenshot_1.png)"
@@ -124,7 +124,7 @@ class SystemsCliTest < Minitest::Test
 
       run!("#{exe_path} #{rundoc} --output-filename tutorial.md")
 
-      tutorial_md = dir.join("project")
+      tutorial_md = dir.join(SUCCESS_DIRNAME)
         .tap { |p| assert p.exist? }
         .join("tutorial.md")
         .tap { |p| assert p.exist? }
@@ -154,7 +154,7 @@ class SystemsCliTest < Minitest::Test
       assert !$?.success?
 
       assert failure_dir.exist?
-      assert !Dir.exist?(dir.join("tmp"))
+      assert !Dir.exist?(dir.join(FAILURE_DIRNAME))
       assert failure_dir.join("lol.txt").exist?
     end
   end
@@ -170,7 +170,7 @@ class SystemsCliTest < Minitest::Test
       run!("#{exe_path} #{rundoc} --on-success-dir #{success_dir}")
 
       assert success_dir.exist?
-      assert !Dir.exist?(dir.join("project"))
+      assert !Dir.exist?(dir.join(SUCCESS_DIRNAME))
 
       readme = success_dir.join("README.md")
       actual = strip_autogen_warning(readme.read)
@@ -192,7 +192,7 @@ class SystemsCliTest < Minitest::Test
 
       run!("#{exe_path} #{rundoc}")
 
-      readme = dir.join("project").join("README.md")
+      readme = dir.join(SUCCESS_DIRNAME).join("README.md")
       actual = strip_autogen_warning(readme.read)
       expected = <<~EOF
         ```
