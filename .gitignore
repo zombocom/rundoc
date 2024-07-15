@@ -12,3 +12,7 @@ test/fixtures/*/*/myapp/
 .DS_Store
 Gemfile.lock
 .env
+
+# IDEs
+.idea/
+.vscode/
