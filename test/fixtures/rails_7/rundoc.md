@@ -3,7 +3,6 @@
 email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`
 
 Rundoc.configure do |config|
-  config.project_root = "myapp"
   config.filter_sensitive(email => "developer@example.com")
   config.filter_sensitive(Dir.pwd => ".")
 end

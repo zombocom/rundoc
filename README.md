@@ -4,29 +4,37 @@
 
 ## What
 
-This library allows you to "run" your docs and embed the code as well as results back into the documentation. Here's a quick example:
+Turn your tutorials into tests and never let your docs be out of date again.
 
-Write documentation:
+Start off by writing your tutorial in modified-markdown, then execute it with `rundoc`. If there's a problem with following the directions, then your tutorial will fail to build. When it succeeds, the  real world output is embedded in the output markdown file. That means your tutorials will have the EXACT output that your readers will see.
 
-    Install by running:
+## Quickstart
 
+Install the Ruby library:
+
+    $ gem install rundoc
+
+Make a rundoc file:
+
+    $ mkdir /tmp/rundoc-demo
+    $ cd /tmp/rundoc-demo
+    $ cat <<'EOF' > ./RUNDOC.md
     ```
-    :::>> $ gem install rails --no-document
+    :::>> $ echo Hello World
     ```
+    EOF
 
-Now if you "run" this document you'll get this output:
+Run it:
 
-    Install by running:
+    $ rundoc --on-success-dir=rundoc_output ./RUNDOC.md
 
+View the output
+
+    $ cat rundoc_output/README.md
     ```
-    $ gem install rails --no-document
-    Successfully installed rails-5.2.2
-    1 gem installed
+    $ echo Hello World
+    Hello World
     ```
-
-The idea is that as your documentation "runs" it builds a working tutorial. It also acts as tests since if your docs become incorrect due to a typo or bit-rot then when you try to generate them, the process will fail.
-
-Think of RunDOC as your ever-vigilant tech editor and writing partner.
 
 ## Install
 
@@ -44,15 +52,15 @@ gem 'rundoc'
 
 ## Use It
 
-Run the `rundoc build` command on any markdown file
+Run the `rundoc` command on any rundoc-flavored markdown file:
 
 ```sh
-$ bin/rundoc build --path <test/fixtures/rails_7/rundoc.md>
+$ rundoc <test/fixtures/rails_7/rundoc.md>
 ```
 
 > Note: This command will create and manipulate directories in the working directory of your source markdown file. Best practice is to have your source markdown file in its own empty directory.
 
-This will generate a project folder with your project in it, and a markdown README.md with the parsed output of the markdown docs, and a copy of the source.
+This will generate a project folder with your project in it, and a markdown `README.md` with the parsed output of the markdown docs. See `rundoc --help` for more configuration options.
 
 ## Quick docs
 
@@ -87,7 +95,6 @@ This will generate a project folder with your project in it, and a markdown READ
 - Configure RunDOC
   - [rundoc.configure](#configure)
 - Import and compose documents
-  - [rundoc.depend_on](#compose-multiple-rundoc-documents)
   - [rundoc.require](#compose-multiple-rundoc-documents)
 
 ## RunDOC Syntax
@@ -164,7 +171,6 @@ Different commands will do different things with this input. For example the `ru
     end
     ```
 
-
 And the `website.visit` command allows you to navigate and manipulate a webpage via a Capybara API:
 
     ```
@@ -220,13 +226,11 @@ Current Commands:
 
 Anything you pass to `$` will be run in a shell. If a shell command returns a non-zero exit status an error will be raised. If you expect a non-zero exit status use `fail.$` instead:
 
-
     ```
     :::>> fail.$ cat /dev/null/foo
     ```
 
 Even though this command returns a non zero exit status, the contents of the command will be written since we're stating that we don't care if the command fails. This would be the output:
-
 
     ```
     $ cat /dev/null/foo
@@ -234,7 +238,6 @@ Even though this command returns a non zero exit status, the contents of the com
     ```
 
 Some commands may be custom, for example when running `cd` you likely want to change the working directory that your script is running in. To do this we need to run `Dir.chdir` instead of shelling out. So this works as you would expect:
-
 
     ```
     :::>> $ cd myapp/config
@@ -486,25 +489,19 @@ The bucketeer addon on Heroku is supported out of the box. To specify project sp
 
 ## Compose multiple RunDOC documents
 
-If you're writing multiple tutorials that all are used together to build one larger project then you can declare dependencies inside of your RunDOC document.
-
-For example on day two (`day_two/rundoc.md`) of the tutorials you could:
+You can also break up your document into smaller components using `rundoc.require`:
 
 ```
-:::-- rundoc.depend_on "../day_one/rundoc.md"
+:::>> rundoc.require "../day_one/rundoc.md"
 ```
 
-Now when you build `day_two/rundoc.md` it will also run the steps in `day_one/rundoc.md` first. This way you don't have to copy and paste previous commands.
+This will prepend the code section with the generated contents of `rundoc.require`.
 
-You can also break up your document into smaller components:
-
+If you want to execute another tutorial as a pre-requisite but not embed the results you can use `:::--`:
 
 ```
-:::>> rundoc.require "../shared/rails_new.md"
+:::-- rundoc.require "../day_one/rundoc.md"
 ```
-
-This will replace the code section with the generated contents of `rundoc.require`.
-
 
 ## Dotenv support
 
@@ -522,13 +519,12 @@ Note: Make sure you run this as a hidden command (with `-`).
 
 **After Build**
 
-This will eval any code you put under that line (in Ruby). If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
-
+This will eval any code you put under that line (in Ruby) when the build was successful but before the contents are finalized on disk. If you want to run some code after you're done building your docs you could use `Rundoc.configure` block and call the `after_build` method like this:
 
     ```
     :::-- rundoc.configure
     Rundoc.configure do |config|
-      config.after_build do
+      config.after_build do |context|
         puts "you could push to GitHub here"
         puts "You could do anything here"
         puts "This code will run after the docs are done building"
@@ -536,19 +532,11 @@ This will eval any code you put under that line (in Ruby). If you want to run so
     end
     ```
 
+The `context` object will have details about the structure of the output directory structure. The stable API is:
 
-**Project Root**
-
-By default your app builds in a `tmp` directory. If any failures occur the results will remain in `tmp`. On a successful build the contents are copied over to `project`. If you are generating a new rails project in your code `$ rails new myapp`. Then the finished directory would be in `project/myapp`. If you don't like the `./project` prefix you could tell RunDOC to output contents in `./myapp` instead.
-
-    ```
-    :::-- rundoc.configure
-    Rundoc.configure do |config|
-      config.project_root = "myapp"
-    end
-    ```
-
-This will also be the root directory that the `after_build` is executed in.
+- `context.output_dir`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the top level directory where all commands are were executed. If your script runs `rails new myapp` then this directory would contain another directory named `myapp`. Only modifications to this directory will be persisted to the final `--output-dir`.
+- `context.screenshots_dir`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the directory where screenshots were saved. It is guaranteed to be somewhere within the `context.output_dir`
+- `context.output_markdown_path`: A [Pathname](https://rubyapi.org/3.3/o/pathname) containing the absolute path to the final markdown file. This is guaranteed to be in the `context.output_dir`
 
 **Filter Sensitive Info**
 

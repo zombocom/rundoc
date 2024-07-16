@@ -28,7 +28,7 @@ class Rundoc::CodeCommand::Website
       @driver.scroll(@scroll) if @scroll
 
       return "" if contents.nil? || contents.empty?
-      @driver.safe_eval(contents)
+      @driver.safe_eval(contents, env)
 
       ""
     end

@@ -1,6 +1,11 @@
 ## HEAD
 
-- Change: Location of screenshots is now consistent(https://github.com/zombocom/rundoc/pull/57)
+- Change: Default directories are now `rundoc_output` (instead of `project`) and `rundoc_failure` (instead of `tmp`).
+- Change: Non-empty directories for success or failure paths will now halt execution unless `--force` is used
+- Change: The CLI command `rundoc build --path <path>` is now `rundoc <path>`
+- Change: `rundoc.depend_on` is removed in favor of `:::-- rundoc.require` (https://github.com/zombocom/rundoc/pull/58)
+- Change: `Rundoc.project_root=` is removed, please use `Rundoc.after_build` instead (https://github.com/zombocom/rundoc/pull/58)
+- Change: Location of screenshots is now consistent (https://github.com/zombocom/rundoc/pull/57)
 - Fix: Bash commands now stream their outputs while they're running (https://github.com/zombocom/rundoc/pull/57)
 - Change: Minimum selenium-webdriver is now 4.x. (https://github.com/zombocom/rundoc/pull/41)
 

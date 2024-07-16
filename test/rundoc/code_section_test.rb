@@ -15,7 +15,11 @@ class CodeSectionTest < Minitest::Test
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-        result = Rundoc::CodeSection.new(match, keyword: ":::").render
+        result = Rundoc::CodeSection.new(
+          match,
+          keyword: ":::",
+          context: default_context
+        ).render
         assert_equal "", result
       end
     end
@@ -30,7 +34,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    result = Rundoc::CodeSection.new(match, keyword: ":::").render
+    result = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    ).render
     assert_equal contents, result.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "\n")
   end
 
@@ -42,7 +50,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     code_command = code_section.commands.first
@@ -56,7 +68,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     code_command = code_section.commands.first
@@ -72,7 +88,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     puts code_section.commands.inspect
@@ -89,7 +109,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     code_command = code_section.commands.first
@@ -103,7 +127,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     code_command = code_section.commands.first
@@ -119,7 +147,11 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(match, keyword: ":::")
+    code_section = Rundoc::CodeSection.new(
+      match,
+      keyword: ":::",
+      context: default_context
+    )
     code_section.render
 
     code_command = code_section.commands.first

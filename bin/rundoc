@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 $stdout.sync = true
+$stderr.sync = true
 
 unless File.respond_to? :realpath
   class File #:nodoc:
@@ -13,22 +14,8 @@ end
 $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
 
 require 'rundoc'
-require 'thor'
 
-class RundocThorCLI < Thor
+options = Rundoc::CLIArgumentParser.new(argv: ARGV).call.options
 
-  def initialize(*args)
-    super
-    @path = options[:path]
-  end
-
-  default_task :help
-
-  desc "build", "turns rundoc file into docs and a project"
-  class_option  :path,   banner: "path/to/file.md",          optional: true, default: 'rundoc.md'
-  def build
-    Rundoc::CLI.new.build(path: @path)
-  end
-end
-
-RundocThorCLI.start(ARGV)
+cli = Rundoc::CLI.new(**options)
+cli.call

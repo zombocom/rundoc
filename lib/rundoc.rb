@@ -48,9 +48,9 @@ module Rundoc
     yield self
   end
 
-  def run_after_build
+  def run_after_build(context)
     @after_build_block ||= []
-    @after_build_block.each(&:call)
+    @after_build_block.each { |block| block.call(context) }
   end
 
   def after_build(&block)
@@ -68,7 +68,7 @@ module Rundoc
     @sensitive.merge!(sensitive)
   end
 
-  def sanitize(doc)
+  def sanitize!(doc)
     return doc if @sensitive.nil?
     @sensitive.each do |sensitive, replace|
       doc.gsub!(sensitive.to_s, replace)
@@ -76,11 +76,19 @@ module Rundoc
     doc
   end
 
-  attr_accessor :project_root
+  attr_reader :project_root
+
+  def project_root=(root)
+    raise <<~MSG
+      Setting Rundoc.project_root is now a no-op
+
+      If you want to manipulate the directory structure, use `Rundoc.after_build` instead.
+    MSG
+  end
 end
 
 require "rundoc/parser"
 require "rundoc/code_section"
 require "rundoc/code_command"
 require "rundoc/peg_parser"
-require "rundoc/cli"
+require "rundoc/cli_argument_parser"

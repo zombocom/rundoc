@@ -48,22 +48,23 @@ class Rundoc::CodeCommand::Website
       attr_reader :tasks
     end
 
-    def safe_eval(code)
+    def safe_eval(code, env = {})
       @driver.send(:eval, code)
     rescue => e
       msg = +""
       msg << "Error running code #{code.inspect} at #{current_url.inspect}\n"
       msg << "saving a screenshot to: `tmp/error.png`"
       puts msg
-      session.save_screenshot("tmp/error.png")
+      error_path = env[:context].screenshots_dir.join("error.png")
+      session.save_screenshot(error_path)
       raise e
     end
 
-    def screenshot(screenshots_path:, upload: false)
+    def screenshot(screenshots_dir:, upload: false)
       @driver.resize_window_to(@driver.current_window_handle, @width, @height)
-      FileUtils.mkdir_p(screenshots_path)
+      FileUtils.mkdir_p(screenshots_dir)
       file_name = self.class.next_screenshot_name
-      file_path = screenshots_path.join(file_name)
+      file_path = screenshots_dir.join(file_name)
       session.save_screenshot(file_path)
       puts "Screenshot saved to #{file_path}"
 
