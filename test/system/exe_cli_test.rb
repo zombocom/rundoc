@@ -132,7 +132,7 @@ class SystemsCliTest < Minitest::Test
       readme = dir.join(SUCCESS_DIRNAME).join("README.md").read
       actual = strip_autogen_warning(readme)
 
-      expected = "![Screenshot of http://example.com/](#{screenshots_dirname}/screenshot_1.png)"
+      expected = "![Screenshot of https://example.com/](#{screenshots_dirname}/screenshot_1.png)"
       assert_equal expected, actual.strip
     end
   end
