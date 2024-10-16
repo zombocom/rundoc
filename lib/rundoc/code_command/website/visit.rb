@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::Website
   class Visit < Rundoc::CodeCommand
     def initialize(name:, url: nil, scroll: nil, height: 720, width: 1024, visible: false)
@@ -19,7 +21,7 @@ class Rundoc::CodeCommand::Website
     end
 
     def call(env = {})
-      message = +"Visting: #{@url}"
+      message = "Visting: #{@url}"
       message << "and executing:\n#{contents}" unless contents.nil? || contents.empty?
 
       puts message
