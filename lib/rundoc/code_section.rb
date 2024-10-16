@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   # holds code, parses and creates CodeCommand
   class CodeSection
@@ -44,7 +46,7 @@ module Rundoc
       result = []
       env = {}
       env[:commands] = []
-      env[:fence_start] = +"#{fence}#{lang}"
+      env[:fence_start] = "#{fence}#{lang}"
       env[:fence_end] = "#{fence}#{AUTOGEN_WARNING}"
       env[:before] = []
       env[:after] = []

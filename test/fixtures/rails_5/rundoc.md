@@ -22,7 +22,7 @@ end
 > If you are starting a new application, we recommend you use the most recently released version of Rails.
 
 >warning
->As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Data for Redis plans are [no longer available](https://blog.heroku.com/next-chapter).
+>As of November 28th, 2022, free Heroku dynos, free Heroku Postgres and free Heroku Key-Value Store plans are [no longer available](https://blog.heroku.com/next-chapter).
 >
 >We recommend using our [low-cost plans](https://blog.heroku.com/new-low-cost-plans) to complete this tutorial. Eligible students can apply for platform credits through our new [Heroku for GitHub Students program](https://blog.heroku.com/github-student-developer-program).
 
