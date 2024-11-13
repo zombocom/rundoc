@@ -19,7 +19,7 @@ end
 Ruby on Rails is a popular web framework written in [Ruby](http://www.ruby-lang.org/). This guide covers using Rails 8 on Heroku. For information on running previous versions of Rails on Heroku, see the tutorial for [Rails 7.x](getting-started-with-rails7) or [Rails 6.x](getting-started-with-rails6).
 
 ```
-:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.2.5'"
+:::-- $ ruby -e "exit 1 unless RUBY_VERSION == '3.2.6'"
 ```
 
 The tutorial assumes that you have:
@@ -59,7 +59,7 @@ This authentication is required for the `heroku` and `git` commands to work corr
 Ensure you have Rails 8 installed by running `rails -v` before creating an app. If necessary, install Rails 8 with `gem install`:
 
 ```term
-:::>> $ gem install rails --pre --no-document
+:::>> $ gem install rails --no-document
 ```
 
 Create a Rails app:
@@ -161,7 +161,7 @@ Rails 8 requires Ruby 3.2.0 or above. Heroku installs a recent version of Ruby b
 ```ruby
 :::-- $ sed -i'' -e '/^ruby/d' ./Gemfile
 :::-> file.append Gemfile#4
-ruby "3.2.5"
+ruby "3.2.6"
 ```
 
 Update the `RUBY VERSION` in the `Gemfile.lock` by running:
