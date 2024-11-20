@@ -1,4 +1,8 @@
 module Rundoc
+  # This poorly named class is responsible for taking in the raw markdown and running it
+  #
+  # It works by pulling out the code blocks (CodeSection), and putting them onto a stack.
+  # It then executes each in turn and records the results.
   class Parser
     DEFAULT_KEYWORD = ":::"
     INDENT_BLOCK = '(?<before_indent>(^\s*$\n|\A)(^(?:[ ]{4}|\t))(?<indent_contents>.*)(?<after_indent>[^\s].*$\n?(?:(?:^\s*$\n?)*^(?:[ ]{4}|\t).*[^\s].*$\n?)*))'

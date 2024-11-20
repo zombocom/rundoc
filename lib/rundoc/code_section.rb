@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Rundoc
-  # holds code, parses and creates CodeCommand
+  # A code secttion respesents a block of fenced code
+  #
+  # A document can have multiple code sections
   class CodeSection
     class ParseError < StandardError
       def initialize(options = {})
