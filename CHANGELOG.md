@@ -1,5 +1,7 @@
 ## HEAD
 
+## 3.0.1
+
 - Fix: Save in-progress work in the "failure" directory when the rundoc command is interrupted via a signal such as `SIGTERM` (https://github.com/zombocom/rundoc/pull/67)
 
 ## 3.0.0
