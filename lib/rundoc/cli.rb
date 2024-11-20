@@ -151,7 +151,8 @@ module Rundoc
         )
         output = begin
           parser.to_md
-        rescue => e
+        rescue StandardError, SignalException => e
+          warn "Received exception: #{e.inspect}, cleaning up before re-raise"
           on_fail
           raise e
         end
