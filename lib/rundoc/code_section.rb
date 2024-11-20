@@ -73,6 +73,10 @@ module Rundoc
 
       return "" if hidden?
 
+      self.class.to_doc(result: result, env: env)
+    end
+
+    def self.to_doc(result: , env: )
       array = [env[:before]]
 
       result.flatten!
