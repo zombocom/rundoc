@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Partial output of the document is now written to disk in a `RUNDOC_FAILED.md` file (https://github.com/zombocom/rundoc/pull/69)
+
 ## 3.0.1
 
 - Fix: Save in-progress work in the "failure" directory when the rundoc command is interrupted via a signal such as `SIGTERM` (https://github.com/zombocom/rundoc/pull/67)
