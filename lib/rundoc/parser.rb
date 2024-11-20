@@ -11,6 +11,7 @@ module Rundoc
     COMMAND_REGEX = ->(keyword) {
       /^#{keyword}(?<tag>(\s|=|-|>)?(=|-|>)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
     }
+    PARTIAL_RESULT = []
 
     attr_reader :contents, :keyword, :stack, :context
 
@@ -21,6 +22,7 @@ module Rundoc
       @keyword = keyword
       @stack = []
       partition
+      PARTIAL_RESULT.clear
     end
 
     def to_md
@@ -31,11 +33,24 @@ module Rundoc
         else
           s
         end
+        PARTIAL_RESULT.replace(result)
       end
-      result.join("")
+
+      self.class.to_doc(result: result)
     rescue => e
       File.write("README.md", result.join(""))
       raise e
+    end
+
+    def self.partial_result_to_doc
+      out = to_doc(result: PARTIAL_RESULT)
+      unfinished = CodeSection.partial_result_to_doc
+      out << unfinished if unfinished
+      out
+    end
+
+    def self.to_doc(result:)
+      result.join("")
     end
 
     # split into [before_code, code, after_code], process code, and re-run until tail is empty

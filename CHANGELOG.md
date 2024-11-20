@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Include all code sections in the event of a failure, not just the last one (https://github.com/zombocom/rundoc/pull/71)
+
 ## 3.0.2
 
 - Fix: Partial output of the document is now written to disk in a `RUNDOC_FAILED.md` file (https://github.com/zombocom/rundoc/pull/69)
