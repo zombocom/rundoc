@@ -1,5 +1,7 @@
 ## HEAD
 
+## 3.0.2
+
 - Fix: Partial output of the document is now written to disk in a `RUNDOC_FAILED.md` file (https://github.com/zombocom/rundoc/pull/69)
 
 ## 3.0.1
