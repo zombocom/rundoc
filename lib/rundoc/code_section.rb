@@ -85,10 +85,10 @@ module Rundoc
     end
 
     def self.partial_result_to_doc
-      self.to_doc(result: PARTIAL_RESULT, env: PARTIAL_ENV)
+      to_doc(result: PARTIAL_RESULT, env: PARTIAL_ENV)
     end
 
-    def self.to_doc(result: , env: )
+    def self.to_doc(result:, env:)
       array = [env[:before]]
 
       result.flatten!
