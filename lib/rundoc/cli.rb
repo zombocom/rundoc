@@ -190,6 +190,8 @@ module Rundoc
         from: execution_context.output_dir,
         to: on_failure_dir
       )
+
+      on_failure_dir.join("RUNDOC_FAILED.md").write(Rundoc::CodeSection.partial_result_to_doc)
     end
 
     private def on_success(output)
