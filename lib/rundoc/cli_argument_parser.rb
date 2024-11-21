@@ -8,7 +8,8 @@ module Rundoc
   #
   # Example:
   #
-  #   cli = CLIArgumentParser.new(argv: ARGV).to_cli
+  #   options = Rundoc::CLIArgumentParser.new(argv: ARGV).call.options
+  #   cli = Rundoc::CLI.new(**options)
   #   cli.call
   #
   class CLIArgumentParser
@@ -107,6 +108,10 @@ module Rundoc
           @io.puts opts
           options[:exit] = true
           @exit_obj.exit(0)
+        end
+
+        opts.on("--with-contents <dir>", "Copies contents of directory into the tmp working dir") do |v|
+          options[:with_contents_dir] = v
         end
 
         opts.on("--on-success-dir <dir>", "Success dir, relative to CWD. i.e. `<rundoc.md/dir>/#{CLI::DEFAULTS::ON_SUCCESS_DIR}/`.") do |v|
