@@ -1,5 +1,7 @@
 ## HEAD
 
+## 3.1.0
+
 - Add: `--with-contents` flag that accepts a directory. The **contents** of the directory (and not the directory itself) will be copied into the working dir before execution. This is useful for debugging a single rundoc step. ()
 
 For example if `RUNDOC.md` features many smaller docs:
