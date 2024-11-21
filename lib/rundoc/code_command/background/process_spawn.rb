@@ -43,7 +43,7 @@ class Rundoc::CodeCommand::Background
       @tasks[name]
     end
 
-    attr_reader :log, :pid
+    attr_reader :log, :pid, :command
 
     def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
       @command = command
