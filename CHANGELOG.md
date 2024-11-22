@@ -1,5 +1,7 @@
 ## HEAD
 
+## 3.1.1
+
 - Fix: Include all code sections in the event of a failure, not just the last one (https://github.com/zombocom/rundoc/pull/71)
 
 ## 3.1.0
