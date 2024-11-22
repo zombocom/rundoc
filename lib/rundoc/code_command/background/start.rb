@@ -15,6 +15,7 @@ class Rundoc::CodeCommand::Background
         log: log,
         out: out
       )
+      puts "Spawning commmand: `#{@spawn.command}`"
       ProcessSpawn.add(@name, @spawn)
     end
 

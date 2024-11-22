@@ -23,6 +23,7 @@ class Minitest::Test
     Rundoc::Context::Execution.new(
       output_dir: output_dir || Pathname("/dev/null"),
       source_path: source_path || Pathname("/dev/null"),
+      with_contents_dir: nil,
       screenshots_dirname: screenshots_dirname || Pathname("/dev/null")
     )
   end

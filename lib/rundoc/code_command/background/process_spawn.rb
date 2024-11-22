@@ -43,7 +43,7 @@ class Rundoc::CodeCommand::Background
       @tasks[name]
     end
 
-    attr_reader :log, :pid
+    attr_reader :log, :pid, :command
 
     def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
       @command = command
@@ -68,7 +68,7 @@ class Rundoc::CodeCommand::Background
         end
       end
     rescue Timeout::Error
-      raise "Timeout waiting for #{@command.inspect} to find a match using #{wait_value.inspect} in \n'#{log.read}'"
+      raise "Timeout (#{timeout_value}s) waiting for #{@command.inspect} to find a match using #{wait_value.inspect} in \n'#{log.read}'"
     end
 
     def alive?

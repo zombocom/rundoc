@@ -24,6 +24,7 @@ module Rundoc
       on_success_dir: nil,
       on_failure_dir: nil,
       output_filename: nil,
+      with_contents_dir: nil,
       screenshots_dirname: nil
     )
       @io = io
@@ -37,6 +38,7 @@ module Rundoc
       @execution_context = Rundoc::Context::Execution.new(
         output_dir: Dir.mktmpdir,
         source_path: source_path,
+        with_contents_dir: with_contents_dir,
         screenshots_dirname: screenshots_dirname
       )
 
@@ -136,11 +138,21 @@ module Rundoc
 
       source_contents = execution_context.source_path.read
       if on_failure_dir.exist? && !Dir.empty?(on_failure_dir)
-        io.puts "## earing on failure directory #{on_failure_dir}"
+        io.puts "## erring on failure directory #{on_failure_dir}"
         clean_dir(
           dir: on_failure_dir,
           description: "on failure directory"
         )
+      end
+
+      if execution_context.with_contents_dir
+        io.puts "## Copying contents from #{execution_context.with_contents_dir} to tmp working dir"
+        Dir.chdir(execution_context.with_contents_dir) do
+          FileUtils.cp_r(
+            ".",
+            execution_context.output_dir
+          )
+        end
       end
 
       io.puts "## Working dir is #{execution_context.output_dir}"

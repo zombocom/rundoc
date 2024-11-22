@@ -2,6 +2,20 @@
 
 - Fix: Include all code sections in the event of a failure, not just the last one (https://github.com/zombocom/rundoc/pull/71)
 
+## 3.1.0
+
+- Add: `--with-contents` flag that accepts a directory. The **contents** of the directory (and not the directory itself) will be copied into the working dir before execution. This is useful for debugging a single rundoc step. ()
+
+For example if `RUNDOC.md` features many smaller docs:
+
+```
+:::>> rundoc.require "./intro.md"
+:::>> rundoc.require "../shared/install_cli.md"
+:::>> rundoc.require "./clone_app.md"
+```
+
+If the command fails on `clone_app.md` then you can rapidly iterate by calling `$ rundoc ./clone_app.md --with-contents failed/my-app` but be careful to not use the same failure directory etc or it will be replaced.
+
 ## 3.0.2
 
 - Fix: Partial output of the document is now written to disk in a `RUNDOC_FAILED.md` file (https://github.com/zombocom/rundoc/pull/69)
