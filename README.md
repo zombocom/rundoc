@@ -88,6 +88,7 @@ This will generate a project folder with your project in it, and a markdown `REA
   - [background.stop](#background)
   - [background.log.read](#background)
   - [background.log.clear](#background)
+  - [background.wait](#background)
 - Take screenshots
   - [website.visit](#screenshots)
   - [website.nav](#screenshots)
@@ -410,6 +411,13 @@ To start a process, pass in the command as the first arg, and give it a name (so
 :::>> background.start("rails server", name: "server")
 ```
 
+- Arguments
+  - name: Identifier of the background process, used in later invocations.
+  - wait (Optional): A string to wait for before continuing. This is useful to block moving on until an event happend such as a server was booted or web request was received. Also see `background.wait`
+  - timeout (Optional): A number of seconds to wait for a given string to be found in the logs.
+  - out (Optional): A bash redirect. Defaults to `2>&1` to merge stderr and stdout together.
+  - allow_fail (Optional): Set to `true` if the command exiting shouldn't halt doc generation. Poorly named, may be renamed in the future.
+
 You can make the background process wait until it receives a certain string in the logs. For instance to make sure that the server is fully booted:
 
 ```
@@ -422,17 +430,37 @@ You can stop the process by referencing the name:
 :::-- background.stop(name: "server")
 ```
 
+- Arguments
+  - name
+
 You can also get the log contents:
 
 ```
 :::>> background.log.read(name: "server")
 ```
 
+- Arguments
+  - name
+
 You can also truncate the logs:
 
 ```
 :::>> background.log.clear(name: "server")
 ```
+
+- Arguments
+  - name
+
+You can also wait for a given string to appear in the logs:
+
+```
+:::>> background.wait(name: "server", wait: "method=GET")
+```
+
+- Arguments
+  - name
+  - wait: Same as `background.start` a string value to look for before continuing.
+  - timeout: Maximum number of seconds to wait
 
 ## Screenshots
 
