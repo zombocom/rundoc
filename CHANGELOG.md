@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Include all code sections in the event of a failure, not just the last one (https://github.com/zombocom/rundoc/pull/71)
+
 ## 3.1.0
 
 - Add: `--with-contents` flag that accepts a directory. The **contents** of the directory (and not the directory itself) will be copied into the working dir before execution. This is useful for debugging a single rundoc step. ()
