@@ -60,4 +60,38 @@ class IntegrationRequireTest < Minitest::Test
       end
     end
   end
+
+  def test_require_is_relative_to_current_file_not_source_file
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        dir = Pathname(dir)
+
+        source_path = dir.join("RUNDOC.md")
+        source_path.write <<~EOF
+          ```
+          :::>> rundoc.require "./src/a.md"
+          ```
+        EOF
+
+        dir.join("src").tap(&:mkpath).join("a.md").write <<~EOF
+          ```
+          :::-> rundoc.require "./b.md"
+          ```
+        EOF
+
+        dir.join("src").join("b.md").write <<~EOF
+          ```
+          :::-> print.text Hello World!
+          ```
+        EOF
+
+        parsed = parse_contents(
+          source_path.read,
+          source_path: source_path
+        )
+        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        assert_equal "Hello World!", actual.strip
+      end
+    end
+  end
 end

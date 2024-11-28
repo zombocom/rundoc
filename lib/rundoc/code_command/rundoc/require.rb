@@ -14,12 +14,17 @@ class ::Rundoc::CodeCommand
       end
 
       def call(env = {})
-        document_path = @path.expand_path(env[:context].source_dir)
+        execution_context = env[:context]
+        document_path = @path.expand_path(execution_context.source_dir)
 
-        puts "rundoc.require: Start executing #{@path.to_s.inspect}"
         output = Rundoc::Parser.new(
           document_path.read,
-          context: env[:context]
+          context: Rundoc::Context::Execution.new(
+            source_path: document_path,
+            output_dir: execution_context.output_dir,
+            screenshots_dirname: execution_context.screenshots_dir,
+            with_contents_dir: execution_context.with_contents_dir
+          )
         ).to_md
 
         if render_result?
