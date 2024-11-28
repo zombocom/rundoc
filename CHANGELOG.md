@@ -1,5 +1,6 @@
 ## HEAD
 
+- Fix: Using `rundoc.require` inside of a document that was `rundoc.require`-d now sources files from the correct relative document path (https://github.com/zombocom/rundoc/pull/84)
 - Fix: `rundoc <file> --with-contents <dir>` now expands the path passed in to the `--with-contents` so relative paths can safely be used (https://github.com/zombocom/rundoc/pull/83)
 
 ## 3.1.1
