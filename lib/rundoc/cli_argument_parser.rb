@@ -111,7 +111,7 @@ module Rundoc
         end
 
         opts.on("--with-contents <dir>", "Copies contents of directory into the tmp working dir") do |v|
-          options[:with_contents_dir] = v
+          options[:with_contents_dir] = File.expand_path(v)
         end
 
         opts.on("--on-success-dir <dir>", "Success dir, relative to CWD. i.e. `<rundoc.md/dir>/#{CLI::DEFAULTS::ON_SUCCESS_DIR}/`.") do |v|
