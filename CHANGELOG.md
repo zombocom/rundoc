@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: `rundoc <file> --with-contents <dir>` now expands the path passed in to the `--with-contents` so relative paths can safely be used (https://github.com/zombocom/rundoc/pull/83)
+
 ## 3.1.1
 
 - Fix: Include all code sections in the event of a failure, not just the last one (https://github.com/zombocom/rundoc/pull/71)
