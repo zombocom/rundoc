@@ -76,7 +76,7 @@ class Rundoc::CodeCommand::Background
       return unless wait_value
 
       Timeout.timeout(Integer(timeout_value)) do
-        until file.read.match(wait_value)
+        until file.read.include?(wait_value)
           sleep 0.01
         end
       end
