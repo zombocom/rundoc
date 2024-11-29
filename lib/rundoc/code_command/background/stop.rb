@@ -10,7 +10,7 @@ class Rundoc::CodeCommand::Background
 
     def call(env = {})
       @spawn.stop
-      ""
+      @spawn.log.read
     end
   end
 end
