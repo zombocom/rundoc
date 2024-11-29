@@ -33,4 +33,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.writeln", Rundoc::CodeCommand::Background::Wait)
+Rundoc.register_code_command(:"background.stdin_write", Rundoc::CodeCommand::Background::StdinWrite)
