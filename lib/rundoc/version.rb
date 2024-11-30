@@ -1,3 +1,3 @@
 module Rundoc
-  VERSION = "3.1.2"
+  VERSION = "4.0.0"
 end

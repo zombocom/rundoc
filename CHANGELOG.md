@@ -1,5 +1,7 @@
 ## HEAD
 
+## 4.0.0
+
 - Add: Rundoc command `background.stdin_write` to send a string to a backtround process' STDIN. This allows driving REPL interfaces (https://github.com/zombocom/rundoc/pull/79)
 
 ```
