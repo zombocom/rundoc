@@ -86,9 +86,10 @@ This will generate a project folder with your project in it, and a markdown `REA
 - Boot background processes such as a local server
   - [background.start](#background)
   - [background.stop](#background)
+  - [background.stdin_write](#background)
+  - [background.wait](#background)
   - [background.log.read](#background)
   - [background.log.clear](#background)
-  - [background.wait](#background)
 - Take screenshots
   - [website.visit](#screenshots)
   - [website.nav](#screenshots)
@@ -424,6 +425,21 @@ You can make the background process wait until it receives a certain string in t
 :::>> background.start("rails server", name: "server", wait: "Listening on")
 ```
 
+You can send strings to the STDIN of the process:
+
+```
+:::>> background.start("heroku run bash", name: "heroku_run", wait: "$")
+:::-- background.stdin_write("ls", name: "heroku_run")
+```
+
+- Arguments
+  - contents: Positional. The string to write to stdin
+  - ending: A string to append to the end of the contents, defaults to a newline
+            you could set it to something like ";" or an empty newline ""
+  - name
+  - wait
+  - timeout
+
 You can stop the process by referencing the name:
 
 ```
@@ -432,6 +448,7 @@ You can stop the process by referencing the name:
 
 - Arguments
   - name
+
 
 You can also get the log contents:
 

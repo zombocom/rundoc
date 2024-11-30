@@ -1,5 +1,23 @@
 ## HEAD
 
+## 4.0.0
+
+- Add: Rundoc command `background.stdin_write` to send a string to a backtround process' STDIN. This allows driving REPL interfaces (https://github.com/zombocom/rundoc/pull/79)
+
+```
+:::>- background.start("ruby #{script}",
+  name: "script",
+  wait: ">",
+  timeout: 15
+)
+:::-- background.stdin_write("hello", name: "script", wait: "hello")
+:::-- background.stdin_write("exit", name: "script", wait: "exit")
+:::>> background.stop(name: "script")
+```
+
+- Changed: Rundoc command `background.stop` now outputs the log contents on `:::>>`. Previously it output nothing (https://github.com/zombocom/rundoc/pull/79)
+- Changed: Strings passed into `background.wait` and similar `wait:` arguments of other background rundoc commands were accidentally being converted into regex, now they are matched as string literals. If you need regexes, please open an issue, they could be supporte but require peg_parser support (https://github.com/zombocom/rundoc/pull/79)
+
 ## 3.1.2
 
 - Fix: Using `rundoc.require` inside of a document that was `rundoc.require`-d now sources files from the correct relative document path (https://github.com/zombocom/rundoc/pull/84)
@@ -11,7 +29,7 @@
 
 ## 3.1.0
 
-- Add: `--with-contents` flag that accepts a directory. The **contents** of the directory (and not the directory itself) will be copied into the working dir before execution. This is useful for debugging a single rundoc step. ()
+- Add: `--with-contents` flag that accepts a directory. The **contents** of the directory (and not the directory itself) will be copied into the working dir before execution. This is useful for debugging a single rundoc step. (https://github.com/zombocom/rundoc/pull/83)
 
 For example if `RUNDOC.md` features many smaller docs:
 
