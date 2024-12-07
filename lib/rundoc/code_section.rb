@@ -132,7 +132,6 @@ module Rundoc
       actual = Rundoc::PegTransformer.new.apply(tree)
       actual = [actual] unless actual.is_a?(Array)
       actual.each do |code_command|
-        @stack << "\n" if commands.last.is_a?(Rundoc::CodeCommand)
         @stack << code_command
         commands << code_command
       end
