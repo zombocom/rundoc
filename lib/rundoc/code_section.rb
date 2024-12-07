@@ -64,7 +64,11 @@ module Rundoc
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
 
-        env[:commands] << {object: code_command, output: code_output, command: code_line}
+        env[:commands] << {
+          object: code_command,
+          output: code_output,
+          command: code_line
+        }
 
         tmp_result = []
         tmp_result << code_line if code_command.render_command?
@@ -76,7 +80,7 @@ module Rundoc
         PARTIAL_ENV.replace(env)
       end
 
-      return "" if hidden?
+      return "" if env[:commands].all? { |c| c[:object].hidden? }
 
       self.class.to_doc(result: result, env: env)
     end
