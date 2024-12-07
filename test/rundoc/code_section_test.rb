@@ -57,7 +57,7 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    code_command = code_section.commands.first
+    code_command = code_section.executed_commands.first
     assert_equal true, code_command.render_command
     assert_equal false, code_command.render_result
 
@@ -75,7 +75,7 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    code_command = code_section.commands.first
+    code_command = code_section.executed_commands.first
     assert_equal true, code_command.render_command
     assert_equal false, code_command.render_result
   end
@@ -95,8 +95,8 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    puts code_section.commands.inspect
-    code_command = code_section.commands.first
+    puts code_section.executed_commands.inspect
+    code_command = code_section.executed_commands.first
     assert_equal true, code_command.render_command
     assert_equal true, code_command.render_result
   end
@@ -116,7 +116,7 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    code_command = code_section.commands.first
+    code_command = code_section.executed_commands.first
     assert_equal false, code_command.render_command
     assert_equal false, code_command.render_result
 
@@ -134,7 +134,7 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    code_command = code_section.commands.first
+    code_command = code_section.executed_commands.first
     assert_equal false, code_command.render_command
     assert_equal false, code_command.render_result
   end
@@ -154,7 +154,7 @@ class CodeSectionTest < Minitest::Test
     )
     code_section.render
 
-    code_command = code_section.commands.first
+    code_command = code_section.executed_commands.first
     assert_equal false, code_command.render_command
     assert_equal true, code_command.render_result
   end
