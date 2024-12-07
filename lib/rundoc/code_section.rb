@@ -35,6 +35,7 @@ module Rundoc
     PARTIAL_RESULT = []
     PARTIAL_ENV = {}
 
+    # Used for tests to inspect the command that was executed
     def executed_commands
       raise "Nothing executed" unless @env[:commands].any?
 
@@ -42,6 +43,7 @@ module Rundoc
     end
 
     def initialize(match, keyword:, context:)
+      @executed = false
       @original = match.to_s
       @env = {}
       @stack = []
@@ -50,6 +52,7 @@ module Rundoc
       @fence = match[:fence]
       @lang = match[:lang]
       @code = match[:contents]
+      @rendered = ""
       self.class.parse_code_commands(@code).each do |code_command|
         @stack << code_command
       end
@@ -58,7 +61,10 @@ module Rundoc
       PARTIAL_ENV.clear
     end
 
-    def render
+    def call
+      return self if @executed
+      @executed = true
+
       result = []
       env = @env
       env[:commands] = []
@@ -71,26 +77,28 @@ module Rundoc
       @stack.each do |code_command|
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
+        result << code_line if code_command.render_command?
+        result << code_output if code_command.render_result?
+
+        PARTIAL_RESULT.replace(result)
+        PARTIAL_ENV.replace(env)
 
         env[:commands] << {
           object: code_command,
           output: code_output,
           command: code_line
         }
-
-        tmp_result = []
-        tmp_result << code_line if code_command.render_command?
-        tmp_result << code_output if code_command.render_result?
-
-        result << tmp_result unless code_command.hidden?
-
-        PARTIAL_RESULT.replace(result)
-        PARTIAL_ENV.replace(env)
       end
 
-      return "" if env[:commands].all? { |c| c[:object].hidden? }
+      if env[:commands].any? { |c| c[:object].not_hidden? }
+        @rendered = self.class.to_doc(result: result, env: env)
+      end
+      self
+    end
 
-      self.class.to_doc(result: result, env: env)
+    def render
+      call
+      @rendered
     end
 
     def self.partial_result_to_doc
