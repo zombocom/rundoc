@@ -68,8 +68,7 @@ module Rundoc
       env[:after] = []
       env[:context] = @context
 
-      @stack.each do |s|
-        code_command = s
+      @stack.each do |code_command|
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
 
