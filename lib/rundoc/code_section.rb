@@ -114,17 +114,6 @@ module Rundoc
       array.join("\n") << "\n"
     end
 
-    # all of the commands are hidden
-    def hidden?
-      !not_hidden?
-    end
-
-    # one or more of the commands are not hidden
-    def not_hidden?
-      return true if commands.empty?
-      commands.map(&:not_hidden?).detect { |c| c }
-    end
-
     def parse_code_command
       parser = Rundoc::PegParser.new.code_block
       tree = parser.parse(@code)
