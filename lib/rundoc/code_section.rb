@@ -50,7 +50,10 @@ module Rundoc
       @fence = match[:fence]
       @lang = match[:lang]
       @code = match[:contents]
-      parse_code_command
+      self.class.parse_code_commands(@code).each do |code_command|
+        @stack << code_command
+      end
+
       PARTIAL_RESULT.clear
       PARTIAL_ENV.clear
     end
@@ -120,16 +123,14 @@ module Rundoc
       array.join("\n") << "\n"
     end
 
-    def parse_code_command
+    def self.parse_code_commands(code)
       parser = Rundoc::PegParser.new.code_block
-      tree = parser.parse(@code)
-      actual = Rundoc::PegTransformer.new.apply(tree)
-      actual = [actual] unless actual.is_a?(Array)
-      actual.each do |code_command|
-        @stack << code_command
-      end
+      tree = parser.parse(code)
+      commands = Rundoc::PegTransformer.new.apply(tree)
+      commands = [commands] unless commands.is_a?(Array)
+      commands
     rescue ::Parslet::ParseFailed => e
-      raise "Could not compile code:\n#{@code}\nReason: #{e.message}"
+      raise "Could not compile code:\n#{code}\nReason: #{e.message}"
     end
   end
 end
