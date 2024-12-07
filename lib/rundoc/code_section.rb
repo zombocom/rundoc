@@ -60,11 +60,6 @@ module Rundoc
       env[:context] = @context
 
       @stack.each do |s|
-        unless s.respond_to?(:call)
-          result << s
-          next
-        end
-
         code_command = s
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
