@@ -138,17 +138,5 @@ module Rundoc
     rescue ::Parslet::ParseFailed => e
       raise "Could not compile code:\n#{@code}\nReason: #{e.message}"
     end
-
-    # def check_parse_error(command, code_block)
-    #   return unless code_command = @stack.last
-    #   return unless code_command.is_a?(Rundoc::CodeCommand::NoSuchCommand)
-    #   @original.lines.each_with_index do |line, index|
-    #     next unless line == command
-    #     raise ParseError.new(keyword:     code_command.keyword,
-    #                          block:       code_block,
-    #                          command:     command,
-    #                          line_number: index.next)
-    #   end
-    # end
   end
 end
