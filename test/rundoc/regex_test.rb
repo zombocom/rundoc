@@ -7,11 +7,11 @@ class RegexTest < Minitest::Test
   def test_indent_regex
     contents = <<~RUBY
       foo
-      
+
           $ cd
           yo
           sup
-      
+
       bar
     RUBY
 
@@ -23,13 +23,13 @@ class RegexTest < Minitest::Test
   def test_github_regex
     contents = <<~RUBY
       foo
-      
+
       ```
       $ cd
       yo
       sup
       ```
-      
+
       bar
     RUBY
 
@@ -41,13 +41,13 @@ class RegexTest < Minitest::Test
   def test_github_tagged_regex
     contents = <<~RUBY
       foo
-      
+
       ```ruby
       $ cd
       yo
       sup
       ```
-      
+
       bar
     RUBY
 
@@ -56,55 +56,21 @@ class RegexTest < Minitest::Test
     assert_equal "```ruby\n$ cd\nyo\nsup\n```\n", parsed
   end
 
-  def test_command_regex
-    regex = Rundoc::Parser::COMMAND_REGEX.call(":::")
-
-    contents = ":::$ mkdir schneems"
-    match = contents.match(regex)
-    assert_equal "", match[:tag]
-    assert_equal "$", match[:command]
-    assert_equal "mkdir schneems", match[:statement]
-
-    contents = ":::=$ mkdir schneems"
-    match = contents.match(regex)
-    assert_equal "=", match[:tag]
-    assert_equal "$", match[:command]
-    assert_equal "mkdir schneems", match[:statement]
-
-    contents = ":::=       $ mkdir schneems"
-    match = contents.match(regex)
-    assert_equal "=", match[:tag]
-    assert_equal "$", match[:command]
-    assert_equal "mkdir schneems", match[:statement]
-
-    contents = ":::-$ mkdir schneems"
-    match = contents.match(regex)
-    assert_equal "-", match[:tag]
-    assert_equal "$", match[:command]
-    assert_equal "mkdir schneems", match[:statement]
-
-    contents = ":::- $ mkdir schneems"
-    match = contents.match(regex)
-    assert_equal "-", match[:tag]
-    assert_equal "$", match[:command]
-    assert_equal "mkdir schneems", match[:statement]
-  end
-
   def test_codeblock_regex
     contents = <<~RUBY
       foo
-      
+
       ```
       :::>$ mkdir
       ```
-      
+
       zoo
-      
+
       ```
       :::>$ cd ..
       something
       ```
-      
+
       bar
     RUBY
 
@@ -133,7 +99,7 @@ class RegexTest < Minitest::Test
       ```java
       :::>> write app/controllers/Application.java
       package controllers;
-      
+
       import static java.util.concurrent.TimeUnit.SECONDS;
       import models.Pinger;
       import play.libs.Akka;
@@ -146,7 +112,7 @@ class RegexTest < Minitest::Test
       import akka.actor.ActorRef;
       import akka.actor.Cancellable;
       import akka.actor.Props;
-      
+
       public class Application extends Controller {
           public static WebSocket<String> pingWs() {
               return new WebSocket<String>() {
@@ -159,7 +125,7 @@ class RegexTest < Minitest::Test
                                                          Akka.system().dispatcher(),
                                                          null
                                                          );
-      
+
                       in.onClose(new Callback0() {
                         @Override
                         public void invoke() throws Throwable {
@@ -167,14 +133,14 @@ class RegexTest < Minitest::Test
                         }
                       });
                   }
-      
+
               };
           }
-      
+
           public static Result pingJs() {
               return ok(views.js.ping.render());
           }
-      
+
           public static Result index() {
               return ok(index.render());
           }

@@ -8,9 +8,6 @@ module Rundoc
     INDENT_BLOCK = '(?<before_indent>(^\s*$\n|\A)(^(?:[ ]{4}|\t))(?<indent_contents>.*)(?<after_indent>[^\s].*$\n?(?:(?:^\s*$\n?)*^(?:[ ]{4}|\t).*[^\s].*$\n?)*))'
     GITHUB_BLOCK = '^(?<fence>(?<fence_char>~|`){3,})\s*?(?<lang>\w+)?\s*?\n(?<contents>.*?)^\g<fence>\g<fence_char>*\s*?\n?'
     CODEBLOCK_REGEX = /(#{GITHUB_BLOCK})/m
-    COMMAND_REGEX = ->(keyword) {
-      /^#{keyword}(?<tag>(\s|=|-|>)?(=|-|>)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
-    }
     PARTIAL_RESULT = []
 
     attr_reader :contents, :keyword, :stack, :context
