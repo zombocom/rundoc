@@ -18,6 +18,12 @@ module Rundoc
       @env[:commands].map { |c| c[:object] }
     end
 
+    # @param fence [String] the fence used to start the code block like "```".
+    # @param lang [String] any extra string after the fence like for example
+    #        a fence of "```ruby" the lang would be "ruby".
+    # @param code [String] the code block contents inside the fence.
+    # @param context [Context::Execution] The details about where
+    #        the code block came from.
     def initialize(fence:, lang:, code:, context:)
       @fence = fence
       @lang = lang
