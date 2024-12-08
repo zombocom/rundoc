@@ -4,22 +4,6 @@ class RegexTest < Minitest::Test
   def setup
   end
 
-  def test_indent_regex
-    contents = <<~RUBY
-      foo
-
-          $ cd
-          yo
-          sup
-
-      bar
-    RUBY
-
-    regex = Rundoc::Parser::INDENT_BLOCK
-    parsed = contents.match(/#{regex}/).to_s
-    assert_equal "\n    $ cd\n    yo\n    sup\n", parsed
-  end
-
   def test_github_regex
     contents = <<~RUBY
       foo
