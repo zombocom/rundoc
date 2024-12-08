@@ -17,7 +17,6 @@ class CodeSectionTest < Minitest::Test
         match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
         result = Rundoc::CodeSection.new(
           match,
-          keyword: ":::",
           context: default_context
         ).render
         assert_equal "", result
@@ -36,7 +35,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     result = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     ).render
     assert_equal contents, result.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "\n")
@@ -52,7 +50,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render
@@ -70,7 +67,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render
@@ -90,7 +86,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render
@@ -111,7 +106,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render
@@ -129,7 +123,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render
@@ -149,7 +142,6 @@ class CodeSectionTest < Minitest::Test
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
     code_section = Rundoc::CodeSection.new(
       match,
-      keyword: ":::",
       context: default_context
     )
     code_section.render

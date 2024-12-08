@@ -19,12 +19,11 @@ module Rundoc
       @env[:commands].map { |c| c[:object] }
     end
 
-    def initialize(match, keyword:, context:)
+    def initialize(match, context:)
       @executed = false
       @original = match.to_s
       @env = {}
       @stack = []
-      @keyword = keyword
       @context = context
       @fence = match[:fence]
       @lang = match[:lang]

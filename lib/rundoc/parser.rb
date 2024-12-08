@@ -62,7 +62,6 @@ module Rundoc
           match = code.match(CODEBLOCK_REGEX)
           @stack << CodeSection.new(
             match,
-            keyword: keyword,
             context: context
           )
         end
