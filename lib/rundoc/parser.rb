@@ -10,13 +10,12 @@ module Rundoc
     CODEBLOCK_REGEX = /(#{GITHUB_BLOCK})/m
     PARTIAL_RESULT = []
 
-    attr_reader :contents, :keyword, :stack, :context
+    attr_reader :contents, :stack, :context
 
     def initialize(contents, context:, keyword: DEFAULT_KEYWORD)
       @context = context
       @contents = contents
       @original = contents.dup
-      @keyword = keyword
       @stack = []
       partition
       PARTIAL_RESULT.clear
