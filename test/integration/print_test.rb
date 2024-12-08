@@ -21,7 +21,7 @@ class IntegrationPrintTest < Minitest::Test
           #{key}
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -44,7 +44,7 @@ class IntegrationPrintTest < Minitest::Test
           one
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -70,7 +70,7 @@ class IntegrationPrintTest < Minitest::Test
           ```
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -94,7 +94,7 @@ class IntegrationPrintTest < Minitest::Test
           there
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -118,7 +118,7 @@ class IntegrationPrintTest < Minitest::Test
           there
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -142,7 +142,7 @@ class IntegrationPrintTest < Minitest::Test
           there
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -163,7 +163,7 @@ class IntegrationPrintTest < Minitest::Test
           Hello there
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -186,7 +186,7 @@ class IntegrationPrintTest < Minitest::Test
           ```
         EOF
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end

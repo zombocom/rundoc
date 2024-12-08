@@ -87,8 +87,8 @@ module Rundoc
   end
 end
 
-require "rundoc/parser"
-require "rundoc/code_section"
+require "rundoc/document"
+require "rundoc/fenced_code_block"
 require "rundoc/code_command"
 require "rundoc/peg_parser"
 require "rundoc/cli_argument_parser"

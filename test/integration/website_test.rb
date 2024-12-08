@@ -23,7 +23,7 @@ class IntegrationWebsiteTest < Minitest::Test
           output_dir: screenshots_dir.parent,
           screenshots_dirname: screenshots_dirname
         )
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
 
         expected = "![Screenshot of https://example.com/](screenshots/screenshot_1.png)"
         assert_equal expected, actual.strip

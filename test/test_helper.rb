@@ -39,7 +39,7 @@ class Minitest::Test
       source_path: source_path,
       screenshots_dirname: screenshots_dirname
     )
-    Rundoc::Parser.new(
+    Rundoc::Document.new(
       contents,
       context: context
     )
@@ -60,7 +60,7 @@ class Minitest::Test
   end
 
   def strip_autogen_warning(string)
-    string.gsub!(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+    string.gsub!(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
     string.gsub!(/<!-- STOP.*STOP -->/m, "")
     string
   end

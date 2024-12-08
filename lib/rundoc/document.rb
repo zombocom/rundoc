@@ -1,25 +1,20 @@
 module Rundoc
-  # This poorly named class is responsible for taking in the raw markdown and running it
+  # Represents a single rundoc file on disk,
   #
-  # It works by pulling out the code blocks (CodeSection), and putting them onto a stack.
-  # It then executes each in turn and records the results.
-  class Parser
-    DEFAULT_KEYWORD = ":::"
-    INDENT_BLOCK = '(?<before_indent>(^\s*$\n|\A)(^(?:[ ]{4}|\t))(?<indent_contents>.*)(?<after_indent>[^\s].*$\n?(?:(?:^\s*$\n?)*^(?:[ ]{4}|\t).*[^\s].*$\n?)*))'
+  # Each document contains one or more fenced code blocks.
+  # Those are parsed as `FencedCodeBlock` instances and then
+  # executed.
+  class Document
     GITHUB_BLOCK = '^(?<fence>(?<fence_char>~|`){3,})\s*?(?<lang>\w+)?\s*?\n(?<contents>.*?)^\g<fence>\g<fence_char>*\s*?\n?'
     CODEBLOCK_REGEX = /(#{GITHUB_BLOCK})/m
-    COMMAND_REGEX = ->(keyword) {
-      /^#{keyword}(?<tag>(\s|=|-|>)?(=|-|>)?)\s*(?<command>(\S)+)\s+(?<statement>.*)$/
-    }
     PARTIAL_RESULT = []
 
-    attr_reader :contents, :keyword, :stack, :context
+    attr_reader :contents, :stack, :context
 
-    def initialize(contents, context:, keyword: DEFAULT_KEYWORD)
+    def initialize(contents, context:)
       @context = context
       @contents = contents
       @original = contents.dup
-      @keyword = keyword
       @stack = []
       partition
       PARTIAL_RESULT.clear
@@ -44,7 +39,7 @@ module Rundoc
 
     def self.partial_result_to_doc
       out = to_doc(result: PARTIAL_RESULT)
-      unfinished = CodeSection.partial_result_to_doc
+      unfinished = FencedCodeBlock.partial_result_to_doc
       out << unfinished if unfinished
       out
     end
@@ -60,9 +55,10 @@ module Rundoc
         @stack << head unless head.empty?
         unless code.empty?
           match = code.match(CODEBLOCK_REGEX)
-          @stack << CodeSection.new(
-            match,
-            keyword: keyword,
+          @stack << FencedCodeBlock.new(
+            fence: match[:fence],
+            lang: match[:lang],
+            code: match[:contents],
             context: context
           )
         end
@@ -71,5 +67,3 @@ module Rundoc
     end
   end
 end
-
-# convert string of markdown to array of strings and code_command

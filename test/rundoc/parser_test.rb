@@ -17,7 +17,7 @@ class ParserTest < Minitest::Test
       Dir.chdir(dir) do
         expected = "sup\n\n```\n$ mkdir foo\n$ ls\nfoo\n```\n\nyo\n"
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -39,7 +39,7 @@ class ParserTest < Minitest::Test
       Dir.chdir(dir) do
         expected = "sup\n\nIn file `foo/code.rb` write:\n\n```\na = 1 + 1\nb = a * 2\n```\nyo\n"
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
@@ -57,7 +57,7 @@ class ParserTest < Minitest::Test
       Dir.chdir(dir) do
         expected = "\nIn file `foo/newb.rb` write:\n\n```\nputs 'hello world'\n$ cat foo/newb.rb\nputs 'hello world'\n```\n"
         parsed = parse_contents(contents)
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal expected, actual
       end
     end
