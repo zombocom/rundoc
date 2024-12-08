@@ -22,7 +22,7 @@ class IntegrationRequireTest < Minitest::Test
           source_path.read,
           source_path: source_path
         )
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal "Hello World!", actual.strip
       end
     end
@@ -50,7 +50,7 @@ class IntegrationRequireTest < Minitest::Test
           source_path.read,
           source_path: source_path
         )
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         # Command was run
         assert dir.join("foo.txt").exist?
         assert "echo hello world", dir.join("foo.txt").read.strip
@@ -89,7 +89,7 @@ class IntegrationRequireTest < Minitest::Test
           source_path.read,
           source_path: source_path
         )
-        actual = parsed.to_md.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "")
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
         assert_equal "Hello World!", actual.strip
       end
     end

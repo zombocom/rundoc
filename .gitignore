@@ -11,6 +11,7 @@ coverage/
 .DS_Store
 Gemfile.lock
 .env
+.ruby-version
 
 # IDEs
 .idea/

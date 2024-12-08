@@ -38,7 +38,7 @@ module Rundoc
 
     def self.partial_result_to_doc
       out = to_doc(result: PARTIAL_RESULT)
-      unfinished = CodeSection.partial_result_to_doc
+      unfinished = FencedCodeBlock.partial_result_to_doc
       out << unfinished if unfinished
       out
     end
@@ -54,7 +54,7 @@ module Rundoc
         @stack << head unless head.empty?
         unless code.empty?
           match = code.match(CODEBLOCK_REGEX)
-          @stack << CodeSection.new(
+          @stack << FencedCodeBlock.new(
             fence: match[:fence],
             lang: match[:lang],
             code: match[:contents],

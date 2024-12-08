@@ -15,7 +15,7 @@ class CodeSectionTest < Minitest::Test
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-        result = Rundoc::CodeSection.new(
+        result = Rundoc::FencedCodeBlock.new(
           fence: match[:fence],
           lang: match[:lang],
           code: match[:contents],
@@ -35,13 +35,13 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    result = Rundoc::CodeSection.new(
+    result = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
       context: default_context
     ).render
-    assert_equal contents, result.gsub(Rundoc::CodeSection::AUTOGEN_WARNING, "\n")
+    assert_equal contents, result.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "\n")
   end
 
   def test_show_command_hide_render
@@ -52,7 +52,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
@@ -71,7 +71,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
@@ -92,7 +92,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
@@ -114,7 +114,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
@@ -133,7 +133,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
@@ -154,7 +154,7 @@ class CodeSectionTest < Minitest::Test
     RUBY
 
     match = contents.match(Rundoc::Parser::CODEBLOCK_REGEX)
-    code_section = Rundoc::CodeSection.new(
+    code_section = Rundoc::FencedCodeBlock.new(
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
