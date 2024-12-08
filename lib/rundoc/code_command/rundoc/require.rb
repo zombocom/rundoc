@@ -17,7 +17,7 @@ class ::Rundoc::CodeCommand
         execution_context = env[:context]
         document_path = @path.expand_path(execution_context.source_dir)
 
-        output = Rundoc::Parser.new(
+        output = Rundoc::Document.new(
           document_path.read,
           context: Rundoc::Context::Execution.new(
             source_path: document_path,

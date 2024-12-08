@@ -39,7 +39,7 @@ class Minitest::Test
       source_path: source_path,
       screenshots_dirname: screenshots_dirname
     )
-    Rundoc::Parser.new(
+    Rundoc::Document.new(
       contents,
       context: context
     )

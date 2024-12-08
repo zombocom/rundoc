@@ -17,7 +17,7 @@ class RegexTest < Minitest::Test
       bar
     RUBY
 
-    regex = Rundoc::Parser::GITHUB_BLOCK
+    regex = Rundoc::Document::GITHUB_BLOCK
     parsed = contents.match(/#{regex}/m).to_s
     assert_equal "```\n$ cd\nyo\nsup\n```\n", parsed
   end
@@ -35,7 +35,7 @@ class RegexTest < Minitest::Test
       bar
     RUBY
 
-    regex = Rundoc::Parser::GITHUB_BLOCK
+    regex = Rundoc::Document::GITHUB_BLOCK
     parsed = contents.match(/#{regex}/m).to_s
     assert_equal "```ruby\n$ cd\nyo\nsup\n```\n", parsed
   end
@@ -58,7 +58,7 @@ class RegexTest < Minitest::Test
       bar
     RUBY
 
-    regex = Rundoc::Parser::CODEBLOCK_REGEX
+    regex = Rundoc::Document::CODEBLOCK_REGEX
 
     actual = contents.partition(regex)
     expected = ["foo\n\n",
@@ -132,7 +132,7 @@ class RegexTest < Minitest::Test
       ```
     RUBY
 
-    regex = Rundoc::Parser::CODEBLOCK_REGEX
+    regex = Rundoc::Document::CODEBLOCK_REGEX
     match = contents.match(regex)
     assert_equal "java", match[:lang]
     assert_equal "```", match[:fence]
@@ -155,7 +155,7 @@ class RegexTest < Minitest::Test
       :::>> $ echo "hello"
       ```
     MD
-    regex = Rundoc::Parser::CODEBLOCK_REGEX
+    regex = Rundoc::Document::CODEBLOCK_REGEX
     match = code_block_with_newline.match(regex)
     assert_equal expected, match.to_s.strip
 

@@ -1,9 +1,10 @@
 module Rundoc
-  # This poorly named class is responsible for taking in the raw markdown and running it
+  # Represents a single rundoc file on disk,
   #
-  # It works by pulling out the code blocks (CodeSection), and putting them onto a stack.
-  # It then executes each in turn and records the results.
-  class Parser
+  # Each document contains one or more fenced code blocks.
+  # Those are parsed as `FencedCodeBlock` instances and then
+  # executed.
+  class Document
     GITHUB_BLOCK = '^(?<fence>(?<fence_char>~|`){3,})\s*?(?<lang>\w+)?\s*?\n(?<contents>.*?)^\g<fence>\g<fence_char>*\s*?\n?'
     CODEBLOCK_REGEX = /(#{GITHUB_BLOCK})/m
     PARTIAL_RESULT = []
@@ -66,5 +67,3 @@ module Rundoc
     end
   end
 end
-
-# convert string of markdown to array of strings and code_command

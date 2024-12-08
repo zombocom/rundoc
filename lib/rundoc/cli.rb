@@ -157,7 +157,7 @@ module Rundoc
 
       io.puts "## Working dir is #{execution_context.output_dir}"
       Dir.chdir(execution_context.output_dir) do
-        parser = Rundoc::Parser.new(
+        parser = Rundoc::Document.new(
           source_contents,
           context: execution_context
         )
@@ -203,7 +203,7 @@ module Rundoc
         to: on_failure_dir
       )
 
-      on_failure_dir.join("RUNDOC_FAILED.md").write(Rundoc::Parser.partial_result_to_doc)
+      on_failure_dir.join("RUNDOC_FAILED.md").write(Rundoc::Document.partial_result_to_doc)
     end
 
     private def on_success(output)
