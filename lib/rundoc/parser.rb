@@ -55,7 +55,9 @@ module Rundoc
         unless code.empty?
           match = code.match(CODEBLOCK_REGEX)
           @stack << CodeSection.new(
-            match,
+            fence: match[:fence],
+            lang: match[:lang],
+            code: match[:contents],
             context: context
           )
         end

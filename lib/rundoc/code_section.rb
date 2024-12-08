@@ -18,15 +18,14 @@ module Rundoc
       @env[:commands].map { |c| c[:object] }
     end
 
-    def initialize(match, context:)
+    def initialize(fence:, lang:, code:, context:)
+      @fence = fence
+      @lang = lang
+      @code = code
       @executed = false
-      @original = match.to_s
       @env = {}
       @stack = []
       @context = context
-      @fence = match[:fence]
-      @lang = match[:lang]
-      @code = match[:contents]
       @rendered = ""
       self.class.parse_code_commands(@code).each do |code_command|
         @stack << code_command
