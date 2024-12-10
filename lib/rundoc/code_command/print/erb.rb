@@ -31,7 +31,7 @@ class Rundoc::CodeCommand
       @render ||= ERB.new([@line, contents].compact.join("\n")).result(@binding)
     end
 
-    def call(erb = {})
+    def call(env = {})
       if render_before?
         ""
       else
