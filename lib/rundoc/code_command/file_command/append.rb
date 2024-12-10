@@ -12,7 +12,9 @@ class Rundoc::CodeCommand::FileCommand
     def to_md(env)
       return unless render_command?
 
-      raise "must call write in its own code section" unless env[:commands].empty?
+      if env[:commands].any? {|c| c[:object].not_hidden? }
+        raise "Must call append in its own code section"
+      end
 
       env[:before] << if @line_number
         "In file `#{filename}`, on line #{@line_number} add:"
