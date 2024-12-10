@@ -10,9 +10,9 @@ class EmptyBinding
   end
 end
 
-RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
 
 class Rundoc::CodeCommand
+  RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
   class PrintERB < Rundoc::CodeCommand
     def initialize(line = nil, binding: "default")
       @line = line
