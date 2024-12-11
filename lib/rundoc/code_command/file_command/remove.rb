@@ -7,7 +7,7 @@ class Rundoc::CodeCommand::FileCommand
     end
 
     def to_md(env)
-      if env[:commands].any? {|c| c[:object].not_hidden? }
+      if env[:commands].any? { |c| c[:object].not_hidden? }
         raise "Must call remove in its own code section"
       end
 

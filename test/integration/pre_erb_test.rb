@@ -13,7 +13,6 @@ class IntegrationPreErb < Minitest::Test
 
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-        env = {}
         expected = <<~EOF
           In file `lol.txt` write:
 
@@ -41,7 +40,6 @@ class IntegrationPreErb < Minitest::Test
 
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-        env = {}
         expected = <<~EOF
           ```
           $ echo #{key}

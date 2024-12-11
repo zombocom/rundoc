@@ -55,7 +55,7 @@ module Rundoc
       env[:context] = @context
       env[:stack] = @stack
 
-      while code_command = @stack.pop
+      while (code_command = @stack.pop)
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
         result << code_line if code_command.render_command?

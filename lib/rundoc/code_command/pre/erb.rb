@@ -1,4 +1,4 @@
-require_relative "../print/erb.rb"
+require_relative "../print/erb"
 
 class Rundoc::CodeCommand
   class PreErb < Rundoc::CodeCommand

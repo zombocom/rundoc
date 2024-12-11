@@ -12,7 +12,7 @@ class Rundoc::CodeCommand::FileCommand
     def to_md(env)
       return unless render_command?
 
-      if env[:commands].any? {|c| c[:object].not_hidden? }
+      if env[:commands].any? { |c| c[:object].not_hidden? }
         raise "Must call append in its own code section"
       end
 
