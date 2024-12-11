@@ -1,5 +1,7 @@
 ## HEAD
 
+## 4.1.0
+
 - Add: Rundoc command `pre.erb` command used for dynamically templating any command using ERB syntax. (https://github.com/zombocom/rundoc/pull/90)
 
 ## 4.0.0
