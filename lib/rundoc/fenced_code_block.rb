@@ -34,7 +34,7 @@ module Rundoc
       @context = context
       @rendered = ""
       self.class.parse_code_commands(@code).each do |code_command|
-        @stack << code_command
+        @stack.unshift(code_command)
       end
 
       PARTIAL_RESULT.clear
@@ -53,8 +53,9 @@ module Rundoc
       env[:before] = []
       env[:after] = []
       env[:context] = @context
+      env[:stack] = @stack
 
-      @stack.each do |code_command|
+      while (code_command = @stack.pop)
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
         result << code_line if code_command.render_command?

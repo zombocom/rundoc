@@ -1,5 +1,7 @@
 ## HEAD
 
+- Add: Rundoc command `pre.erb` command used for dynamically templating any command using ERB syntax. (https://github.com/zombocom/rundoc/pull/90)
+
 ## 4.0.0
 
 - Add: Rundoc command `background.stdin_write` to send a string to a backtround process' STDIN. This allows driving REPL interfaces (https://github.com/zombocom/rundoc/pull/79)

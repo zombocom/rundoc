@@ -73,6 +73,8 @@ This will generate a project folder with your project in it, and a markdown `REA
 - Execute Bash Commands
   - [$](#shell-commands)
   - [fail.$](#shell-commands)
+- Dynamic command templating
+  - [pre.erb](#pre.erb)
 - Printing
   - [print.text](#print)
   - [print.erb](#print)
@@ -256,6 +258,66 @@ However this command would fall on its face:
 These custom commands are kept to a minimum, and for the most part behave as you would expect them to. Write your docs as you normally would and check the output frequently.
 
 Running shell commands like this can be very powerful, you'll likely want more control of how you manipulate files in your project. To do this you can use the `file.` namespace:
+
+## Dynamic command templating
+
+Meta commands that produce no output but instead allow for generating commands via dynamic templates.
+
+Current Commands:
+
+- `pre.erb`
+
+### pre.erb
+
+Placing `pre.erb` in-front of another command will allow dynmaic templating via Ruby's [ERB](https://rubyapi.org/3.3/o/erb) syntax.
+
+For example:
+
+  ```
+  :::>> pre.erb $ echo "The answer to everything is <%= 6*7 %>"
+  ```
+
+When this runs, it will first replace the template with the result of the ERB. It would be the same as this:
+
+    ```
+    :::>> $ echo "The answer to everything is 42"
+    ```
+
+The binding (variable and method scope) for `pre.erb` is shared across all executions and the default `print.erb` command. That means you can use it to persist data or logic and re-use it:
+
+    ```ruby
+    :::-- print.erb <%
+      # Won't be rendered because it's using `--` visibility
+      def lol
+        "haha"
+      end
+
+      user = "Schneems"
+    %>
+    ```
+
+    ```
+    :::>> pre.erb $ echo <%= user %> said <%= lol() %> | tr '[:lower:]' '[:upper:]'
+    ```
+
+When run, this would produce:
+
+    ```
+    $ echo Schneems said haha | tr '[:lower:]' '[:upper:]'
+    SCHNEEMS SAID HAHA
+    ```
+
+Multi-line commands are also supported
+
+    ```
+    :::>> pre.erb file.write "lol.txt"
+    Super secret key:
+      <%= "#{key}" %>
+    ```
+
+The only thing to watch out for is if the resulting template contains a `:::>>` (or similar) rundoc marker at the beginning of the line; Rundoc will think it is a new command rather than a part of `pre.erb` template.
+
+The visibility of the `pre.erb` is forwarded to whatever command is run.
 
 ## Print
 
