@@ -74,7 +74,7 @@ This will generate a project folder with your project in it, and a markdown `REA
   - [$](#shell-commands)
   - [fail.$](#shell-commands)
 - Dynamic command templating
-  - [pre.erb](#pre.erb)
+  - [pre.erb](#preerb)
 - Printing
   - [print.text](#print)
   - [print.erb](#print)
