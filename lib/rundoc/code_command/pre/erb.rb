@@ -2,8 +2,8 @@ require_relative "../print/erb.rb"
 
 class Rundoc::CodeCommand
   class PreErb < Rundoc::CodeCommand
-    def initialize(contents)
-      @contents = contents
+    def initialize(line)
+      @line = line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil
       @command = nil
@@ -29,7 +29,11 @@ class Rundoc::CodeCommand
         vis = +""
         vis += @render_delegate_result ? ">" : "-"
         vis += @render_delegate_command ? ">" : "-"
-        @template = ":::#{vis} #{@contents}"
+        code = [@line, @contents]
+          .compact
+          .reject(&:empty?)
+          .join("\n")
+        @template = ":::#{vis} #{code}"
 
         puts "pre.erb: Applying ERB, template:\n#{@template}"
         result = ERB.new(@template).result(@binding)
