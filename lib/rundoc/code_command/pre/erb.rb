@@ -27,8 +27,8 @@ class Rundoc::CodeCommand
     def code
       @code ||= begin
         vis = +""
-        vis += @render_delegate_result ? ">" : "-"
         vis += @render_delegate_command ? ">" : "-"
+        vis += @render_delegate_result ? ">" : "-"
         code = [@line, @contents]
           .compact
           .reject(&:empty?)

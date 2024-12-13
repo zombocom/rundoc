@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Visibility forwarding for `pre.erb` was accidentally reversed, this is now fixed. (https://github.com/zombocom/rundoc/pull/93)
+
 ## 4.1.0
 
 - Add: Rundoc command `pre.erb` command used for dynamically templating any command using ERB syntax. (https://github.com/zombocom/rundoc/pull/90)
