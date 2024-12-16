@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Internal error in `background.wait` introduced in 4.1.2 (https://github.com/zombocom/rundoc/pull/97)
+
 ## 4.1.2
 
 - Fix: Background task name lookup is now lazy, this fixes a bug when using `:::>- pre.erb background.start(...)` (https://github.com/zombocom/rundoc/pull/95)
