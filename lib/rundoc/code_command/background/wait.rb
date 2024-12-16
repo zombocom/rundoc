@@ -8,7 +8,7 @@ class Rundoc::CodeCommand::Background
     end
 
     def background
-      @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(name)
+      @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
     end
 
     def to_md(env = {})
