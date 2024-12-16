@@ -1,6 +1,7 @@
 ## HEAD
 
 - Fix: Internal error in `background.wait` introduced in 4.1.2 (https://github.com/zombocom/rundoc/pull/97)
+- Fix: Website commands such as `:::>> website.visit(...)` now use lazy lookup (like Background tasks since 4.1.2). This allows `pre.erb` to be used with these commands (https://github.com/zombocom/rundoc/pull/98)
 
 ## 4.1.2
 
