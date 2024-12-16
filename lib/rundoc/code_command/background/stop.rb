@@ -1,7 +1,12 @@
 class Rundoc::CodeCommand::Background
   class Stop < Rundoc::CodeCommand
     def initialize(name:)
-      @spawn = Rundoc::CodeCommand::Background::ProcessSpawn.find(name)
+      @name = name
+      @background = nil
+    end
+
+    def background
+      @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
     end
 
     def to_md(env = {})
@@ -9,8 +14,8 @@ class Rundoc::CodeCommand::Background
     end
 
     def call(env = {})
-      @spawn.stop
-      @spawn.log.read
+      background.stop
+      background.log.read
     end
   end
 end

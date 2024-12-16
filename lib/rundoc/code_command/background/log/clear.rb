@@ -1,7 +1,12 @@
 class Rundoc::CodeCommand::Background::Log
   class Clear < Rundoc::CodeCommand
     def initialize(name:)
-      @spawn = Rundoc::CodeCommand::Background::ProcessSpawn.find(name)
+      @name = name
+      @background = nil
+    end
+
+    def background
+      @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
     end
 
     def to_md(env = {})
@@ -9,7 +14,7 @@ class Rundoc::CodeCommand::Background::Log
     end
 
     def call(env = {})
-      @spawn.log.truncate(0)
+      background.log.truncate(0)
       ""
     end
   end
