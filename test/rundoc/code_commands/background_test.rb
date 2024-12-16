@@ -4,15 +4,19 @@ class BackgroundTest < Minitest::Test
   def test_stdin_with_cat_echo
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
-        background_start = Rundoc::CodeCommand::Background::Start.new("cat",
-          name: "cat")
-        background_start.call
-
-        output = Rundoc::CodeCommand::Background::StdinWrite.new(
+        # Intentionally out of order, should not raise an error as long as "cat"
+        # command exists at execution time
+        stdin_write = Rundoc::CodeCommand::Background::StdinWrite.new(
           "hello there",
           name: "cat",
           wait: "hello"
-        ).call
+        )
+
+        background_start = Rundoc::CodeCommand::Background::Start.new("cat",
+          name: "cat")
+
+        background_start.call
+        output = stdin_write.call
         assert_equal("hello there" + $/, output)
 
         Rundoc::CodeCommand::Background::Log::Clear.new(

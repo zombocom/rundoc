@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Background task name lookup is now lazy, this fixes a bug when using `:::>- pre.erb background.start(...)` (https://github.com/zombocom/rundoc/pull/95)
+
 ## 4.1.1
 
 - Fix: Visibility forwarding for `pre.erb` was accidentally reversed, this is now fixed. (https://github.com/zombocom/rundoc/pull/93)
