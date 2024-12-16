@@ -2,7 +2,11 @@ class Rundoc::CodeCommand::Website
   class Navigate < Rundoc::CodeCommand
     def initialize(name:)
       @name = name
-      @driver = Rundoc::CodeCommand::Website::Driver.find(name)
+      @driver = nil
+    end
+
+    def driver
+      @driver ||= Rundoc::CodeCommand::Website::Driver.find(@name)
     end
 
     def to_md(env = {})
@@ -11,7 +15,7 @@ class Rundoc::CodeCommand::Website
 
     def call(env = {})
       puts "website.navigate [#{@name}]: #{contents}"
-      @driver.safe_eval(contents, env)
+      driver.safe_eval(contents, env)
       ""
     end
 

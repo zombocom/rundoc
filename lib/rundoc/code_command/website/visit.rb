@@ -6,14 +6,21 @@ class Rundoc::CodeCommand::Website
       @name = name
       @url = url
       @scroll = scroll
-      @driver = Driver.new(
-        name: name,
-        url: url,
-        height: height,
-        width: width,
-        visible: visible
-      )
-      Driver.add(@name, @driver)
+      @height = height
+      @width = width
+      @visible = visible
+    end
+
+    def driver
+      @driver ||= Driver.new(
+        name: @name,
+        url: @url,
+        height: @height,
+        width: @width,
+        visible: @visible
+      ).tap do |driver|
+        Driver.add(@name, driver)
+      end
     end
 
     def to_md(env = {})
@@ -26,11 +33,11 @@ class Rundoc::CodeCommand::Website
 
       puts message
 
-      @driver.visit(@url) if @url
-      @driver.scroll(@scroll) if @scroll
+      driver.visit(@url) if @url
+      driver.scroll(@scroll) if @scroll
 
       return "" if contents.nil? || contents.empty?
-      @driver.safe_eval(contents, env)
+      driver.safe_eval(contents, env)
 
       ""
     end

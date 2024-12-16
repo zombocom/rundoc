@@ -6,6 +6,8 @@ class IntegrationWebsiteTest < Minitest::Test
       ```
       :::>> website.visit(name: "example", url: "http://example.com")
       :::>> website.screenshot(name: "example")
+      :::>> website.navigate(name: "example")
+      session.execute_script "window.scrollBy(0,10)"
       ```
     RUBY
 
