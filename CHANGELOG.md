@@ -1,5 +1,7 @@
 ## HEAD
 
+## 4.1.2
+
 - Fix: Background task name lookup is now lazy, this fixes a bug when using `:::>- pre.erb background.start(...)` (https://github.com/zombocom/rundoc/pull/95)
 
 ## 4.1.1
