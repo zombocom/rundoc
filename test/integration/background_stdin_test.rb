@@ -6,21 +6,7 @@ class BackgroundStdinTest < Minitest::Test
       Dir.chdir(dir) do
         dir = Pathname(dir)
         script = dir.join("script.rb")
-        script.write <<~'EOF'
-          $stdout.sync = true
-
-          print "> "
-          while line = gets
-            puts line
-            if line.strip == "exit"
-              puts "Bye"
-              return
-            else
-              puts "You said: #{line}"
-            end
-            print "> "
-          end
-        EOF
+        script.write loop_script
 
         source_path = dir.join("RUNDOC.md")
         source_path.write <<~EOF
@@ -53,5 +39,23 @@ class BackgroundStdinTest < Minitest::Test
         assert readme.include?(expected)
       end
     end
+  end
+
+  def loop_script
+    <<~'EOF'
+      $stdout.sync = true
+
+      print "> "
+      while line = gets
+        puts line
+        if line.strip == "exit"
+          puts "Bye"
+          return
+        else
+          puts "You said: #{line}"
+        end
+        print "> "
+      end
+    EOF
   end
 end
