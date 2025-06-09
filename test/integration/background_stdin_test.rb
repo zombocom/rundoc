@@ -74,7 +74,7 @@ class BackgroundStdinTest < Minitest::Test
     end
   end
 
-  def assert_include(actual: , include_str:)
+  def assert_include(actual:, include_str:)
     assert actual.include?(include_str), "Expected to find `#{include_str}` in output, but did not. Output:\n#{actual}"
   end
 

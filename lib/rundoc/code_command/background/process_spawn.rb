@@ -125,7 +125,6 @@ class Rundoc::CodeCommand::Background
       @pipe_input.close
       Process.kill("TERM", -Process.getpgid(@pid))
       Process.wait(@pid)
-
     rescue Errno::ESRCH => e
       puts "Error stopping process (command: #{command}): #{e}"
     ensure
