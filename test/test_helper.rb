@@ -86,19 +86,17 @@ class Minitest::Test
 
   # Yields port, exits unexpectedly
   def tcp_unexpected_exit(timeout: 30)
-    Timeout::timeout(timeout) do
+    Timeout.timeout(timeout) do
       threads = []
-      server = TCPServer.new('127.0.0.1', 0)
+      server = TCPServer.new("127.0.0.1", 0)
       port = server.addr[1]
       threads << Thread.new do
-        begin
-          # Accept one connection, then raise an error to simulate unexpected close
-          client = server.accept
-          raise "Unexpected server error!"
-        rescue => e
-          # Simulate crash, but let ensure run
-        end
-      end.tap {|t| t.abort_on_exception = false }
+        # Accept one connection, then raise an error to simulate unexpected close
+        server.accept
+        raise "Unexpected server error!"
+      rescue
+        # Simulate crash, but let ensure run
+      end.tap { |t| t.abort_on_exception = false }
 
       threads << Thread.new do
         yield port

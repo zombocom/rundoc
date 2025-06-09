@@ -50,7 +50,7 @@ class IntegrationWebsiteTest < Minitest::Test
     end
   end
 
-  def assert_logs_include(logs: , include_str: )
+  def assert_logs_include(logs:, include_str:)
     assert logs.include?(include_str), "Expected logs to include #{include_str} but they didnt. Logs:\n#{logs}"
   end
 end
