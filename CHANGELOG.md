@@ -1,5 +1,7 @@
 ## HEAD
 
+- Fix: Net::ReadTimeout errors on `website.visit` are now retried by default (https://github.com/zombocom/rundoc/pull/103)
+
 ## 4.1.3
 
 - Fix: Internal error in `background.wait` introduced in 4.1.2 (https://github.com/zombocom/rundoc/pull/97)
