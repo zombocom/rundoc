@@ -28,8 +28,20 @@ class Rundoc::CodeCommand::Website
       @session = Capybara::Session.new(driver_name)
     end
 
-    def visit(url)
-      @session.visit(url)
+    def visit(url, max_attempts: 3, delay: 1)
+      attempts = 0
+      begin
+        @session.visit(url)
+      rescue ::Net::ReadTimeout => e
+        attempts += 1
+        if attempts > max_attempts
+          raise e
+        else
+          @io.puts "Error visiting url (#{attempts}/#{max_attempts}) `#{url}`:\n#{e}"
+          sleep delay
+          retry
+        end
+      end
     end
 
     def timestamp

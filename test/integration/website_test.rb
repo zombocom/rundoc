@@ -34,4 +34,23 @@ class IntegrationWebsiteTest < Minitest::Test
       end
     end
   end
+
+  def test_retry_client_closed_early
+    tcp_unexpected_exit do |port|
+      io = StringIO.new
+      driver = Rundoc::CodeCommand::Website::Driver.new(name: SecureRandom.hex, url: nil, read_timeout: 0.1, io: io)
+      assert_raises(Net::ReadTimeout) do
+        driver.visit("http://localhost:#{port}", max_attempts: 3, delay: 0)
+      end
+
+      logs = io.string
+      assert_logs_include(logs: logs, include_str: "Error visiting url (1/3)")
+      assert_logs_include(logs: logs, include_str: "Error visiting url (2/3)")
+      assert_logs_include(logs: logs, include_str: "Error visiting url (3/3)")
+    end
+  end
+
+  def assert_logs_include(logs: , include_str: )
+    assert logs.include?(include_str), "Expected logs to include #{include_str} but they didnt. Logs:\n#{logs}"
+  end
 end
