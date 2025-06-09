@@ -45,7 +45,7 @@ class Rundoc::CodeCommand::Background
     attr_reader :log, :pid, :command
 
     def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
-      @command = command
+      @original_command = command
       @timeout_value = timeout
       @log_reference = log # https://twitter.com/schneems/status/1285289971083907075
 
@@ -54,7 +54,7 @@ class Rundoc::CodeCommand::Background
       FileUtils.touch(@log)
       @pipe_output, @pipe_input = IO.pipe
 
-      @command = "/usr/bin/env bash -c #{@command.shellescape} >> #{@log} #{out}"
+      @command = "/usr/bin/env bash -c #{@original_command.shellescape} >> #{@log} #{out}"
       @pid = nil
     end
 
