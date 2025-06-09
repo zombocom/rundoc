@@ -47,7 +47,7 @@ class Rundoc::CodeCommand::Background
     def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
       @original_command = command
       @timeout_value = timeout
-      @log_reference = log # https://twitter.com/schneems/status/1285289971083907075
+      @log_reference = log # Need to keep a reference to `Tempfile` or it will be deleted. Pathname does not retain the passed in reference
 
       @log = Pathname.new(log)
       @log.dirname.mkpath
