@@ -177,7 +177,7 @@ module Rundoc
         next unless task.alive?
 
         io.puts "Warning background task is still running, cleaning up: name: #{name}"
-        task.stop
+        task.stop(print_io: io)
       end
 
       if execution_context.output_dir.exist?
