@@ -67,7 +67,7 @@ class BackgroundStdinTest < Minitest::Test
           on_success_dir: dir.join(SUCCESS_DIRNAME)
         ).call
 
-        assert_include(actual: io.string, include_str: "Warning background task is still running, cleaning up: name: script")
+        assert_include(actual: io.string, include_str: "Warning background task is still running, cleaning up: `background_ungraceful_exit`")
         assert_include(actual: io.string, include_str: "Log contents for `/usr/bin/env bash -c")
         assert_include(actual: io.string, include_str: "You said: hello")
       end
