@@ -6,7 +6,7 @@ class Rundoc::CodeCommand::Website
   class Driver
     attr_reader :session
 
-    def initialize(name:, url:, width: 1024, height: 720, visible: false, io: $stdout)
+    def initialize(name:, url:, width: 1024, height: 720, visible: false, io: $stdout, read_timeout: 60)
       @io = io
       browser_options = ::Selenium::WebDriver::Chrome::Options.new
       browser_options.args << "--headless" unless visible
@@ -16,7 +16,10 @@ class Rundoc::CodeCommand::Website
       @width = width
       @height = height
 
-      @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options)
+      client = Selenium::WebDriver::Remote::Http::Default.new
+      client.read_timeout = read_timeout
+
+      @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options, http_client: client)
       driver_name = :"rundoc_driver_#{name}"
       Capybara.register_driver(driver_name) do |app|
         @driver
