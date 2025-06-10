@@ -45,16 +45,16 @@ class Rundoc::CodeCommand::Background
     attr_reader :log, :pid, :command
 
     def initialize(command, timeout: 5, log: Tempfile.new("log"), out: "2>&1")
-      @command = command
+      @original_command = command
       @timeout_value = timeout
-      @log_reference = log # https://twitter.com/schneems/status/1285289971083907075
+      @log_reference = log # Need to keep a reference to `Tempfile` or it will be deleted. Pathname does not retain the passed in reference
 
       @log = Pathname.new(log)
       @log.dirname.mkpath
       FileUtils.touch(@log)
       @pipe_output, @pipe_input = IO.pipe
 
-      @command = "/usr/bin/env bash -c #{@command.shellescape} >> #{@log} #{out}"
+      @command = "/usr/bin/env bash -c #{@original_command.shellescape} >> #{@log} #{out}"
       @pid = nil
     end
 
@@ -120,13 +120,15 @@ class Rundoc::CodeCommand::Background
       contents
     end
 
-    def stop
+    def stop(print_io: nil)
       return unless alive?
       @pipe_input.close
       Process.kill("TERM", -Process.getpgid(@pid))
       Process.wait(@pid)
     rescue Errno::ESRCH => e
       puts "Error stopping process (command: #{command}): #{e}"
+    ensure
+      print_io&.puts "Log contents for `#{command}`:\n#{@log.read}"
     end
 
     def check_alive!
