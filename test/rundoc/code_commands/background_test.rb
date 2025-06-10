@@ -88,6 +88,8 @@ class BackgroundTest < Minitest::Test
 
         run!("echo 'bar' >> #{file}")
 
+        background_start.background.wait("bar")
+
         log_read = Rundoc::CodeCommand::Background::Log::Read.new(name: "tail")
         output = log_read.call
 

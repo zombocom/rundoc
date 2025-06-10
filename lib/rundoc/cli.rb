@@ -176,8 +176,8 @@ module Rundoc
       Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
         next unless task.alive?
 
-        io.puts "Warning background task is still running, cleaning up: name: #{name}"
-        task.stop
+        io.puts "Warning background task is still running, cleaning up: `#{name}`"
+        task.stop(print_io: io)
       end
 
       if execution_context.output_dir.exist?
