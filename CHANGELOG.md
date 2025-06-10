@@ -1,5 +1,6 @@
 ## HEAD
 
+- Fix: Net::ReadTimeout errors on `website.visit` are now retried by default (https://github.com/zombocom/rundoc/pull/103)
 - Added: When a background process (`background.start`) does not exit cleanly, print its logs for help with debugging. (https://github.com/zombocom/rundoc/pull/104)
 
 ## 4.1.3

@@ -9,6 +9,8 @@ require "rundoc"
 require "minitest/autorun"
 require "mocha/minitest"
 require "tmpdir"
+require "socket"
+require "timeout"
 
 class Minitest::Test
   SUCCESS_DIRNAME = Rundoc::CLI::DEFAULTS::ON_SUCCESS_DIR
@@ -80,5 +82,31 @@ class Minitest::Test
     end
 
     attr_reader :value
+  end
+
+  # Yields port, exits unexpectedly
+  def tcp_unexpected_exit(timeout: 30)
+    Timeout.timeout(timeout) do
+      threads = []
+      server = TCPServer.new("127.0.0.1", 0)
+      port = server.addr[1]
+      threads << Thread.new do
+        # Accept one connection, then raise an error to simulate unexpected close
+        server.accept
+        raise "Unexpected server error!"
+      rescue
+        # Simulate crash, but let ensure run
+      end.tap { |t| t.abort_on_exception = false }
+
+      threads << Thread.new do
+        yield port
+      end
+
+      while threads.all?(&:alive?)
+        sleep 0.1
+      end
+    ensure
+      server.close if server && !server.closed?
+    end
   end
 end

@@ -6,7 +6,8 @@ class Rundoc::CodeCommand::Website
   class Driver
     attr_reader :session
 
-    def initialize(name:, url:, width: 1024, height: 720, visible: false)
+    def initialize(name:, url:, width: 1024, height: 720, visible: false, io: $stdout, read_timeout: 60)
+      @io = io
       browser_options = ::Selenium::WebDriver::Chrome::Options.new
       browser_options.args << "--headless" unless visible
       browser_options.args << "--disable-gpu" if Gem.win_platform?
@@ -15,7 +16,10 @@ class Rundoc::CodeCommand::Website
       @width = width
       @height = height
 
-      @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options)
+      client = Selenium::WebDriver::Remote::Http::Default.new
+      client.read_timeout = read_timeout
+
+      @driver = Capybara::Selenium::Driver.new(nil, browser: :chrome, options: browser_options, http_client: client)
       driver_name = :"rundoc_driver_#{name}"
       Capybara.register_driver(driver_name) do |app|
         @driver
@@ -24,8 +28,20 @@ class Rundoc::CodeCommand::Website
       @session = Capybara::Session.new(driver_name)
     end
 
-    def visit(url)
-      @session.visit(url)
+    def visit(url, max_attempts: 3, delay: 1)
+      attempts = 0
+      begin
+        @session.visit(url)
+      rescue ::Net::ReadTimeout => e
+        attempts += 1
+        if attempts > max_attempts
+          raise e
+        else
+          @io.puts "Error visiting url (#{attempts}/#{max_attempts}) `#{url}`:\n#{e}"
+          sleep delay
+          retry
+        end
+      end
     end
 
     def timestamp
@@ -54,7 +70,7 @@ class Rundoc::CodeCommand::Website
       msg = +""
       msg << "Error running code #{code.inspect} at #{current_url.inspect}\n"
       msg << "saving a screenshot to: `tmp/error.png`"
-      puts msg
+      @io.puts msg
       error_path = env[:context].screenshots_dir.join("error.png")
       session.save_screenshot(error_path)
       raise e
@@ -66,13 +82,13 @@ class Rundoc::CodeCommand::Website
       file_name = self.class.next_screenshot_name
       file_path = screenshots_dir.join(file_name)
       session.save_screenshot(file_path)
-      puts "Screenshot saved to #{file_path}"
+      @io.puts "Screenshot saved to #{file_path}"
 
       return file_path unless upload
 
       case upload
       when "s3", "aws"
-        puts "Uploading screenshot to S3"
+        @io.puts "Uploading screenshot to S3"
         require "aws-sdk-s3"
         ENV.fetch("AWS_ACCESS_KEY_ID")
         s3 = Aws::S3::Resource.new(region: ENV.fetch("AWS_REGION"))
