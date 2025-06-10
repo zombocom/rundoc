@@ -67,15 +67,24 @@ class BackgroundStdinTest < Minitest::Test
           on_success_dir: dir.join(SUCCESS_DIRNAME)
         ).call
 
-        assert_include(actual: io.string, include_str: "Warning background task is still running, cleaning up: `background_ungraceful_exit`")
-        assert_include(actual: io.string, include_str: "Log contents for `/usr/bin/env bash -c")
-        assert_include(actual: io.string, include_str: "You said: hello")
+        logs = io.string
+
+        match_after = partition_match_after(actual: logs, include_str: "Warning background task is still running, cleaning up: `background_ungraceful_exit`")
+        match_after = partition_match_after(actual: match_after, include_str: "Log contents for `/usr/bin/env bash -c")
+        partition_match_after(actual: match_after, include_str: "> hello")
       end
     end
   end
 
-  def assert_include(actual:, include_str:)
-    assert actual.include?(include_str), "Expected to find `#{include_str}` in output, but did not. Output:\n#{actual}"
+  # Finds the include_str if it exists or raises an error
+  # Returns the contents of that string and everything after it
+  #
+  # Used to handle the case where output might be in the logs twice and we want to verify the order
+  def partition_match_after(actual:, include_str:)
+    _before, match, after = actual.partition(include_str)
+    found = match && !match.empty?
+    assert found, "Expected to find `#{include_str}` in output, but did not. Output:\n#{actual}"
+    [match, after].join
   end
 
   def loop_script
