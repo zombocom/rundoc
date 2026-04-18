@@ -6,11 +6,11 @@ class BackgroundTest < Minitest::Test
       Dir.chdir(dir) do
         # Intentionally out of order, should not raise an error as long as "cat"
         # command exists at execution time
-        stdin_write = Rundoc::CodeCommand::Background::StdinWrite.new(
+        stdin_write = Rundoc::CodeCommand::Background::StdinWriteRunner.new(user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
           "hello there",
           name: "cat",
           wait: "hello"
-        )
+        ))
 
         background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("cat",
           name: "cat"))
@@ -32,11 +32,11 @@ class BackgroundTest < Minitest::Test
           )
         ).call
 
-        output = Rundoc::CodeCommand::Background::StdinWrite.new(
+        output = Rundoc::CodeCommand::Background::StdinWriteRunner.new(user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
           "general kenobi",
           name: "cat",
           wait: "general"
-        ).call
+        )).call
         assert_equal("general kenobi" + $/, output)
       end
     end
