@@ -15,11 +15,19 @@ module Rundoc
       end
     end
 
-    class Write < Rundoc::CodeCommand
+    class WriteArgs
+      attr_reader :path
+
+      def initialize(path)
+        @path = Pathname(path)
+      end
+    end
+
+    class WriteRunner < Rundoc::CodeCommand
       include FileUtil
 
-      def initialize(filename)
-        @filename = filename
+      def initialize(user_args: )
+        @filename = user_args.path.to_s
       end
 
       def to_md(env)
@@ -43,8 +51,8 @@ module Rundoc
   end
 end
 
-Rundoc.register_code_command(:write, Rundoc::CodeCommand::Write)
-Rundoc.register_code_command(:"file.write", Rundoc::CodeCommand::Write)
+Rundoc.register_code_command(:write, Rundoc::CodeCommand::WriteArgs, runner: Rundoc::CodeCommand::WriteRunner)
+Rundoc.register_code_command(:"file.write", Rundoc::CodeCommand::WriteArgs, runner: Rundoc::CodeCommand::WriteRunner)
 
 require "rundoc/code_command/file_command/append"
 require "rundoc/code_command/file_command/remove"
