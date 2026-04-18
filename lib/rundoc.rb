@@ -24,6 +24,10 @@ module Rundoc
     raise ArgumentError, "Wrong method signature for #{keyword} with arguments: #{original_args.inspect}, error:\n #{e.message}"
   end
 
+  def user_code_runner_klass
+    @user_code_runner_klass ||= {}
+  end
+
   def parser_options
     @parser_options ||= {}
   end
@@ -44,8 +48,9 @@ module Rundoc
     user_code_klass.keys
   end
 
-  def register_code_command(keyword, klass)
+  def register_code_command(keyword, klass, runner: nil)
     user_code_klass[keyword] = klass
+    user_code_runner_klass[keyword] = runner if runner
   end
 
   def configure(&block)
