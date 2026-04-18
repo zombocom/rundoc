@@ -32,24 +32,24 @@ module Rundoc
     @parser_options ||= {}
   end
 
-  def user_code_klass
-    @user_code_klass ||= {}
+  def user_args_runner
+    @user_args_runner ||= {}
   end
 
-  def user_code_klass
-    @user_code_klass ||= {}
+  def user_args
+    @user_args ||= {}
   end
 
   def code_command(keyword)
-    user_code_klass[:"#{keyword}"]
+    user_args[:"#{keyword}"]
   end
 
   def known_commands
-    user_code_klass.keys
+    user_args.keys
   end
 
   def register_code_command(keyword, klass, runner: nil)
-    user_code_klass[keyword] = klass
+    user_args[keyword] = klass
     user_code_runner_klass[keyword] = runner if runner
   end
 
