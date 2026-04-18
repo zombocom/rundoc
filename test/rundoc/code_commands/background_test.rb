@@ -55,7 +55,7 @@ class BackgroundTest < Minitest::Test
         assert_match("foo", output)
         assert_equal(true, background_start.alive?)
 
-        background_stop = Rundoc::CodeCommand::Background::Stop.new(name: "tail2")
+        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail2"))
         background_stop.call
 
         assert_equal(false, background_start.alive?)
@@ -95,7 +95,7 @@ class BackgroundTest < Minitest::Test
 
         assert_equal("bar", output.chomp)
 
-        background_stop = Rundoc::CodeCommand::Background::Stop.new(name: "tail")
+        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail"))
         background_stop.call
 
         assert_equal(false, background_start.alive?)
