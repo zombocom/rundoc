@@ -17,7 +17,7 @@ module Rundoc
       cc = klass.new(*args)
     end
 
-    command = if runner = user_args_runner[keyword]
+    command = if (runner = user_args_runner[keyword])
       runner.new(user_args: cc)
     else
       cc
