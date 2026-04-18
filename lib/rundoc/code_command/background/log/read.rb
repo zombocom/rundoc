@@ -1,7 +1,15 @@
 class Rundoc::CodeCommand::Background::Log
-  class Read < Rundoc::CodeCommand
+  class ReadArgs
+    attr_reader :name
+
     def initialize(name:)
       @name = name
+    end
+  end
+
+  class ReadRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @name = user_args.name
       @background = nil
     end
 
@@ -18,4 +26,4 @@ class Rundoc::CodeCommand::Background::Log
     end
   end
 end
-Rundoc.register_code_command(:"background.log.read", Rundoc::CodeCommand::Background::Log::Read)
+Rundoc.register_code_command(:"background.log.read", Rundoc::CodeCommand::Background::Log::ReadArgs, runner: Rundoc::CodeCommand::Background::Log::ReadRunner)

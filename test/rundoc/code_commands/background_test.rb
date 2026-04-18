@@ -26,8 +26,10 @@ class BackgroundTest < Minitest::Test
           )
         ).call
 
-        Rundoc::CodeCommand::Background::Log::Clear.new(
-          name: "cat"
+        Rundoc::CodeCommand::Background::Log::ClearRunner.new(
+          user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(
+            name: "cat"
+          )
         ).call
 
         output = Rundoc::CodeCommand::Background::StdinWrite.new(
@@ -79,12 +81,12 @@ class BackgroundTest < Minitest::Test
         assert_match("foo", output)
         assert_equal(true, background_start.alive?)
 
-        log_read = Rundoc::CodeCommand::Background::Log::Read.new(name: "tail")
+        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
         output = log_read.call
 
         assert_equal("foo", output.chomp)
 
-        log_clear = Rundoc::CodeCommand::Background::Log::Clear.new(name: "tail")
+        log_clear = Rundoc::CodeCommand::Background::Log::ClearRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(name: "tail"))
         output = log_clear.call
         assert_equal("", output)
 
@@ -92,7 +94,7 @@ class BackgroundTest < Minitest::Test
 
         background_start.background.wait("bar")
 
-        log_read = Rundoc::CodeCommand::Background::Log::Read.new(name: "tail")
+        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
         output = log_read.call
 
         assert_equal("bar", output.chomp)
