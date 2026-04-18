@@ -6,7 +6,7 @@ class PrintTest < Minitest::Test
     env[:before] = []
 
     input = %($ rails new myapp # Not a command since it's missing the ":::>>")
-    cmd = Rundoc::CodeCommand::PrintText.new(input)
+    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input))
     cmd.render_command = false
     cmd.render_result = true
 
@@ -20,7 +20,7 @@ class PrintTest < Minitest::Test
     env[:before] = []
 
     input = %($ rails new myapp # Not a command since it's missing the ":::>>")
-    cmd = Rundoc::CodeCommand::PrintText.new(input)
+    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input))
     cmd.render_command = true
     cmd.render_result = true
 
