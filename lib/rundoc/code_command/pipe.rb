@@ -1,11 +1,16 @@
 module Rundoc
   class CodeCommand
-    class Pipe < Rundoc::CodeCommand
-      # ::: ls
-      # ::: | tail -n 2
-      # => "test\ntmp.file\n"
+    class PipeArgs
+      attr_reader :line
+
       def initialize(line)
-        @delegate = parse(line)
+        @line = line
+      end
+    end
+
+    class PipeRunner < Rundoc::CodeCommand
+      def initialize(user_args:)
+        @delegate = parse(user_args.line)
       end
 
       # before: "",
@@ -43,5 +48,5 @@ module Rundoc
   end
 end
 
-Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::Pipe)
-Rundoc.register_code_command(:|, Rundoc::CodeCommand::Pipe)
+Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::PipeArgs, runner: Rundoc::CodeCommand::PipeRunner)
+Rundoc.register_code_command(:|, Rundoc::CodeCommand::PipeArgs, runner: Rundoc::CodeCommand::PipeRunner)
