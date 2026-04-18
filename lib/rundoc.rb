@@ -28,20 +28,24 @@ module Rundoc
     @parser_options ||= {}
   end
 
-  def code_lookup
-    @code_lookup ||= {}
+  def user_code_klass
+    @user_code_klass ||= {}
+  end
+
+  def user_code_klass
+    @user_code_klass ||= {}
   end
 
   def code_command(keyword)
-    code_lookup[:"#{keyword}"]
+    user_code_klass[:"#{keyword}"]
   end
 
   def known_commands
-    code_lookup.keys
+    user_code_klass.keys
   end
 
   def register_code_command(keyword, klass)
-    code_lookup[keyword] = klass
+    user_code_klass[keyword] = klass
   end
 
   def configure(&block)
