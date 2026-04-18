@@ -54,9 +54,9 @@ module Rundoc
     user_args.keys
   end
 
-  def register_code_command(keyword:, args_klass:, runner_klass: nil)
+  def register_code_command(keyword:, args_klass:, runner_klass:)
     user_args[keyword] = args_klass
-    user_args_runner[keyword] = runner_klass if runner_klass
+    user_args_runner[keyword] = runner_klass
   end
 
   def configure(&block)
