@@ -1,9 +1,17 @@
 class Rundoc::CodeCommand::FileCommand
-  class Append < Rundoc::CodeCommand
-    include FileUtil
+  class AppendArgs
+    attr_reader :filename
 
     def initialize(filename)
-      @filename, line = filename.split("#")
+      @filename = filename
+    end
+  end
+
+  class AppendRunner < Rundoc::CodeCommand
+    include FileUtil
+
+    def initialize(user_args:)
+      @filename, line = user_args.filename.split("#")
       @line_number = if line
         Integer(line)
       end
@@ -74,4 +82,4 @@ class Rundoc::CodeCommand::FileCommand
   end
 end
 
-Rundoc.register_code_command(:"file.append", Rundoc::CodeCommand::FileCommand::Append)
+Rundoc.register_code_command(:"file.append", Rundoc::CodeCommand::FileCommand::AppendArgs, runner: Rundoc::CodeCommand::FileCommand::AppendRunner)
