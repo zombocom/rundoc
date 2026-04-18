@@ -1,9 +1,19 @@
 class Rundoc::CodeCommand::Background
-  class Wait < Rundoc::CodeCommand
+  class WaitArgs
+    attr_reader :name, :wait, :timeout
+
     def initialize(name:, wait:, timeout: 5)
       @name = name
       @wait = wait
-      @timeout_value = Integer(timeout)
+      @timeout = Integer(timeout)
+    end
+  end
+
+  class WaitRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @name = user_args.name
+      @wait = user_args.wait
+      @timeout_value = user_args.timeout
       @background = nil
     end
 
@@ -21,4 +31,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.wait", Rundoc::CodeCommand::Background::Wait)
+Rundoc.register_code_command(:"background.wait", Rundoc::CodeCommand::Background::WaitArgs, runner: Rundoc::CodeCommand::Background::WaitRunner)

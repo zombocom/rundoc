@@ -19,9 +19,11 @@ class BackgroundTest < Minitest::Test
         output = stdin_write.call
         assert_equal("hello there" + $/, output)
 
-        Rundoc::CodeCommand::Background::Wait.new(
-          name: "cat",
-          wait: "hello"
+        Rundoc::CodeCommand::Background::WaitRunner.new(
+          user_args: Rundoc::CodeCommand::Background::WaitArgs.new(
+            name: "cat",
+            wait: "hello"
+          )
         ).call
 
         Rundoc::CodeCommand::Background::Log::Clear.new(
