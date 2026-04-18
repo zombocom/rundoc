@@ -1,9 +1,17 @@
 require_relative "../print/erb"
 
 class Rundoc::CodeCommand
-  class PreErb < Rundoc::CodeCommand
+  class PreErbArgs
+    attr_reader :line
+
     def initialize(line)
       @line = line
+    end
+  end
+
+  class PreErbRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil
       @command = nil
@@ -60,4 +68,4 @@ class Rundoc::CodeCommand
     end
   end
 end
-Rundoc.register_code_command(:"pre.erb", Rundoc::CodeCommand::PreErb)
+Rundoc.register_code_command(:"pre.erb", Rundoc::CodeCommand::PreErbArgs, runner: Rundoc::CodeCommand::PreErbRunner)
