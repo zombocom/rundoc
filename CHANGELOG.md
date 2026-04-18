@@ -1,5 +1,7 @@
 ## HEAD
 
+- Changed: All code commands now use an Args + Runner class pattern. `register_code_command` now requires keyword arguments: `keyword:`, `args_klass:`, and `runner_klass:`.
+
 ## 4.1.4
 
 - Fix: Net::ReadTimeout errors on `website.visit` are now retried by default (https://github.com/zombocom/rundoc/pull/103)
