@@ -1,9 +1,17 @@
 class Rundoc::CodeCommand::FileCommand
-  class Remove < Rundoc::CodeCommand
-    include FileUtil
+  class RemoveArgs
+    attr_reader :filename
 
     def initialize(filename)
       @filename = filename
+    end
+  end
+
+  class RemoveRunner < Rundoc::CodeCommand
+    include FileUtil
+
+    def initialize(user_args:)
+      @filename = user_args.filename
     end
 
     def to_md(env)
@@ -30,4 +38,4 @@ class Rundoc::CodeCommand::FileCommand
   end
 end
 
-Rundoc.register_code_command(:"file.remove", Rundoc::CodeCommand::FileCommand::Remove)
+Rundoc.register_code_command(keyword: :"file.remove", args_klass: Rundoc::CodeCommand::FileCommand::RemoveArgs, runner_klass: Rundoc::CodeCommand::FileCommand::RemoveRunner)

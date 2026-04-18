@@ -1,7 +1,15 @@
 class Rundoc::CodeCommand
-  class PrintText < Rundoc::CodeCommand
+  class PrintTextArgs
+    attr_reader :line
+
     def initialize(line)
       @line = line
+    end
+  end
+
+  class PrintTextRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @line = user_args.line
     end
 
     def to_md(env)
@@ -30,4 +38,4 @@ class Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:"print.text", Rundoc::CodeCommand::PrintText)
+Rundoc.register_code_command(keyword: :"print.text", args_klass: Rundoc::CodeCommand::PrintTextArgs, runner_klass: Rundoc::CodeCommand::PrintTextRunner)

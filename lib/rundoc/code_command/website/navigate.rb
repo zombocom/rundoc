@@ -1,7 +1,15 @@
 class Rundoc::CodeCommand::Website
-  class Navigate < Rundoc::CodeCommand
+  class NavigateArgs
+    attr_reader :name
+
     def initialize(name:)
       @name = name
+    end
+  end
+
+  class NavigateRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @name = user_args.name
       @driver = nil
     end
 
@@ -29,5 +37,5 @@ class Rundoc::CodeCommand::Website
   end
 end
 
-Rundoc.register_code_command(:"website.nav", Rundoc::CodeCommand::Website::Navigate)
-Rundoc.register_code_command(:"website.navigate", Rundoc::CodeCommand::Website::Navigate)
+Rundoc.register_code_command(keyword: :"website.nav", args_klass: Rundoc::CodeCommand::Website::NavigateArgs, runner_klass: Rundoc::CodeCommand::Website::NavigateRunner)
+Rundoc.register_code_command(keyword: :"website.navigate", args_klass: Rundoc::CodeCommand::Website::NavigateArgs, runner_klass: Rundoc::CodeCommand::Website::NavigateRunner)

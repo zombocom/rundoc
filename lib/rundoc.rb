@@ -17,31 +17,46 @@ module Rundoc
       cc = klass.new(*args)
     end
 
-    cc.original_args = original_args
-    cc.keyword = keyword
-    cc
+    command = if (runner = user_args_runner[keyword])
+      runner.new(user_args: cc)
+    else
+      cc
+    end
+
+    command.original_args = original_args
+    command.keyword = keyword
+    command
   rescue ArgumentError => e
     raise ArgumentError, "Wrong method signature for #{keyword} with arguments: #{original_args.inspect}, error:\n #{e.message}"
+  end
+
+  def user_code_runner_klass
+    @user_code_runner_klass ||= {}
   end
 
   def parser_options
     @parser_options ||= {}
   end
 
-  def code_lookup
-    @code_lookup ||= {}
+  def user_args_runner
+    @user_args_runner ||= {}
+  end
+
+  def user_args
+    @user_args ||= {}
   end
 
   def code_command(keyword)
-    code_lookup[:"#{keyword}"]
+    user_args[:"#{keyword}"]
   end
 
   def known_commands
-    code_lookup.keys
+    user_args.keys
   end
 
-  def register_code_command(keyword, klass)
-    code_lookup[keyword] = klass
+  def register_code_command(keyword:, args_klass:, runner_klass:)
+    user_args[keyword] = args_klass
+    user_args_runner[keyword] = runner_klass
   end
 
   def configure(&block)

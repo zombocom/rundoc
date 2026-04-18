@@ -660,36 +660,63 @@ This command `filter_sensitive` can be called multiple times with different valu
 
 ## Writing a new command
 
+> Note: This is an advanced topic and this interface is unstable.
+
 Rundoc does not have a stable internal command interface. You can define your own commands, but unless it is committed in this repo, it may break on a minor version change.
 
 To add a new command it needs to be parsed and called. Examples of commands being implemented are seen in `lib/rundoc/code_command`.
 
-A new command needs to be registered:
+Each command is split into two classes: an **Args** class that handles argument parsing/validation and a **Runner** class that handles execution. Both must be registered:
 
-```
-Rundoc.register_code_command(:lol, Rundoc::CodeCommand::Lol)
+```ruby
+Rundoc.register_code_command(
+  keyword: :lol,
+  args_klass: Rundoc::CodeCommand::LolArgs,
+  runner_klass: Rundoc::CodeCommand::LolRunner
+)
 ```
 
-They should inherit from Rundoc::CodeCommand:
+The Args class is a plain Ruby class. Its initialize method receives input from the document and exposes parsed values via `attr_reader`:
 
-```
-class Rundoc::CodeCommand::Lol < Rundoc::CodeCommand
-  def initialize(line)
+```ruby
+class Rundoc::CodeCommand::LolArgs
+  attr_reader :message
+
+  def initialize(message)
+    @message = message
   end
 end
 ```
 
-The initialize method is called with input from the document. The command is rendered (`:::>-`) by the output of the `def call` method. The contents produced by the command (`:::->`) are rendered by the `def to_md` method.
+The Runner class inherits from `Rundoc::CodeCommand` and receives the args instance via `user_args:`:
+
+```ruby
+class Rundoc::CodeCommand::LolRunner < Rundoc::CodeCommand
+  def initialize(user_args:)
+    @message = user_args.message
+  end
+
+  def to_md(env = {})
+    ""
+  end
+
+  def call(env = {})
+    @message
+  end
+end
+```
+
+The command is rendered (`:::>-`) by the output of the `def call` method. The contents produced by the command (`:::->`) are rendered by the `def to_md` method.
 
 The syntax for commands is ruby-ish but it is a custom grammar implemented in `lib/peg_parser.rb` for more info on manipulating the grammar see this tutorial on how I added keword-like/hash-like syntax https://github.com/schneems/implement_ruby_hash_syntax_with_parslet_example.
 
-Command initialize methods natively support:
+Args class initialize methods natively support:
 
 - Barewords as a single string input
 - Keyword arguments
 - A combination of the two
 
-Anything that is passed to the command via "stdin" is available via a method `self.contents`. The interplay between the input and `self.contents` is not strongly defined.
+Anything that is passed to the command via "stdin" is available on the Runner via a method `self.contents`. The interplay between the input and `self.contents` is not strongly defined.
 
 ## Copyright
 

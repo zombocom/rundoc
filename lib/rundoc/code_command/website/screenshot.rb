@@ -1,8 +1,17 @@
 class Rundoc::CodeCommand::Website
-  class Screenshot < Rundoc::CodeCommand
+  class ScreenshotArgs
+    attr_reader :name, :upload
+
     def initialize(name:, upload: false)
       @name = name
       @upload = upload
+    end
+  end
+
+  class ScreenshotRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @name = user_args.name
+      @upload = user_args.upload
       @driver = nil
     end
 
@@ -35,4 +44,4 @@ class Rundoc::CodeCommand::Website
     # end
   end
 end
-Rundoc.register_code_command(:"website.screenshot", Rundoc::CodeCommand::Website::Screenshot)
+Rundoc.register_code_command(keyword: :"website.screenshot", args_klass: Rundoc::CodeCommand::Website::ScreenshotArgs, runner_klass: Rundoc::CodeCommand::Website::ScreenshotRunner)

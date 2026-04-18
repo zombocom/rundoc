@@ -1,8 +1,5 @@
-class Rundoc::CodeCommand::Bash
-  # special purpose class to persist cd behavior across the entire program
-  # we change the directory of the parent program (rundoc) rather than
-  # changing the directory of a spawned child (via exec, ``, system, etc.)
-  class Cd < Rundoc::CodeCommand::Bash
+class Rundoc::CodeCommand::BashRunner
+  class Cd < Rundoc::CodeCommand::BashRunner
     def initialize(line)
       @line = line
     end

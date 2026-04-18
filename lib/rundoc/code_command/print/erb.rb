@@ -14,10 +14,19 @@ class Rundoc::CodeCommand
   RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
   RUNDOC_DEFAULT_ERB_BINDING = "default"
 
-  class PrintERB < Rundoc::CodeCommand
+  class PrintERBArgs
+    attr_reader :line, :binding_name
+
     def initialize(line = nil, binding: RUNDOC_DEFAULT_ERB_BINDING)
       @line = line
-      @binding = RUNDOC_ERB_BINDINGS[binding]
+      @binding_name = binding
+    end
+  end
+
+  class PrintERBRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @line = user_args.line
+      @binding = RUNDOC_ERB_BINDINGS[user_args.binding_name]
     end
 
     def to_md(env)
@@ -45,4 +54,4 @@ class Rundoc::CodeCommand
     end
   end
 end
-Rundoc.register_code_command(:"print.erb", Rundoc::CodeCommand::PrintERB)
+Rundoc.register_code_command(keyword: :"print.erb", args_klass: Rundoc::CodeCommand::PrintERBArgs, runner_klass: Rundoc::CodeCommand::PrintERBRunner)

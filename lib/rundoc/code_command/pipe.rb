@@ -1,11 +1,16 @@
 module Rundoc
   class CodeCommand
-    class Pipe < Rundoc::CodeCommand
-      # ::: ls
-      # ::: | tail -n 2
-      # => "test\ntmp.file\n"
+    class PipeArgs
+      attr_reader :line
+
       def initialize(line)
-        @delegate = parse(line)
+        @line = line
+      end
+    end
+
+    class PipeRunner < Rundoc::CodeCommand
+      def initialize(user_args:)
+        @delegate = parse(user_args.line)
       end
 
       # before: "",
@@ -31,17 +36,17 @@ module Rundoc
 
         actual = actual.first if actual.is_a?(Array)
 
-        actual = Rundoc::CodeCommand::Bash.new(code) if actual.is_a?(Rundoc::CodeCommand::NoSuchCommand)
+        actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code)) if actual.is_a?(Rundoc::CodeCommand::NoSuchCommand)
         actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash
       rescue Parslet::ParseFailed
-        Rundoc::CodeCommand::Bash.new(code)
+        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code))
       end
     end
   end
 end
 
-Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::Pipe)
-Rundoc.register_code_command(:|, Rundoc::CodeCommand::Pipe)
+Rundoc.register_code_command(keyword: :pipe, args_klass: Rundoc::CodeCommand::PipeArgs, runner_klass: Rundoc::CodeCommand::PipeRunner)
+Rundoc.register_code_command(keyword: :|, args_klass: Rundoc::CodeCommand::PipeArgs, runner_klass: Rundoc::CodeCommand::PipeRunner)

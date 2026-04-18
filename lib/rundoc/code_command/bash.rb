@@ -1,9 +1,14 @@
-class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
-  # line = "cd ..""
-  # line = "pwd"
-  # line = "ls"
+class Rundoc::CodeCommand::BashArgs
+  attr_reader :line
+
   def initialize(line)
     @line = line
+  end
+end
+
+class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
+  def initialize(user_args:)
+    @line = user_args.line
     @contents = ""
     @delegate = case @line.split(" ").first.downcase
     when "cd"
@@ -56,8 +61,8 @@ class Rundoc::CodeCommand::Bash < Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:bash, Rundoc::CodeCommand::Bash)
-Rundoc.register_code_command(:"$", Rundoc::CodeCommand::Bash)
-Rundoc.register_code_command(:"fail.$", Rundoc::CodeCommand::Bash)
+Rundoc.register_code_command(keyword: :bash, args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(keyword: :"$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(keyword: :"fail.$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
 
 require "rundoc/code_command/bash/cd"

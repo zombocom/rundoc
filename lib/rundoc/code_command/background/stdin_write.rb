@@ -1,14 +1,23 @@
 class Rundoc::CodeCommand::Background
-  # Will send contents to the background process via STDIN along with a newline
-  #
-  #
-  class StdinWrite < Rundoc::CodeCommand
+  class StdinWriteArgs
+    attr_reader :contents, :name, :wait, :timeout, :ending
+
     def initialize(contents, name:, wait:, timeout: 5, ending: $/)
       @contents = contents
-      @ending = ending
-      @wait = wait
       @name = name
-      @timeout_value = Integer(timeout)
+      @wait = wait
+      @timeout = Integer(timeout)
+      @ending = ending
+    end
+  end
+
+  class StdinWriteRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @contents = user_args.contents
+      @ending = user_args.ending
+      @wait = user_args.wait
+      @name = user_args.name
+      @timeout_value = user_args.timeout
       @contents_written = nil
       @background = nil
     end
@@ -38,4 +47,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.stdin_write", Rundoc::CodeCommand::Background::StdinWrite)
+Rundoc.register_code_command(keyword: :"background.stdin_write", args_klass: Rundoc::CodeCommand::Background::StdinWriteArgs, runner_klass: Rundoc::CodeCommand::Background::StdinWriteRunner)

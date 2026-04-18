@@ -1,7 +1,15 @@
 class Rundoc::CodeCommand::Background
-  class Stop < Rundoc::CodeCommand
+  class StopArgs
+    attr_reader :name
+
     def initialize(name:)
       @name = name
+    end
+  end
+
+  class StopRunner < Rundoc::CodeCommand
+    def initialize(user_args:)
+      @name = user_args.name
       @background = nil
     end
 
@@ -19,4 +27,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.stop", Rundoc::CodeCommand::Background::Stop)
+Rundoc.register_code_command(keyword: :"background.stop", args_klass: Rundoc::CodeCommand::Background::StopArgs, runner_klass: Rundoc::CodeCommand::Background::StopRunner)
