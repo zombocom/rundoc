@@ -67,4 +67,4 @@ class Rundoc::CodeCommand::Website
   end
 end
 
-Rundoc.register_code_command(:"website.visit", Rundoc::CodeCommand::Website::VisitArgs, runner: Rundoc::CodeCommand::Website::VisitRunner)
+Rundoc.register_code_command(keyword: :"website.visit", args_klass: Rundoc::CodeCommand::Website::VisitArgs, runner_klass: Rundoc::CodeCommand::Website::VisitRunner)

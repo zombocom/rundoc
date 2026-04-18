@@ -53,4 +53,4 @@ class ::Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:"rundoc.require", ::Rundoc::CodeCommand::RundocCommand::RequireArgs, runner: ::Rundoc::CodeCommand::RundocCommand::RequireRunner)
+Rundoc.register_code_command(keyword: :"rundoc.require", args_klass: ::Rundoc::CodeCommand::RundocCommand::RequireArgs, runner_klass: ::Rundoc::CodeCommand::RundocCommand::RequireRunner)

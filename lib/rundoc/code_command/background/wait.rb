@@ -31,4 +31,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.wait", Rundoc::CodeCommand::Background::WaitArgs, runner: Rundoc::CodeCommand::Background::WaitRunner)
+Rundoc.register_code_command(keyword: :"background.wait", args_klass: Rundoc::CodeCommand::Background::WaitArgs, runner_klass: Rundoc::CodeCommand::Background::WaitRunner)

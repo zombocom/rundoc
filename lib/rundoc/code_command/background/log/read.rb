@@ -26,4 +26,4 @@ class Rundoc::CodeCommand::Background::Log
     end
   end
 end
-Rundoc.register_code_command(:"background.log.read", Rundoc::CodeCommand::Background::Log::ReadArgs, runner: Rundoc::CodeCommand::Background::Log::ReadRunner)
+Rundoc.register_code_command(keyword: :"background.log.read", args_klass: Rundoc::CodeCommand::Background::Log::ReadArgs, runner_klass: Rundoc::CodeCommand::Background::Log::ReadRunner)

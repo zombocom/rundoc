@@ -38,4 +38,4 @@ class Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:"print.text", Rundoc::CodeCommand::PrintTextArgs, runner: Rundoc::CodeCommand::PrintTextRunner)
+Rundoc.register_code_command(keyword: :"print.text", args_klass: Rundoc::CodeCommand::PrintTextArgs, runner_klass: Rundoc::CodeCommand::PrintTextRunner)

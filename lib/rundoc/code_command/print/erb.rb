@@ -54,4 +54,4 @@ class Rundoc::CodeCommand
     end
   end
 end
-Rundoc.register_code_command(:"print.erb", Rundoc::CodeCommand::PrintERBArgs, runner: Rundoc::CodeCommand::PrintERBRunner)
+Rundoc.register_code_command(keyword: :"print.erb", args_klass: Rundoc::CodeCommand::PrintERBArgs, runner_klass: Rundoc::CodeCommand::PrintERBRunner)

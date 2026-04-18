@@ -47,4 +47,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.stdin_write", Rundoc::CodeCommand::Background::StdinWriteArgs, runner: Rundoc::CodeCommand::Background::StdinWriteRunner)
+Rundoc.register_code_command(keyword: :"background.stdin_write", args_klass: Rundoc::CodeCommand::Background::StdinWriteArgs, runner_klass: Rundoc::CodeCommand::Background::StdinWriteRunner)

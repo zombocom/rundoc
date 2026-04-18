@@ -37,5 +37,5 @@ class Rundoc::CodeCommand::Website
   end
 end
 
-Rundoc.register_code_command(:"website.nav", Rundoc::CodeCommand::Website::NavigateArgs, runner: Rundoc::CodeCommand::Website::NavigateRunner)
-Rundoc.register_code_command(:"website.navigate", Rundoc::CodeCommand::Website::NavigateArgs, runner: Rundoc::CodeCommand::Website::NavigateRunner)
+Rundoc.register_code_command(keyword: :"website.nav", args_klass: Rundoc::CodeCommand::Website::NavigateArgs, runner_klass: Rundoc::CodeCommand::Website::NavigateRunner)
+Rundoc.register_code_command(keyword: :"website.navigate", args_klass: Rundoc::CodeCommand::Website::NavigateArgs, runner_klass: Rundoc::CodeCommand::Website::NavigateRunner)

@@ -48,5 +48,5 @@ module Rundoc
   end
 end
 
-Rundoc.register_code_command(:pipe, Rundoc::CodeCommand::PipeArgs, runner: Rundoc::CodeCommand::PipeRunner)
-Rundoc.register_code_command(:|, Rundoc::CodeCommand::PipeArgs, runner: Rundoc::CodeCommand::PipeRunner)
+Rundoc.register_code_command(keyword: :pipe, args_klass: Rundoc::CodeCommand::PipeArgs, runner_klass: Rundoc::CodeCommand::PipeRunner)
+Rundoc.register_code_command(keyword: :|, args_klass: Rundoc::CodeCommand::PipeArgs, runner_klass: Rundoc::CodeCommand::PipeRunner)

@@ -38,4 +38,4 @@ class Rundoc::CodeCommand::FileCommand
   end
 end
 
-Rundoc.register_code_command(:"file.remove", Rundoc::CodeCommand::FileCommand::RemoveArgs, runner: Rundoc::CodeCommand::FileCommand::RemoveRunner)
+Rundoc.register_code_command(keyword: :"file.remove", args_klass: Rundoc::CodeCommand::FileCommand::RemoveArgs, runner_klass: Rundoc::CodeCommand::FileCommand::RemoveRunner)

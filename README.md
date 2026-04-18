@@ -667,7 +667,7 @@ To add a new command it needs to be parsed and called. Examples of commands bein
 A new command needs to be registered:
 
 ```
-Rundoc.register_code_command(:lol, Rundoc::CodeCommand::Lol)
+Rundoc.register_code_command(keyword: :lol, args_klass: Rundoc::CodeCommand::Lol)
 ```
 
 They should inherit from Rundoc::CodeCommand:

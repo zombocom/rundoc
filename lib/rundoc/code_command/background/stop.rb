@@ -27,4 +27,4 @@ class Rundoc::CodeCommand::Background
     end
   end
 end
-Rundoc.register_code_command(:"background.stop", Rundoc::CodeCommand::Background::StopArgs, runner: Rundoc::CodeCommand::Background::StopRunner)
+Rundoc.register_code_command(keyword: :"background.stop", args_klass: Rundoc::CodeCommand::Background::StopArgs, runner_klass: Rundoc::CodeCommand::Background::StopRunner)

@@ -27,4 +27,4 @@ class Rundoc::CodeCommand::Background::Log
     end
   end
 end
-Rundoc.register_code_command(:"background.log.clear", Rundoc::CodeCommand::Background::Log::ClearArgs, runner: Rundoc::CodeCommand::Background::Log::ClearRunner)
+Rundoc.register_code_command(keyword: :"background.log.clear", args_klass: Rundoc::CodeCommand::Background::Log::ClearArgs, runner_klass: Rundoc::CodeCommand::Background::Log::ClearRunner)

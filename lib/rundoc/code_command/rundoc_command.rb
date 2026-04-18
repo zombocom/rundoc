@@ -26,8 +26,8 @@ module ::Rundoc
   end
 end
 
-Rundoc.register_code_command(:rundoc, Rundoc::CodeCommand::RundocCommandArgs, runner: Rundoc::CodeCommand::RundocCommandRunner)
-Rundoc.register_code_command(:"rundoc.configure", Rundoc::CodeCommand::RundocCommandArgs, runner: Rundoc::CodeCommand::RundocCommandRunner)
+Rundoc.register_code_command(keyword: :rundoc, args_klass: Rundoc::CodeCommand::RundocCommandArgs, runner_klass: Rundoc::CodeCommand::RundocCommandRunner)
+Rundoc.register_code_command(keyword: :"rundoc.configure", args_klass: Rundoc::CodeCommand::RundocCommandArgs, runner_klass: Rundoc::CodeCommand::RundocCommandRunner)
 
 require "rundoc/code_command/rundoc/depend_on"
 require "rundoc/code_command/rundoc/require"

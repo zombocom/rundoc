@@ -68,4 +68,4 @@ class Rundoc::CodeCommand
     end
   end
 end
-Rundoc.register_code_command(:"pre.erb", Rundoc::CodeCommand::PreErbArgs, runner: Rundoc::CodeCommand::PreErbRunner)
+Rundoc.register_code_command(keyword: :"pre.erb", args_klass: Rundoc::CodeCommand::PreErbArgs, runner_klass: Rundoc::CodeCommand::PreErbRunner)

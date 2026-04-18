@@ -44,4 +44,4 @@ class Rundoc::CodeCommand::Website
     # end
   end
 end
-Rundoc.register_code_command(:"website.screenshot", Rundoc::CodeCommand::Website::ScreenshotArgs, runner: Rundoc::CodeCommand::Website::ScreenshotRunner)
+Rundoc.register_code_command(keyword: :"website.screenshot", args_klass: Rundoc::CodeCommand::Website::ScreenshotArgs, runner_klass: Rundoc::CodeCommand::Website::ScreenshotRunner)

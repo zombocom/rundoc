@@ -82,4 +82,4 @@ class Rundoc::CodeCommand::FileCommand
   end
 end
 
-Rundoc.register_code_command(:"file.append", Rundoc::CodeCommand::FileCommand::AppendArgs, runner: Rundoc::CodeCommand::FileCommand::AppendRunner)
+Rundoc.register_code_command(keyword: :"file.append", args_klass: Rundoc::CodeCommand::FileCommand::AppendArgs, runner_klass: Rundoc::CodeCommand::FileCommand::AppendRunner)

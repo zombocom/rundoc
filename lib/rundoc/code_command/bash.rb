@@ -61,8 +61,8 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:bash, Rundoc::CodeCommand::BashArgs, runner: Rundoc::CodeCommand::BashRunner)
-Rundoc.register_code_command(:"$", Rundoc::CodeCommand::BashArgs, runner: Rundoc::CodeCommand::BashRunner)
-Rundoc.register_code_command(:"fail.$", Rundoc::CodeCommand::BashArgs, runner: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(keyword: :bash, args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(keyword: :"$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(keyword: :"fail.$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
 
 require "rundoc/code_command/bash/cd"

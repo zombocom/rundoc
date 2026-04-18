@@ -8,4 +8,4 @@ class ::Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:"rundoc.depend_on", ::Rundoc::CodeCommand::RundocCommand::DependOnArgs)
+Rundoc.register_code_command(keyword: :"rundoc.depend_on", args_klass: ::Rundoc::CodeCommand::RundocCommand::DependOnArgs)

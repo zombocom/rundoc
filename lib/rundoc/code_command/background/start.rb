@@ -58,4 +58,4 @@ class Rundoc::CodeCommand::Background
   end
 end
 
-Rundoc.register_code_command(:"background.start", Rundoc::CodeCommand::Background::StartArgs, runner: Rundoc::CodeCommand::Background::StartRunner)
+Rundoc.register_code_command(keyword: :"background.start", args_klass: Rundoc::CodeCommand::Background::StartArgs, runner_klass: Rundoc::CodeCommand::Background::StartRunner)
