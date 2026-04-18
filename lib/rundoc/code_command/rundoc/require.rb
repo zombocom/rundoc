@@ -1,12 +1,17 @@
 class ::Rundoc::CodeCommand
   class RundocCommand
-    class Require < ::Rundoc::CodeCommand
-      # Pass in the relative path of another rundoc document in order to
-      # run all of it's commands. Resulting contents will be displayed
-      # in current document
+    class RequireArgs
+      attr_reader :path
+
       def initialize(path)
         raise "Path must be relative (i.e. start with `.` or `..`. #{path.inspect} does not" unless path.start_with?(".")
         @path = Pathname.new(path)
+      end
+    end
+
+    class RequireRunner < ::Rundoc::CodeCommand
+      def initialize(user_args:)
+        @path = user_args.path
       end
 
       def to_md(env = {})
@@ -48,4 +53,4 @@ class ::Rundoc::CodeCommand
   end
 end
 
-Rundoc.register_code_command(:"rundoc.require", ::Rundoc::CodeCommand::RundocCommand::Require)
+Rundoc.register_code_command(:"rundoc.require", ::Rundoc::CodeCommand::RundocCommand::RequireArgs, runner: ::Rundoc::CodeCommand::RundocCommand::RequireRunner)
