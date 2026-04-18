@@ -12,8 +12,8 @@ class BackgroundTest < Minitest::Test
           wait: "hello"
         )
 
-        background_start = Rundoc::CodeCommand::Background::Start.new("cat",
-          name: "cat")
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("cat",
+          name: "cat"))
 
         background_start.call
         output = stdin_write.call
@@ -48,9 +48,9 @@ class BackgroundTest < Minitest::Test
         file = "foo.txt"
         run!("echo 'foo' >> #{file}")
 
-        background_start = Rundoc::CodeCommand::Background::Start.new("tail -f #{file}",
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
           name: "tail2",
-          wait: "f")
+          wait: "f"))
 
         GC.start
 
@@ -73,9 +73,9 @@ class BackgroundTest < Minitest::Test
         file = "foo.txt"
         run!("echo 'foo' >> #{file}")
 
-        background_start = Rundoc::CodeCommand::Background::Start.new("tail -f #{file}",
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
           name: "tail",
-          wait: "f")
+          wait: "f"))
         output = background_start.call
 
         assert_match("foo", output)
