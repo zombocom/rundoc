@@ -7,6 +7,8 @@ module Rundoc
       alias_method :render_result?, :render_result
       alias_method :render_command?, :render_command
 
+      attr_reader :runner_klass
+
       def initialize(args_instance:, runner_klass:)
         @args_instance = args_instance
         @runner_klass = runner_klass

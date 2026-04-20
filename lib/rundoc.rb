@@ -10,10 +10,10 @@ module Rundoc
     original_args = args&.dup
 
     unless args_klass
-      command = Rundoc::CodeCommand::NoSuchCommand.new
-      command.keyword = keyword
-      command.original_args = original_args
-      return command
+      deferred = CodeCommand::Deferred.new(args_instance: nil, runner_klass: Rundoc::CodeCommand::NoSuchCommand)
+      deferred.keyword = keyword
+      deferred.original_args = original_args
+      return deferred
     end
 
     runner_klass = user_args_runner[keyword]
