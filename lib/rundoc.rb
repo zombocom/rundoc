@@ -9,25 +9,26 @@ module Rundoc
     args_klass = code_command(keyword.to_sym)
     original_args = args&.dup
 
-    unless args_klass
-      deferred = CodeCommand::Deferred.new(args_instance: nil, runner_klass: Rundoc::CodeCommand::NoSuchCommand)
-      deferred.keyword = keyword
-      deferred.original_args = original_args
-      return deferred
-    end
+    if args_klass
+      runner_klass = user_args_runner[keyword]
 
-    runner_klass = user_args_runner[keyword]
-
-    if args.is_a?(Array) && args.last.is_a?(Hash)
-      kwargs = args.pop
-      cc = args_klass.new(*args, **kwargs)
-    elsif args.is_a?(Hash)
-      cc = args_klass.new(**args)
+      if args.is_a?(Array) && args.last.is_a?(Hash)
+        kwargs = args.pop
+        user_args = args_klass.new(*args, **kwargs)
+      elsif args.is_a?(Hash)
+        user_args = args_klass.new(**args)
+      else
+        user_args = args_klass.new(*args)
+      end
     else
-      cc = args_klass.new(*args)
+      runner_klass = Rundoc::CodeCommand::NoSuchCommand
+      user_args = nil
     end
 
-    deferred = CodeCommand::Deferred.new(args_instance: cc, runner_klass: runner_klass)
+    deferred = CodeCommand::Deferred.new(
+      args_instance: user_args,
+      runner_klass: runner_klass
+    )
     deferred.original_args = original_args
     deferred.keyword = keyword
     deferred
