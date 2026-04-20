@@ -61,8 +61,8 @@ class CodeSectionTest < Minitest::Test
     code_section.render
 
     code_command = code_section.executed_commands.first
-    assert_equal true, code_command.render_command
-    assert_equal false, code_command.render_result
+    assert_equal true, code_command.render_command?
+    assert_equal false, code_command.render_result?
 
     contents = <<~RUBY
       ```
@@ -80,8 +80,8 @@ class CodeSectionTest < Minitest::Test
     code_section.render
 
     code_command = code_section.executed_commands.first
-    assert_equal true, code_command.render_command
-    assert_equal false, code_command.render_result
+    assert_equal true, code_command.render_command?
+    assert_equal false, code_command.render_result?
   end
 
   def test_show_command_show_render
@@ -102,8 +102,8 @@ class CodeSectionTest < Minitest::Test
 
     puts code_section.executed_commands.inspect
     code_command = code_section.executed_commands.first
-    assert_equal true, code_command.render_command
-    assert_equal true, code_command.render_result
+    assert_equal true, code_command.render_command?
+    assert_equal true, code_command.render_result?
   end
 
   def test_hide_command_hide_render
@@ -123,8 +123,8 @@ class CodeSectionTest < Minitest::Test
     code_section.render
 
     code_command = code_section.executed_commands.first
-    assert_equal false, code_command.render_command
-    assert_equal false, code_command.render_result
+    assert_equal false, code_command.render_command?
+    assert_equal false, code_command.render_result?
 
     contents = <<~RUBY
       ```
@@ -142,8 +142,8 @@ class CodeSectionTest < Minitest::Test
     code_section.render
 
     code_command = code_section.executed_commands.first
-    assert_equal false, code_command.render_command
-    assert_equal false, code_command.render_result
+    assert_equal false, code_command.render_command?
+    assert_equal false, code_command.render_result?
   end
 
   def test_hide_command_show_render
@@ -163,7 +163,7 @@ class CodeSectionTest < Minitest::Test
     code_section.render
 
     code_command = code_section.executed_commands.first
-    assert_equal false, code_command.render_command
-    assert_equal true, code_command.render_result
+    assert_equal false, code_command.render_command?
+    assert_equal true, code_command.render_result?
   end
 end
