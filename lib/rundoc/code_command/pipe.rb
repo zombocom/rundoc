@@ -36,6 +36,7 @@ module Rundoc
 
         actual = actual.first if actual.is_a?(Array)
 
+        # Unregistered keywords (e.g. `| tail -n 2`) aren't rundoc commands — treat them as bash
         if actual.runner_klass == Rundoc::CodeCommand::NoSuchCommand
           actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code))
         end
