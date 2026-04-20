@@ -19,7 +19,8 @@ class CodeSectionTest < Minitest::Test
           fence: match[:fence],
           lang: match[:lang],
           code: match[:contents],
-          context: default_context
+          context: default_context,
+          io: StringIO.new
         ).render
         assert_equal "", result
       end
@@ -39,7 +40,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     ).render
     assert_equal contents, result.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "\n")
   end
@@ -56,7 +58,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
@@ -75,7 +78,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
@@ -96,11 +100,11 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
-    puts code_section.executed_commands.inspect
     code_command = code_section.executed_commands.first
     assert_equal true, code_command.render_command?
     assert_equal true, code_command.render_result?
@@ -118,7 +122,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
@@ -137,7 +142,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
@@ -158,7 +164,8 @@ class CodeSectionTest < Minitest::Test
       fence: match[:fence],
       lang: match[:lang],
       code: match[:contents],
-      context: default_context
+      context: default_context,
+      io: StringIO.new
     )
     code_section.render
 
