@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::FileCommand
   class AppendArgs
     attr_reader :filename
@@ -43,7 +45,7 @@ class Rundoc::CodeCommand::FileCommand
     end
 
     def concat_with_newline(str1, str2)
-      result = ""
+      result = +""
       result << str1
       result << "\n" unless ends_in_newline?(result)
       result << str2

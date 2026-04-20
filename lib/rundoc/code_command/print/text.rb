@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand
   class PrintTextArgs
     attr_reader :line

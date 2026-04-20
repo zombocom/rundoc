@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::BashArgs
   attr_reader :line
 
@@ -42,11 +44,11 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
 
   def shell(cmd, stdin = nil)
     cmd = "(#{cmd}) 2>&1"
-    msg = "Running: $ '#{cmd}'"
+    msg = +"Running: $ '#{cmd}'"
     msg << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
     io.puts msg
 
-    result = ""
+    result = +""
     IO.popen(cmd, "w+") do |pipe|
       pipe << stdin if stdin
       pipe.close_write

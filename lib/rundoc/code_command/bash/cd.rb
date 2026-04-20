@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::BashRunner
   class Cd < Rundoc::CodeCommand::BashRunner
     def initialize(line, io: $stdout)

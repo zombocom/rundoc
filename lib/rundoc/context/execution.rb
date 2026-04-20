@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   module Context
     # Holds configuration for the currently executing script
