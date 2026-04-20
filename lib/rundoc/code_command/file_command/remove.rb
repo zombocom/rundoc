@@ -8,6 +8,16 @@ class Rundoc::CodeCommand::FileCommand
   end
 
   class RemoveRunner < Rundoc::CodeCommand
+    # Newlines are stripped and re-added, this tells the project that
+    # we're intentionally wanting an extra newline
+    NEWLINE = Object.new
+    def NEWLINE.to_s
+      ""
+    end
+
+    def NEWLINE.empty?
+      false
+    end
     include FileUtil
 
     def initialize(user_args:, **)
