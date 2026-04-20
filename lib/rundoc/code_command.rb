@@ -13,9 +13,7 @@ module Rundoc
       false
     end
 
-    attr_accessor :render_result, :render_command,
-      :contents, :keyword,
-      :original_args
+    attr_accessor :render_result, :render_command, :contents
 
     alias_method :render_result?, :render_result
     alias_method :render_command?, :render_command

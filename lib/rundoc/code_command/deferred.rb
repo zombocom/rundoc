@@ -41,11 +41,11 @@ module Rundoc
           runner = @runner_klass.new(user_args: @args_instance)
           runner.render_command = render_command
           runner.render_result = render_result
-          runner.keyword = keyword
-          runner.original_args = original_args
           runner.push(@contents) if @contents && !@contents.empty?
           runner
         end
+      rescue UnknownCommand
+        raise "No such command registered with rundoc #{keyword.inspect} for `#{keyword} #{original_args}`"
       end
 
       def call(env = {})
