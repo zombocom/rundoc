@@ -2,15 +2,20 @@ module Rundoc
   # Generic CodeCommand class to be inherited
   #
   class CodeCommand
-    attr_accessor :render_result, :render_command, :contents
+    attr_accessor :contents
 
-    alias_method :render_result?, :render_result
-    alias_method :render_command?, :render_command
-
-    def initialize(render_command: nil, render_result: nil, contents: nil)
+    def initialize(render_command:, render_result:, contents: nil)
       @render_command = render_command
       @render_result = render_result
       push(contents) if contents && !contents.empty?
+    end
+
+    def render_result?
+      @render_result
+    end
+
+    def render_command?
+      @render_command
     end
 
     def hidden?
