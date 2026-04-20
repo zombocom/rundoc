@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::Background
   class WaitArgs
     attr_reader :name, :wait, :timeout

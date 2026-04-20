@@ -44,7 +44,7 @@ class Rundoc::CodeCommand::Website
     end
 
     def call(env = {})
-      message = "Visting: #{@url}"
+      message = +"Visting: #{@url}"
       message << "and executing:\n#{contents}" unless contents.nil? || contents.empty?
 
       io.puts message

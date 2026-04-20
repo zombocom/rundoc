@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   # Represents a single rundoc file on disk,
   #

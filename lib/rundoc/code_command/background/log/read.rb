@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::Background::Log
   class ReadArgs
     attr_reader :name

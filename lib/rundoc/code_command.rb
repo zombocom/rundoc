@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   # Generic CodeCommand class to be inherited
   #
@@ -30,7 +32,7 @@ module Rundoc
     end
 
     def push(contents)
-      @contents ||= ""
+      @contents ||= +""
       @contents << contents
     end
     alias_method :<<, :push

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   class CodeCommand
     # Hold enough information to construct commands, but don't yet
@@ -31,7 +33,7 @@ module Rundoc
       end
 
       def push(contents)
-        @contents ||= ""
+        @contents ||= +""
         @contents << contents
       end
       alias_method :<<, :push

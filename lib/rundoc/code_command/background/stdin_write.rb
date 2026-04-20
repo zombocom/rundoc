@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::Background
   class StdinWriteArgs
     attr_reader :contents, :name, :wait, :timeout, :ending
