@@ -25,7 +25,7 @@ class Rundoc::CodeCommand::Website
     end
 
     def call(env = {})
-      puts "Taking screenshot: #{driver.current_url}"
+      io.puts "Taking screenshot: #{driver.current_url}"
       filename = driver.screenshot(
         upload: @upload,
         screenshots_dir: env[:context].screenshots_dir

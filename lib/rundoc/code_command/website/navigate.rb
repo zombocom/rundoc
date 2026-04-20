@@ -23,7 +23,7 @@ class Rundoc::CodeCommand::Website
     end
 
     def call(env = {})
-      puts "website.navigate [#{@name}]: #{contents}"
+      io.puts "website.navigate [#{@name}]: #{contents}"
       driver.safe_eval(contents, env)
       ""
     end

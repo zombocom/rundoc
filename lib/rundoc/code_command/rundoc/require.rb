@@ -35,10 +35,10 @@ class ::Rundoc::CodeCommand
         ).to_md
 
         if render_result?
-          puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
+          io.puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
           env[:before] << output
         else
-          puts "rundoc.require: Done executing #{@path.to_s.inspect}, quietly"
+          io.puts "rundoc.require: Done executing #{@path.to_s.inspect}, quietly"
         end
 
         ""

@@ -32,10 +32,10 @@ class Rundoc::CodeCommand
           .join("\n")
         @template = ":::#{vis} #{code}"
 
-        puts "pre.erb: Applying ERB, template:\n#{@template}"
+        io.puts "pre.erb: Applying ERB, template:\n#{@template}"
         result = ERB.new(@template).result(@binding)
-        puts "pre.erb: ERB result:\n#{result}"
-        puts "pre.erb: done, ready to delegate"
+        io.puts "pre.erb: ERB result:\n#{result}"
+        io.puts "pre.erb: done, ready to delegate"
         result
       end
     end

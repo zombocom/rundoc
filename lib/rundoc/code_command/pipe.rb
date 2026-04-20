@@ -10,8 +10,8 @@ module Rundoc
 
     class PipeRunner < Rundoc::CodeCommand
       def initialize(user_args:, **)
-        @delegate = parse(user_args.line)
         super(**)
+        @delegate = parse(user_args.line)
       end
 
       # before: "",
@@ -20,7 +20,7 @@ module Rundoc
       #   [[cmd, output], [cmd, output]]
       def call(env = {})
         last_command = env[:commands].last
-        puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
+        io.puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
 
         @delegate.push(last_command[:output])
         @delegate.call(env)
