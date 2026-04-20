@@ -50,6 +50,7 @@ module Rundoc
   end
 end
 
+require "rundoc/code_command/deferred"
 require "rundoc/code_command/bash"
 require "rundoc/code_command/pipe"
 require "rundoc/code_command/write"

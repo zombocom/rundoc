@@ -55,7 +55,13 @@ module Rundoc
       env[:context] = @context
       env[:stack] = @stack
 
-      while (code_command = @stack.pop)
+      while (item = @stack.pop)
+        code_command = if item.is_a?(CodeCommand::Deferred)
+          item.build
+        else
+          item
+        end
+
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
         result << code_line if code_command.render_command?
