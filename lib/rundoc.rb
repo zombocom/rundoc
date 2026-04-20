@@ -6,26 +6,31 @@ module Rundoc
   extend self
 
   def code_command_from_keyword(keyword, args)
-    klass = code_command(keyword.to_sym) || Rundoc::CodeCommand::NoSuchCommand
-    original_args = args.dup
+    args_klass = code_command(keyword.to_sym)
+    original_args = args&.dup
+
+    unless args_klass
+      command = Rundoc::CodeCommand::NoSuchCommand.new
+      command.keyword = keyword
+      command.original_args = original_args
+      return command
+    end
+
+    runner_klass = user_args_runner[keyword]
+
     if args.is_a?(Array) && args.last.is_a?(Hash)
       kwargs = args.pop
-      cc = klass.new(*args, **kwargs)
+      cc = args_klass.new(*args, **kwargs)
     elsif args.is_a?(Hash)
-      cc = klass.new(**args)
+      cc = args_klass.new(**args)
     else
-      cc = klass.new(*args)
+      cc = args_klass.new(*args)
     end
 
-    command = if (runner = user_args_runner[keyword])
-      runner.new(user_args: cc)
-    else
-      cc
-    end
-
-    command.original_args = original_args
-    command.keyword = keyword
-    command
+    deferred = CodeCommand::Deferred.new(args_instance: cc, runner_klass: runner_klass)
+    deferred.original_args = original_args
+    deferred.keyword = keyword
+    deferred
   rescue ArgumentError => e
     raise ArgumentError, "Wrong method signature for #{keyword} with arguments: #{original_args.inspect}, error:\n #{e.message}"
   end

@@ -13,7 +13,11 @@ module Rundoc
       end
 
       def hidden?
-        !render_command? && !render_result?
+        if @built
+          @built.hidden?
+        else
+          !render_command? && !render_result?
+        end
       end
 
       def not_hidden?
@@ -27,13 +31,15 @@ module Rundoc
       alias_method :<<, :push
 
       def build
-        runner = @runner_klass.new(user_args: @args_instance)
-        runner.render_command = render_command
-        runner.render_result = render_result
-        runner.keyword = keyword
-        runner.original_args = original_args
-        runner.push(@contents) if @contents && !@contents.empty?
-        runner
+        @built ||= begin
+          runner = @runner_klass.new(user_args: @args_instance)
+          runner.render_command = render_command
+          runner.render_result = render_result
+          runner.keyword = keyword
+          runner.original_args = original_args
+          runner.push(@contents) if @contents && !@contents.empty?
+          runner
+        end
       end
 
       def call(env = {})
