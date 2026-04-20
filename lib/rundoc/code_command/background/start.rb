@@ -37,7 +37,7 @@ class Rundoc::CodeCommand::Background
         log: @log,
         out: @redirect
       ).tap do |spawn|
-        puts "Spawning commmand: `#{spawn.command}`"
+        io.puts "Spawning commmand: `#{spawn.command}`"
         ProcessSpawn.add(@name, spawn)
       end
     end

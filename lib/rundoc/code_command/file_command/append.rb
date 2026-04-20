@@ -70,10 +70,10 @@ class Rundoc::CodeCommand::FileCommand
       mkdir_p
       doc = File.read(filename)
       if @line_number
-        puts "Writing to: '#{filename}' line #{@line_number} with: #{contents.inspect}"
+        io.puts "Writing to: '#{filename}' line #{@line_number} with: #{contents.inspect}"
         doc = insert_contents_into_at_line(doc)
       else
-        puts "Appending to file: '#{filename}' with: #{contents.inspect}"
+        io.puts "Appending to file: '#{filename}' with: #{contents.inspect}"
         doc = concat_with_newline(doc, contents)
       end
 

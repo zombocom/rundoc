@@ -47,7 +47,7 @@ class Rundoc::CodeCommand::Website
       message = "Visting: #{@url}"
       message << "and executing:\n#{contents}" unless contents.nil? || contents.empty?
 
-      puts message
+      io.puts message
 
       driver.visit(@url, max_attempts: @max_attempts) if @url
       driver.scroll(@scroll) if @scroll

@@ -36,7 +36,7 @@ class Rundoc::CodeCommand::FileCommand
     end
 
     def call(env = {})
-      puts "Deleting '#{contents.strip}' from #{filename}"
+      io.puts "Deleting '#{contents.strip}' from #{filename}"
       raise "#{filename} does not exist" unless File.exist?(filename)
 
       regex = /^\s*#{Regexp.quote(contents)}/
