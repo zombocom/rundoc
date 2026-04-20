@@ -7,7 +7,7 @@ class Rundoc::CodeCommand::BashArgs
 end
 
 class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
-  def initialize(user_args:)
+  def initialize(user_args:, **)
     @line = user_args.line
     @contents = ""
     @delegate = case @line.split(" ").first.downcase
@@ -16,6 +16,7 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
     else
       false
     end
+    super(**)
   end
 
   # predicate to over-write for failure support

@@ -9,8 +9,9 @@ module Rundoc
     end
 
     class PipeRunner < Rundoc::CodeCommand
-      def initialize(user_args:)
+      def initialize(user_args:, **)
         @delegate = parse(user_args.line)
+        super(**)
       end
 
       # before: "",

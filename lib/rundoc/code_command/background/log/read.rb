@@ -8,9 +8,10 @@ class Rundoc::CodeCommand::Background::Log
   end
 
   class ReadRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @name = user_args.name
       @background = nil
+      super(**)
     end
 
     def background

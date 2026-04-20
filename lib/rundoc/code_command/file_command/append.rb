@@ -10,11 +10,12 @@ class Rundoc::CodeCommand::FileCommand
   class AppendRunner < Rundoc::CodeCommand
     include FileUtil
 
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @filename, line = user_args.filename.split("#")
       @line_number = if line
         Integer(line)
       end
+      super(**)
     end
 
     def to_md(env)

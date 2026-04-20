@@ -10,11 +10,12 @@ class Rundoc::CodeCommand::Background
   end
 
   class WaitRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @name = user_args.name
       @wait = user_args.wait
       @timeout_value = user_args.timeout
       @background = nil
+      super(**)
     end
 
     def background

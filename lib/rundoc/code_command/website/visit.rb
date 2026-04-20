@@ -16,7 +16,7 @@ class Rundoc::CodeCommand::Website
   end
 
   class VisitRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @name = user_args.name
       @url = user_args.url
       @scroll = user_args.scroll
@@ -24,6 +24,7 @@ class Rundoc::CodeCommand::Website
       @width = user_args.width
       @visible = user_args.visible
       @max_attempts = user_args.max_attempts
+      super(**)
     end
 
     def driver

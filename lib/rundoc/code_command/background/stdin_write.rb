@@ -12,7 +12,7 @@ class Rundoc::CodeCommand::Background
   end
 
   class StdinWriteRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @contents = user_args.contents
       @ending = user_args.ending
       @wait = user_args.wait
@@ -20,6 +20,7 @@ class Rundoc::CodeCommand::Background
       @timeout_value = user_args.timeout
       @contents_written = nil
       @background = nil
+      super(**)
     end
 
     def background
