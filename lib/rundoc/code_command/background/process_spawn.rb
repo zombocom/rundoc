@@ -126,7 +126,7 @@ class Rundoc::CodeCommand::Background
       Process.kill("TERM", -Process.getpgid(@pid))
       Process.wait(@pid)
     rescue Errno::ESRCH => e
-      warn "Error stopping process (command: #{command}): #{e}"
+      print_io&.puts "Error stopping process (command: #{command}): #{e}"
     ensure
       print_io&.puts "Log contents for `#{command}`:\n#{@log.read}"
     end

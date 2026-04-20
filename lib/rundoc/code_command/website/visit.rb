@@ -33,7 +33,8 @@ class Rundoc::CodeCommand::Website
         url: @url,
         height: @height,
         width: @width,
-        visible: @visible
+        visible: @visible,
+        io: io
       ).tap do |driver|
         Driver.add(@name, driver)
       end
