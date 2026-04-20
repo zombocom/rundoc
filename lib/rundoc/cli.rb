@@ -159,7 +159,8 @@ module Rundoc
       Dir.chdir(execution_context.output_dir) do
         parser = Rundoc::Document.new(
           source_contents,
-          context: execution_context
+          context: execution_context,
+          io: io
         )
         output = begin
           parser.to_md

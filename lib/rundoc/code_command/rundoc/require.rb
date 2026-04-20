@@ -30,7 +30,8 @@ class ::Rundoc::CodeCommand
             output_dir: execution_context.output_dir,
             screenshots_dirname: execution_context.screenshots_dir,
             with_contents_dir: execution_context.with_contents_dir
-          )
+          ),
+          io: io
         ).to_md
 
         if render_result?

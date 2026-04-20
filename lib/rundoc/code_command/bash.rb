@@ -8,15 +8,14 @@ end
 
 class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
   def initialize(user_args:, **)
+    super(**)
     @line = user_args.line
-    @contents = ""
     @delegate = case @line.split(" ").first.downcase
     when "cd"
-      Cd.new(@line)
+      Cd.new(@line, io: io)
     else
       false
     end
-    super(**)
   end
 
   # predicate to over-write for failure support

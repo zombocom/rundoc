@@ -4,7 +4,10 @@ module Rundoc
   class CodeCommand
     attr_accessor :contents
 
-    def initialize(render_command:, render_result:, contents: nil)
+    attr_reader :io
+
+    def initialize(render_command:, render_result:, io:, contents: nil)
+      @io = io
       @render_command = render_command
       @render_result = render_result
       push(contents) if contents && !contents.empty?
