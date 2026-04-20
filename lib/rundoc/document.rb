@@ -11,7 +11,8 @@ module Rundoc
 
     attr_reader :contents, :stack, :context
 
-    def initialize(contents, context:)
+    def initialize(contents, context:, io: $stdout)
+      @io = io
       @context = context
       @contents = contents
       @original = contents.dup
@@ -59,7 +60,8 @@ module Rundoc
             fence: match[:fence],
             lang: match[:lang],
             code: match[:contents],
-            context: context
+            context: context,
+            io: @io
           )
         end
         @contents = tail

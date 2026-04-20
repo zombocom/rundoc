@@ -5,7 +5,7 @@ class PipeTest < Minitest::Test
     pipe_cmd = "tail -n 2"
     cmd = "ls"
     out = `#{cmd}`
-    pipe = Rundoc::CodeCommand::PipeRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::PipeArgs.new(pipe_cmd))
+    pipe = Rundoc::CodeCommand::PipeRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::PipeArgs.new(pipe_cmd))
     actual = pipe.call(commands: [{command: cmd, output: out}])
 
     expected = `#{cmd} | #{pipe_cmd}`
@@ -16,7 +16,7 @@ class PipeTest < Minitest::Test
     pipe_cmd = "tail -n 2"
     cmd = "ls"
     out = `#{cmd}`
-    pipe = Rundoc::CodeCommand::PipeRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::PipeArgs.new("$ #{pipe_cmd}"))
+    pipe = Rundoc::CodeCommand::PipeRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::PipeArgs.new("$ #{pipe_cmd}"))
     actual = pipe.call(commands: [{command: cmd, output: out}])
 
     expected = `#{cmd} | #{pipe_cmd}`

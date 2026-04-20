@@ -10,7 +10,7 @@ class Rundoc::CodeCommand
   end
 
   class PreErbRunner < Rundoc::CodeCommand
-    def initialize(user_args:, render_command:, render_result:, contents: nil)
+    def initialize(user_args:, render_command:, render_result:, **)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil
@@ -18,9 +18,7 @@ class Rundoc::CodeCommand
       @template = nil
       @render_delegate_result = render_result
       @render_delegate_command = render_command
-      @render_result = false
-      @render_command = false
-      push(contents) if contents && !contents.empty?
+      super(render_command: false, render_result: false, **)
     end
 
     def code

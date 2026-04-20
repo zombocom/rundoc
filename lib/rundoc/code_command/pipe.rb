@@ -39,14 +39,14 @@ module Rundoc
 
         # Unregistered keywords (e.g. `| tail -n 2`) aren't rundoc commands — treat them as bash
         if actual.runner_klass == Rundoc::CodeCommand::NoSuchCommand
-          actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
+          actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
         end
         actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash
       rescue Parslet::ParseFailed
-        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
+        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
       end
     end
   end

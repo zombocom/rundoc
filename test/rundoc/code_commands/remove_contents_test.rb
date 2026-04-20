@@ -21,7 +21,7 @@ class RemoveContentsTest < Minitest::Test
 
         assert_match(/sqlite3/, File.read(@file))
 
-        cc = Rundoc::CodeCommand::FileCommand::RemoveRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::RemoveArgs.new(@file))
+        cc = Rundoc::CodeCommand::FileCommand::RemoveRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::RemoveArgs.new(@file))
         cc << "gem 'sqlite3'"
         cc.call
 

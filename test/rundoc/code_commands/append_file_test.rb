@@ -7,7 +7,7 @@ class AppendFileTest < Minitest::Test
         file = "foo.rb"
         `echo 'foo' >> #{file}`
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
         cc << "bar"
         cc.call
 
@@ -16,7 +16,7 @@ class AppendFileTest < Minitest::Test
         assert_match(/foo/, result)
         assert_match(/bar/, result)
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
         cc << "baz"
         cc.call
 
@@ -39,7 +39,7 @@ class AppendFileTest < Minitest::Test
         line = 2
         `echo '#{contents}' >> #{file}`
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}##{line}"))
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}##{line}"))
         cc << "gem 'pg'"
         cc.call
 
@@ -54,7 +54,7 @@ class AppendFileTest < Minitest::Test
       Dir.chdir(dir) do
         filename = "file-#{Time.now.utc.strftime("%Y%m%d%H%M%S")}.txt"
         FileUtils.touch(filename)
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
         cc << "some text"
         cc.call
 
@@ -69,7 +69,7 @@ class AppendFileTest < Minitest::Test
         FileUtils.touch("file-1234.txt")
         FileUtils.touch("file-5678.txt")
         assert_raises do
-          cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
+          cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
           cc << "some text"
           cc.call
         end
