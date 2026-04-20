@@ -10,26 +10,17 @@ class Rundoc::CodeCommand
   end
 
   class PreErbRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, render_command: nil, render_result: nil, contents: nil)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil
       @command = nil
       @template = nil
-      @render_delegate_result = nil
-      @render_delegate_command = nil
-      # Hide self, pass visibility onto delegate
+      @render_delegate_result = render_result
+      @render_delegate_command = render_command
       @render_result = false
       @render_command = false
-    end
-
-    # Visibility is injected by the parser, capture it and pass it to the delegate
-    def render_result=(value)
-      @render_delegate_result = value
-    end
-
-    def render_command=(value)
-      @render_delegate_command = value
+      push(contents) if contents && !contents.empty?
     end
 
     def code

@@ -10,8 +10,9 @@ class Rundoc::CodeCommand::FileCommand
   class RemoveRunner < Rundoc::CodeCommand
     include FileUtil
 
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @filename = user_args.filename
+      super(**)
     end
 
     def to_md(env)

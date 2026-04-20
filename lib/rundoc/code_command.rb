@@ -18,7 +18,10 @@ module Rundoc
     alias_method :render_result?, :render_result
     alias_method :render_command?, :render_command
 
-    def initialize(*args)
+    def initialize(render_command: nil, render_result: nil, contents: nil)
+      @render_command = render_command
+      @render_result = render_result
+      push(contents) if contents && !contents.empty?
     end
 
     def hidden?

@@ -16,7 +16,7 @@ class Rundoc::CodeCommand::Background
   end
 
   class StartRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @timeout = user_args.timeout
       @command = user_args.command
       @name = user_args.name
@@ -27,6 +27,7 @@ class Rundoc::CodeCommand::Background
       FileUtils.touch(@log)
 
       @background = nil
+      super(**)
     end
 
     def background

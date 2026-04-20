@@ -9,8 +9,9 @@ module ::Rundoc
     end
 
     class RundocCommandRunner < ::Rundoc::CodeCommand
-      def initialize(user_args:)
+      def initialize(user_args:, **)
         @contents = user_args.contents
+        super(**)
       end
 
       def to_md(env = {})

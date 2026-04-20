@@ -8,8 +8,9 @@ class Rundoc::CodeCommand
   end
 
   class PrintTextRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @line = user_args.line
+      super(**)
     end
 
     def to_md(env)
