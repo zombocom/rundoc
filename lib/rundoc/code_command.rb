@@ -14,7 +14,7 @@ module Rundoc
     end
 
     attr_accessor :render_result, :render_command,
-      :command, :contents, :keyword,
+      :contents, :keyword,
       :original_args
 
     alias_method :render_result?, :render_result
