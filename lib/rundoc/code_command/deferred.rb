@@ -1,5 +1,9 @@
 module Rundoc
   class CodeCommand
+    # Hold enough information to construct commands, but don't yet
+    #
+    # Allows us to separate parse time constructs from runtime injectables
+    # (such as IO). Which gives us a cleaner running model.
     class Deferred
       attr_accessor :render_result, :render_command,
         :contents, :keyword, :original_args
