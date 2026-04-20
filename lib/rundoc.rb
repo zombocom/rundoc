@@ -5,6 +5,8 @@ require "rundoc/version"
 module Rundoc
   extend self
 
+  class UnknownCommand < StandardError; end
+
   def code_command_from_keyword(keyword, args)
     args_klass = code_command(keyword.to_sym)
     original_args = args&.dup
