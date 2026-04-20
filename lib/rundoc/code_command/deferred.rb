@@ -1,0 +1,48 @@
+module Rundoc
+  class CodeCommand
+    class Deferred
+      attr_accessor :render_result, :render_command,
+        :contents, :keyword, :original_args
+
+      alias_method :render_result?, :render_result
+      alias_method :render_command?, :render_command
+
+      def initialize(args_instance:, runner_klass:)
+        @args_instance = args_instance
+        @runner_klass = runner_klass
+      end
+
+      def hidden?
+        !render_command? && !render_result?
+      end
+
+      def not_hidden?
+        !hidden?
+      end
+
+      def push(contents)
+        @contents ||= ""
+        @contents << contents
+      end
+      alias_method :<<, :push
+
+      def build
+        runner = @runner_klass.new(user_args: @args_instance)
+        runner.render_command = render_command
+        runner.render_result = render_result
+        runner.keyword = keyword
+        runner.original_args = original_args
+        runner.push(@contents) if @contents && !@contents.empty?
+        runner
+      end
+
+      def call(env = {})
+        build.call(env)
+      end
+
+      def to_md(env = {})
+        build.to_md(env)
+      end
+    end
+  end
+end
