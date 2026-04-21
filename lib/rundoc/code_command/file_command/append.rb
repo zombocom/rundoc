@@ -9,15 +9,30 @@ class Rundoc::CodeCommand::FileCommand
     end
   end
 
-  class AppendRunner < Rundoc::CodeCommand
-    include FileUtil
+  class AppendRunner
+    NEWLINE = Rundoc::CodeCommand::WriteRunner::NEWLINE
 
-    def initialize(user_args:, **)
+    include Rundoc::CodeCommand::FileUtil
+
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
       @filename, line = user_args.filename.split("#")
       @line_number = if line
         Integer(line)
       end
-      super(**)
+      @io = io
+      @render_command = render_command
+      @render_result = render_result
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def to_md(env)

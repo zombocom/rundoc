@@ -8,9 +8,14 @@ class Rundoc::CodeCommand::BashArgs
   end
 end
 
-class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
-  def initialize(user_args:, **)
-    super(**)
+class Rundoc::CodeCommand::BashRunner
+  attr_reader :io, :contents
+
+  def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    @io = io
+    @render_command = render_command
+    @render_result = render_result
+    @contents = contents.dup if contents && !contents.empty?
     @line = user_args.line
     @delegate = case @line.split(" ").first.downcase
     when "cd"
@@ -20,7 +25,14 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
     end
   end
 
-  # predicate to over-write for failure support
+  def render_command?
+    @render_command
+  end
+
+  def render_result?
+    @render_result
+  end
+
   def raise_on_error?
     true
   end

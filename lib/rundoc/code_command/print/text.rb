@@ -9,10 +9,22 @@ class Rundoc::CodeCommand
     end
   end
 
-  class PrintTextRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class PrintTextRunner
+    attr_reader :contents
+
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil, **)
       @line = user_args.line
-      super(**)
+      @render_command = render_command
+      @render_result = render_result
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def to_md(env)

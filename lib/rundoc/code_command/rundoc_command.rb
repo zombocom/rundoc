@@ -10,10 +10,23 @@ module ::Rundoc
       end
     end
 
-    class RundocCommandRunner < ::Rundoc::CodeCommand
-      def initialize(user_args:, **)
-        super(**)
-        @contents = user_args.code + @contents
+    class RundocCommandRunner
+      attr_reader :io, :contents
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+        @io = io
+        @render_command = render_command
+        @render_result = render_result
+        @contents = contents.dup if contents && !contents.empty?
+        @contents = user_args.code + (@contents || +"")
+      end
+
+      def render_command?
+        @render_command
+      end
+
+      def render_result?
+        @render_result
       end
 
       def to_md(env = {})

@@ -25,9 +25,7 @@ module Rundoc
       end
     end
 
-    class WriteRunner < Rundoc::CodeCommand
-      # Newlines are stripped and re-added, this tells the project that
-      # we're intentionally wanting an extra newline
+    class WriteRunner
       NEWLINE = Object.new
       def NEWLINE.to_s
         ""
@@ -37,11 +35,24 @@ module Rundoc
         false
       end
 
-      include FileUtil
+      include Rundoc::CodeCommand::FileUtil
 
-      def initialize(user_args:, **)
+      attr_reader :io, :contents
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
         @filename = user_args.path.to_s
-        super(**)
+        @io = io
+        @render_command = render_command
+        @render_result = render_result
+        @contents = contents.dup if contents && !contents.empty?
+      end
+
+      def render_command?
+        @render_command
+      end
+
+      def render_result?
+        @render_result
       end
 
       def to_md(env)

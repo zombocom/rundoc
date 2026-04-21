@@ -11,10 +11,22 @@ class ::Rundoc::CodeCommand
       end
     end
 
-    class RequireRunner < ::Rundoc::CodeCommand
-      def initialize(user_args:, **)
+    class RequireRunner
+      attr_reader :io
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
         @path = user_args.path
-        super(**)
+        @io = io
+        @render_command = render_command
+        @render_result = render_result
+      end
+
+      def render_command?
+        @render_command
+      end
+
+      def render_result?
+        @render_result
       end
 
       def to_md(env = {})

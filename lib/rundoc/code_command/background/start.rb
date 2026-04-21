@@ -17,8 +17,10 @@ class Rundoc::CodeCommand::Background
     end
   end
 
-  class StartRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class StartRunner
+    attr_reader :io
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
       @timeout = user_args.timeout
       @command = user_args.command
       @name = user_args.name
@@ -29,7 +31,9 @@ class Rundoc::CodeCommand::Background
       FileUtils.touch(@log)
 
       @background = nil
-      super(**)
+      @io = io
+      @render_command = render_command
+      @render_result = render_result
     end
 
     def background
@@ -42,6 +46,14 @@ class Rundoc::CodeCommand::Background
         io.puts "Spawning commmand: `#{spawn.command}`"
         ProcessSpawn.add(@name, spawn)
       end
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def to_md(env = {})

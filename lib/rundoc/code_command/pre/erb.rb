@@ -11,8 +11,10 @@ class Rundoc::CodeCommand
     end
   end
 
-  class PreErbRunner < Rundoc::CodeCommand
-    def initialize(user_args:, render_command:, render_result:, **)
+  class PreErbRunner
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil
@@ -20,7 +22,18 @@ class Rundoc::CodeCommand
       @template = nil
       @render_delegate_result = render_result
       @render_delegate_command = render_command
-      super(render_command: false, render_result: false, **)
+      @io = io
+      @render_command = false
+      @render_result = false
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def code

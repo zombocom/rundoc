@@ -9,11 +9,24 @@ class Rundoc::CodeCommand::Website
     end
   end
 
-  class NavigateRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class NavigateRunner
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
       @name = user_args.name
       @driver = nil
-      super(**)
+      @io = io
+      @render_command = render_command
+      @render_result = render_result
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def driver
