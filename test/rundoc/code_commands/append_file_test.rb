@@ -7,8 +7,13 @@ class AppendFileTest < Minitest::Test
         file = "foo.rb"
         `echo 'foo' >> #{file}`
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
-        cc << "bar"
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file),
+          contents: "bar"
+        )
         cc.call
 
         result = File.read(file)
@@ -16,8 +21,13 @@ class AppendFileTest < Minitest::Test
         assert_match(/foo/, result)
         assert_match(/bar/, result)
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file))
-        cc << "baz"
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file),
+          contents: "baz"
+        )
         cc.call
 
         actual = File.read(file)
@@ -39,8 +49,13 @@ class AppendFileTest < Minitest::Test
         line = 2
         `echo '#{contents}' >> #{file}`
 
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}##{line}"))
-        cc << "gem 'pg'"
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}##{line}"),
+          contents: "gem 'pg'"
+        )
         cc.call
 
         expected = "source https://rubygems.org\ngem 'pg'\ngem rails, 4.0.0\n\n"
@@ -54,8 +69,13 @@ class AppendFileTest < Minitest::Test
       Dir.chdir(dir) do
         filename = "file-#{Time.now.utc.strftime("%Y%m%d%H%M%S")}.txt"
         FileUtils.touch(filename)
-        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
-        cc << "some text"
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"),
+          contents: "some text"
+        )
         cc.call
 
         assert_equal "\nsome text\n", File.read(filename)
@@ -69,8 +89,13 @@ class AppendFileTest < Minitest::Test
         FileUtils.touch("file-1234.txt")
         FileUtils.touch("file-5678.txt")
         assert_raises do
-          cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"))
-          cc << "some text"
+          cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+            render_command: false,
+            render_result: false,
+            io: StringIO.new,
+            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"),
+            contents: "some text"
+          )
           cc.call
         end
       end
