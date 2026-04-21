@@ -4,9 +4,7 @@ module Rundoc
   # Generic CodeCommand class to be inherited
   #
   class CodeCommand
-    attr_accessor :contents
-
-    attr_reader :io
+    attr_reader :io, :contents
 
     def initialize(render_command:, render_result:, io:, contents: nil)
       @io = io
