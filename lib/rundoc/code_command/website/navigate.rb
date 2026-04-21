@@ -29,14 +29,6 @@ class Rundoc::CodeCommand::Website
       driver.safe_eval(contents, env)
       ""
     end
-
-    def hidden?
-      true
-    end
-
-    def not_hidden?
-      !hidden?
-    end
   end
 end
 

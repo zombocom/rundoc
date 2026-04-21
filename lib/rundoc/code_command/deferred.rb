@@ -21,11 +21,7 @@ module Rundoc
       end
 
       def hidden?
-        if @built
-          @built.hidden?
-        else
-          !render_command? && !render_result?
-        end
+        !render_command? && !render_result?
       end
 
       def not_hidden?
@@ -39,13 +35,18 @@ module Rundoc
       alias_method :<<, :push
 
       def build(io: $stdout)
-        @built ||= @runner_klass.new(
-          user_args: @args_instance,
-          render_command: render_command,
-          render_result: render_result,
-          contents: @contents,
-          io: io
-        )
+        @built ||= begin
+          runner = @runner_klass.new(
+            user_args: @args_instance,
+            render_command: render_command,
+            render_result: render_result,
+            contents: @contents,
+            io: io
+          )
+          @render_command = runner.render_command?
+          @render_result = runner.render_result?
+          runner
+        end
       rescue UnknownCommand
         raise "No such command registered with rundoc #{keyword.inspect} for `#{keyword} #{original_args}`"
       end

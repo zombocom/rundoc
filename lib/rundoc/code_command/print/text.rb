@@ -23,10 +23,6 @@ class Rundoc::CodeCommand
       ""
     end
 
-    def hidden?
-      !render_result?
-    end
-
     def call(env = {})
       if render_before?
         ""

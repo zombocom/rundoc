@@ -21,14 +21,6 @@ module Rundoc
       @render_command
     end
 
-    def hidden?
-      !render_command? && !render_result?
-    end
-
-    def not_hidden?
-      !hidden?
-    end
-
     # Executes command to build project
     # Is expected to return the result of the command
     def call(env = {})

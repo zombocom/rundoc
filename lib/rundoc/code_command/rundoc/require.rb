@@ -45,14 +45,6 @@ class ::Rundoc::CodeCommand
 
         ""
       end
-
-      def hidden?
-        !render_result?
-      end
-
-      def not_hidden?
-        !hidden?
-      end
     end
   end
 end

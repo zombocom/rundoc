@@ -58,14 +58,6 @@ class Rundoc::CodeCommand::Website
 
       ""
     end
-
-    def hidden?
-      true
-    end
-
-    def not_hidden?
-      !hidden?
-    end
   end
 end
 

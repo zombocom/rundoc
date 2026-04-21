@@ -37,14 +37,6 @@ class Rundoc::CodeCommand::Website
       env[:before] << "![Screenshot of #{driver.current_url}](#{relative_filename})"
       ""
     end
-
-    # def hidden?
-    #   true
-    # end
-
-    # def not_hidden?
-    #   !hidden?
-    # end
   end
 end
 Rundoc.register_code_command(keyword: :"website.screenshot", args_klass: Rundoc::CodeCommand::Website::ScreenshotArgs, runner_klass: Rundoc::CodeCommand::Website::ScreenshotRunner)
