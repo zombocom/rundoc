@@ -21,7 +21,7 @@ class RemoveContentsTest < Minitest::Test
 
         assert_match(/sqlite3/, File.read(@file))
 
-        cc = Rundoc::CodeCommand::FileCommand::RemoveRunner.new(user_args: Rundoc::CodeCommand::FileCommand::RemoveArgs.new(@file))
+        cc = Rundoc::CodeCommand::FileCommand::RemoveRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::FileCommand::RemoveArgs.new(@file))
         cc << "gem 'sqlite3'"
         cc.call
 
@@ -33,7 +33,7 @@ class RemoveContentsTest < Minitest::Test
         env[:fence_start] = "```ruby"
         cc.to_md(env)
 
-        assert_equal ["In file `foo.rb` remove:", Rundoc::CodeCommand::NEWLINE], env[:before]
+        assert_equal ["In file `foo.rb` remove:", Rundoc::CodeCommand::FileCommand::RemoveRunner::NEWLINE], env[:before]
       end
     end
   end

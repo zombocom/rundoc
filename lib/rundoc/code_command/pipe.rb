@@ -9,8 +9,9 @@ module Rundoc
     end
 
     class PipeRunner < Rundoc::CodeCommand
-      def initialize(user_args:)
+      def initialize(user_args:, **)
         @delegate = parse(user_args.line)
+        super(**)
       end
 
       # before: "",
@@ -38,14 +39,14 @@ module Rundoc
 
         # Unregistered keywords (e.g. `| tail -n 2`) aren't rundoc commands — treat them as bash
         if actual.runner_klass == Rundoc::CodeCommand::NoSuchCommand
-          actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code))
+          actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
         end
         actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash
       rescue Parslet::ParseFailed
-        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code))
+        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
       end
     end
   end

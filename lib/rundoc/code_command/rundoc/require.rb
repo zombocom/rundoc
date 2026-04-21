@@ -10,8 +10,9 @@ class ::Rundoc::CodeCommand
     end
 
     class RequireRunner < ::Rundoc::CodeCommand
-      def initialize(user_args:)
+      def initialize(user_args:, **)
         @path = user_args.path
+        super(**)
       end
 
       def to_md(env = {})

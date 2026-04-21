@@ -9,10 +9,11 @@ class Rundoc::CodeCommand::Website
   end
 
   class ScreenshotRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @name = user_args.name
       @upload = user_args.upload
       @driver = nil
+      super(**)
     end
 
     def driver

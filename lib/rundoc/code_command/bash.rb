@@ -7,7 +7,7 @@ class Rundoc::CodeCommand::BashArgs
 end
 
 class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
-  def initialize(user_args:)
+  def initialize(user_args:, **)
     @line = user_args.line
     @contents = ""
     @delegate = case @line.split(" ").first.downcase
@@ -16,6 +16,12 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
     else
       false
     end
+    super(**)
+  end
+
+  # predicate to over-write for failure support
+  def raise_on_error?
+    true
   end
 
   def to_md(env = {})
@@ -54,15 +60,25 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
       end
     end
 
-    unless $?.success?
-      raise "Command `#{@line}` exited with non zero status: #{result}" unless keyword.to_s.include?("fail")
+    if raise_on_error? && !$?.success?
+      raise "Command `#{@line}` exited with non zero status: #{result}"
     end
     result
   end
 end
 
+class Rundoc::CodeCommand::BashRunnerFailOk < Rundoc::CodeCommand::BashRunner
+  def raise_on_error?
+    false
+  end
+end
+
 Rundoc.register_code_command(keyword: :bash, args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
 Rundoc.register_code_command(keyword: :"$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
-Rundoc.register_code_command(keyword: :"fail.$", args_klass: Rundoc::CodeCommand::BashArgs, runner_klass: Rundoc::CodeCommand::BashRunner)
+Rundoc.register_code_command(
+  keyword: :"fail.$",
+  args_klass: Rundoc::CodeCommand::BashArgs,
+  runner_klass: Rundoc::CodeCommand::BashRunnerFailOk
+)
 
 require "rundoc/code_command/bash/cd"

@@ -6,33 +6,31 @@ class BackgroundTest < Minitest::Test
       Dir.chdir(dir) do
         # Intentionally out of order, should not raise an error as long as "cat"
         # command exists at execution time
-        stdin_write = Rundoc::CodeCommand::Background::StdinWriteRunner.new(user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
+        stdin_write = Rundoc::CodeCommand::Background::StdinWriteRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
           "hello there",
           name: "cat",
           wait: "hello"
         ))
 
-        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("cat",
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StartArgs.new("cat",
           name: "cat"))
 
         background_start.call
         output = stdin_write.call
         assert_equal("hello there" + $/, output)
 
-        Rundoc::CodeCommand::Background::WaitRunner.new(
+        Rundoc::CodeCommand::Background::WaitRunner.new(render_command: false, render_result: false,
           user_args: Rundoc::CodeCommand::Background::WaitArgs.new(
             name: "cat",
             wait: "hello"
-          )
-        ).call
+          )).call
 
-        Rundoc::CodeCommand::Background::Log::ClearRunner.new(
+        Rundoc::CodeCommand::Background::Log::ClearRunner.new(render_command: false, render_result: false,
           user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(
             name: "cat"
-          )
-        ).call
+          )).call
 
-        output = Rundoc::CodeCommand::Background::StdinWriteRunner.new(user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
+        output = Rundoc::CodeCommand::Background::StdinWriteRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
           "general kenobi",
           name: "cat",
           wait: "general"
@@ -48,7 +46,7 @@ class BackgroundTest < Minitest::Test
         file = "foo.txt"
         run!("echo 'foo' >> #{file}")
 
-        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
           name: "tail2",
           wait: "f"))
 
@@ -59,7 +57,7 @@ class BackgroundTest < Minitest::Test
         assert_match("foo", output)
         assert_equal(true, background_start.alive?)
 
-        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail2"))
+        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail2"))
         background_stop.call
 
         assert_equal(false, background_start.alive?)
@@ -73,7 +71,7 @@ class BackgroundTest < Minitest::Test
         file = "foo.txt"
         run!("echo 'foo' >> #{file}")
 
-        background_start = Rundoc::CodeCommand::Background::StartRunner.new(user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
+        background_start = Rundoc::CodeCommand::Background::StartRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StartArgs.new("tail -f #{file}",
           name: "tail",
           wait: "f"))
         output = background_start.call
@@ -81,12 +79,12 @@ class BackgroundTest < Minitest::Test
         assert_match("foo", output)
         assert_equal(true, background_start.alive?)
 
-        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
+        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
         output = log_read.call
 
         assert_equal("foo", output.chomp)
 
-        log_clear = Rundoc::CodeCommand::Background::Log::ClearRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(name: "tail"))
+        log_clear = Rundoc::CodeCommand::Background::Log::ClearRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(name: "tail"))
         output = log_clear.call
         assert_equal("", output)
 
@@ -94,12 +92,12 @@ class BackgroundTest < Minitest::Test
 
         background_start.background.wait("bar")
 
-        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
+        log_read = Rundoc::CodeCommand::Background::Log::ReadRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::Log::ReadArgs.new(name: "tail"))
         output = log_read.call
 
         assert_equal("bar", output.chomp)
 
-        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail"))
+        background_stop = Rundoc::CodeCommand::Background::StopRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StopArgs.new(name: "tail"))
         background_stop.call
 
         assert_equal(false, background_start.alive?)

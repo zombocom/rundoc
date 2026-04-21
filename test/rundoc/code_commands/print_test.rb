@@ -6,9 +6,7 @@ class PrintTest < Minitest::Test
     env[:before] = []
 
     input = %($ rails new myapp # Not a command since it's missing the ":::>>")
-    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input))
-    cmd.render_command = false
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input), render_command: false, render_result: true)
 
     assert_equal "", cmd.to_md(env)
     assert_equal "", cmd.call
@@ -20,9 +18,7 @@ class PrintTest < Minitest::Test
     env[:before] = []
 
     input = %($ rails new myapp # Not a command since it's missing the ":::>>")
-    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input))
-    cmd.render_command = true
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintTextRunner.new(user_args: Rundoc::CodeCommand::PrintTextArgs.new(input), render_command: true, render_result: true)
 
     assert_equal "", cmd.to_md(env)
     assert_equal input, cmd.call
@@ -35,9 +31,7 @@ class PrintTest < Minitest::Test
     env[:before] = []
 
     input = %($ rails new <%= 'myapp' %> # Not a command since it's missing the ":::>>")
-    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new(input))
-    cmd.render_command = false
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new(input), render_command: false, render_result: true)
 
     assert_equal "", cmd.to_md(env)
     assert_equal "", cmd.call
@@ -49,10 +43,7 @@ class PrintTest < Minitest::Test
     env = {}
     env[:before] = []
 
-    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new)
-    cmd.contents = %(<%= "foo" %>)
-    cmd.render_command = true
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new, render_command: true, render_result: true, contents: %(<%= "foo" %>))
 
     assert_equal "", cmd.to_md(env)
     assert_equal "foo", cmd.call
@@ -62,10 +53,12 @@ class PrintTest < Minitest::Test
   def test_binding_is_preserved
     env = {}
     env[:before] = []
-    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new)
-    cmd.contents = %{<%= @foo = SecureRandom.hex(16) %>}
-    cmd.render_command = true
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintERBRunner.new(
+      user_args: Rundoc::CodeCommand::PrintERBArgs.new,
+      contents: %{<%= @foo = SecureRandom.hex(16) %>},
+      render_command: true,
+      render_result: true
+    )
 
     assert_equal "", cmd.to_md(env)
     assert_equal [], env[:before]
@@ -73,19 +66,13 @@ class PrintTest < Minitest::Test
 
     assert !expected.empty?
 
-    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new)
-    cmd.contents = %(<%= @foo %>)
-    cmd.render_command = true
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new, render_command: true, render_result: true, contents: %(<%= @foo %>))
 
     assert_equal "", cmd.to_md(env)
     assert_equal expected, cmd.call
     assert_equal [], env[:before]
 
-    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new(binding: "different"))
-    cmd.contents = %(<%= @foo %>)
-    cmd.render_command = true
-    cmd.render_result = true
+    cmd = Rundoc::CodeCommand::PrintERBRunner.new(user_args: Rundoc::CodeCommand::PrintERBArgs.new(binding: "different"), render_command: true, render_result: true, contents: %(<%= @foo %>))
 
     assert_equal "", cmd.to_md(env)
     assert_equal "", cmd.call

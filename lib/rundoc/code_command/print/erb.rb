@@ -24,9 +24,10 @@ class Rundoc::CodeCommand
   end
 
   class PrintERBRunner < Rundoc::CodeCommand
-    def initialize(user_args:)
+    def initialize(user_args:, **)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[user_args.binding_name]
+      super(**)
     end
 
     def to_md(env)
