@@ -15,8 +15,6 @@ module Rundoc
 
       def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
         @io = io
-        @render_command = render_command
-        @render_result = render_result
         @delegate = parse(user_args.line)
       end
 
@@ -30,14 +28,6 @@ module Rundoc
 
         @delegate.push(last_command[:output])
         @delegate.build(io: io).call(env)
-      end
-
-      def render_command?
-        @render_command
-      end
-
-      def render_result?
-        @render_result
       end
 
       def to_md(env = {})

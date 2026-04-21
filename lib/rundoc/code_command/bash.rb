@@ -13,8 +13,6 @@ class Rundoc::CodeCommand::BashRunner
 
   def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
     @io = io
-    @render_command = render_command
-    @render_result = render_result
     @contents = contents.dup if contents && !contents.empty?
     @line = user_args.line
     @delegate = case @line.split(" ").first.downcase
@@ -23,14 +21,6 @@ class Rundoc::CodeCommand::BashRunner
     else
       false
     end
-  end
-
-  def render_command?
-    @render_command
-  end
-
-  def render_result?
-    @render_result
   end
 
   def raise_on_error?

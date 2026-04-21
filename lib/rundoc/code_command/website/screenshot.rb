@@ -18,16 +18,6 @@ class Rundoc::CodeCommand::Website
       @upload = user_args.upload
       @driver = nil
       @io = io
-      @render_command = render_command
-      @render_result = render_result
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def driver

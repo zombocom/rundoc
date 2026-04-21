@@ -17,20 +17,10 @@ class Rundoc::CodeCommand::Background
       @wait = user_args.wait
       @timeout_value = user_args.timeout
       @background = nil
-      @render_command = render_command
-      @render_result = render_result
     end
 
     def background
       @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def to_md(env = {})

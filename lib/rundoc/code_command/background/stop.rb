@@ -13,20 +13,10 @@ class Rundoc::CodeCommand::Background
     def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @name = user_args.name
       @background = nil
-      @render_command = render_command
-      @render_result = render_result
     end
 
     def background
       @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def to_md(env = {})

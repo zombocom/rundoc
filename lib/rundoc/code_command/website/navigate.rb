@@ -16,17 +16,7 @@ class Rundoc::CodeCommand::Website
       @name = user_args.name
       @driver = nil
       @io = io
-      @render_command = render_command
-      @render_result = render_result
       @contents = contents.dup if contents && !contents.empty?
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def driver

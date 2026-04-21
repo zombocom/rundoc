@@ -32,8 +32,6 @@ class Rundoc::CodeCommand::Background
 
       @background = nil
       @io = io
-      @render_command = render_command
-      @render_result = render_result
     end
 
     def background
@@ -46,14 +44,6 @@ class Rundoc::CodeCommand::Background
         io.puts "Spawning commmand: `#{spawn.command}`"
         ProcessSpawn.add(@name, spawn)
       end
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def to_md(env = {})

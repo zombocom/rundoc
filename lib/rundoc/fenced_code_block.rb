@@ -15,7 +15,7 @@ module Rundoc
     def executed_commands
       raise "Nothing executed" unless @env[:commands].any?
 
-      @env[:commands].map { |c| c[:object] }
+      @env[:commands].map { |c| c[:visibility] }
     end
 
     # @param fence [String] the fence used to start the code block like "```".

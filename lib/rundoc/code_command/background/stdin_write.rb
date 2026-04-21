@@ -24,20 +24,10 @@ class Rundoc::CodeCommand::Background
       @timeout_value = user_args.timeout
       @contents_written = nil
       @background = nil
-      @render_command = render_command
-      @render_result = render_result
     end
 
     def background
       @background ||= Rundoc::CodeCommand::Background::ProcessSpawn.find(@name)
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     # The command is rendered (`:::>-`) by the output of the `def call` method.

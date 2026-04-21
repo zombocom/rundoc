@@ -27,17 +27,7 @@ class Rundoc::CodeCommand::Website
       @visible = user_args.visible
       @max_attempts = user_args.max_attempts
       @io = io
-      @render_command = render_command
-      @render_result = render_result
       @contents = contents.dup if contents && !contents.empty?
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def driver
