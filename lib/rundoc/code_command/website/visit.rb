@@ -18,7 +18,7 @@ class Rundoc::CodeCommand::Website
   class VisitRunner
     attr_reader :io, :contents
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @name = user_args.name
       @url = user_args.url
       @scroll = user_args.scroll

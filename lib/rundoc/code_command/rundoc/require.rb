@@ -14,7 +14,7 @@ module ::Rundoc::CodeCommand
     class RequireRunner
       attr_reader :io
 
-      def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
         @path = user_args.path
         @io = io
         @render_command = render_command

@@ -16,7 +16,7 @@ class Rundoc::CodeCommand::FileCommand
 
     attr_reader :io, :contents
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @filename, line = user_args.filename.split("#")
       @line_number = if line
         Integer(line)

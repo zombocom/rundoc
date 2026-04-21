@@ -12,7 +12,7 @@ class Rundoc::CodeCommand::Background
   end
 
   class WaitRunner
-    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @name = user_args.name
       @wait = user_args.wait
       @timeout_value = user_args.timeout

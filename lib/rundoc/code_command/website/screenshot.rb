@@ -13,7 +13,7 @@ class Rundoc::CodeCommand::Website
   class ScreenshotRunner
     attr_reader :io
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @name = user_args.name
       @upload = user_args.upload
       @driver = nil

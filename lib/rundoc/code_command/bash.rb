@@ -11,7 +11,7 @@ end
 class Rundoc::CodeCommand::BashRunner
   attr_reader :io, :contents
 
-  def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+  def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
     @io = io
     @render_command = render_command
     @render_result = render_result

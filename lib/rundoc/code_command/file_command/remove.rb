@@ -22,7 +22,7 @@ class Rundoc::CodeCommand::FileCommand
 
     attr_reader :io, :contents
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @filename = user_args.filename
       @io = io
       @render_command = render_command

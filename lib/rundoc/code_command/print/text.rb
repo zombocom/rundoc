@@ -12,7 +12,7 @@ module Rundoc::CodeCommand
   class PrintTextRunner
     attr_reader :contents
 
-    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @line = user_args.line
       @render_command = render_command
       @render_result = render_result

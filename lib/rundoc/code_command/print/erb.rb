@@ -28,7 +28,7 @@ module Rundoc::CodeCommand
   class PrintERBRunner
     attr_reader :contents
 
-    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[user_args.binding_name]
       @render_command = render_command

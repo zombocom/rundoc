@@ -39,7 +39,7 @@ module Rundoc
 
       attr_reader :io, :contents
 
-      def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
         @filename = user_args.path.to_s
         @io = io
         @render_command = render_command

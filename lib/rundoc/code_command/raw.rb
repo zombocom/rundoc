@@ -14,7 +14,7 @@ module Rundoc
     class Raw
       attr_reader :contents
 
-      def initialize(user_args: nil, render_command: true, render_result: true, io: nil, contents: nil, **)
+      def initialize(user_args: nil, render_command: true, render_result: true, io: nil, contents: nil)
         @render_command = render_command
         @render_result = render_result
         @contents = contents.dup if contents && !contents.empty?

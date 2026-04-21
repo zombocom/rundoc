@@ -16,7 +16,7 @@ class Rundoc::CodeCommand::Background
   class StdinWriteRunner
     attr_reader :contents
 
-    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @contents = user_args.contents
       @ending = user_args.ending
       @wait = user_args.wait

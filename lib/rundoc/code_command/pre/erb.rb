@@ -14,7 +14,7 @@ module Rundoc::CodeCommand
   class PreErbRunner
     attr_reader :io, :contents
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       @code = nil

@@ -20,7 +20,7 @@ class Rundoc::CodeCommand::Background
   class StartRunner
     attr_reader :io
 
-    def initialize(user_args:, render_command:, render_result:, io:, contents: nil, **)
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @timeout = user_args.timeout
       @command = user_args.command
       @name = user_args.name
