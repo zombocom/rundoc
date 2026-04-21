@@ -244,8 +244,8 @@ module Rundoc
         raise TransformError.new(message: message, line_and_column: line_and_column)
       end
       Visability.new(
-        command: command.to_s == ">".freeze,
-        result: result.to_s == ">".freeze
+        command: command.to_s == ">",
+        result: result.to_s == ">"
       )
     }
 
