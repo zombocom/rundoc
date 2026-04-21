@@ -46,7 +46,7 @@ module Rundoc
 
       def to_md(env)
         if render_command?
-          if env[:commands].any? { |c| c[:object].not_hidden? }
+          if env[:commands].any? { |c| c[:visibility].not_hidden? }
             raise "must call write in its own code section"
           end
           env[:before] << "In file `#{filename}` write:"
