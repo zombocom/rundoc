@@ -3,17 +3,17 @@
 module ::Rundoc
   class CodeCommand
     class RundocCommandArgs
-      attr_reader :contents
+      attr_reader :code
 
-      def initialize(contents = "")
-        @contents = contents
+      def initialize(code = "")
+        @code = code
       end
     end
 
     class RundocCommandRunner < ::Rundoc::CodeCommand
       def initialize(user_args:, **)
-        @contents = user_args.contents
         super(**)
+        @contents = user_args.code + @contents
       end
 
       def to_md(env = {})

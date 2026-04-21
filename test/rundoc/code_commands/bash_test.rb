@@ -27,8 +27,13 @@ class BashTest < Minitest::Test
 
   def test_stdin
     command = "tail -n 2"
-    bash = Rundoc::CodeCommand::BashRunner.new(render_command: false, render_result: false, io: StringIO.new, user_args: Rundoc::CodeCommand::BashArgs.new(command))
-    bash << "foo\nbar\nbaz\n"
+    bash = Rundoc::CodeCommand::BashRunner.new(
+      render_command: false,
+      render_result: false,
+      io: StringIO.new,
+      user_args: Rundoc::CodeCommand::BashArgs.new(command),
+      contents: "foo\nbar\nbaz\n"
+    )
     assert_equal "bar\nbaz\n", bash.call
   end
 end

@@ -12,7 +12,7 @@ module Rundoc
       @io = io
       @render_command = render_command
       @render_result = render_result
-      push(contents) if contents && !contents.empty?
+      @contents = contents.dup if contents && !contents.empty?
     end
 
     def render_result?
@@ -30,12 +30,6 @@ module Rundoc
     def not_hidden?
       !hidden?
     end
-
-    def push(contents)
-      @contents ||= +""
-      @contents << contents
-    end
-    alias_method :<<, :push
 
     # Executes command to build project
     # Is expected to return the result of the command
