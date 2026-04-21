@@ -56,16 +56,20 @@ module Rundoc
       env[:context] = @context
       env[:stack] = @stack
 
+      any_visible = false
+
       while (item = @stack.pop)
         code_command = item.build(io: @io)
 
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
-        result << code_line if code_command.render_command?
-        result << code_output if code_command.render_result?
+        result << code_line if item.render_command?
+        result << code_output if item.render_result?
 
         PARTIAL_RESULT.replace(result)
         PARTIAL_ENV.replace(env)
+
+        any_visible = true if item.not_hidden?
 
         env[:commands] << {
           object: code_command,
@@ -74,7 +78,7 @@ module Rundoc
         }
       end
 
-      if env[:commands].any? { |c| c[:object].not_hidden? }
+      if any_visible
         @rendered = self.class.to_doc(result: result, env: env)
       end
       self
