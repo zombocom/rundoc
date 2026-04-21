@@ -31,12 +31,6 @@ module Rundoc
       !hidden?
     end
 
-    def push(contents)
-      @contents ||= +""
-      @contents << contents
-    end
-    alias_method :<<, :push
-
     # Executes command to build project
     # Is expected to return the result of the command
     def call(env = {})

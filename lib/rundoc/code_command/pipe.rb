@@ -25,7 +25,7 @@ module Rundoc
         io.puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
 
         @delegate.push(last_command[:output])
-        @delegate.call(env)
+        @delegate.build(io: io).call(env)
       end
 
       def to_md(env = {})
@@ -39,17 +39,23 @@ module Rundoc
 
         actual = actual.first if actual.is_a?(Array)
 
-        # Unregistered keywords (e.g. `| tail -n 2`) aren't rundoc commands — treat them as bash
         if actual.runner_klass == Rundoc::CodeCommand::NoSuchCommand
-          Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
+          bash_deferred(code)
         else
-          actual.build(io: io)
+          actual
         end
-
-      # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
-      # are bash
       rescue Parslet::ParseFailed
-        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
+        bash_deferred(code)
+      end
+
+      private def bash_deferred(code)
+        deferred = Rundoc::CodeCommand::Deferred.new(
+          args_instance: Rundoc::CodeCommand::BashArgs.new(code),
+          runner_klass: Rundoc::CodeCommand::BashRunner
+        )
+        deferred.render_command = false
+        deferred.render_result = false
+        deferred
       end
     end
   end
