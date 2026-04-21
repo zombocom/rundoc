@@ -36,12 +36,13 @@ module Rundoc
       end
       alias_method :<<, :push
 
-      def build
+      def build(io: $stdout)
         @built ||= @runner_klass.new(
           user_args: @args_instance,
           render_command: render_command,
           render_result: render_result,
-          contents: @contents
+          contents: @contents,
+          io: io
         )
       rescue UnknownCommand
         raise "No such command registered with rundoc #{keyword.inspect} for `#{keyword} #{original_args}`"

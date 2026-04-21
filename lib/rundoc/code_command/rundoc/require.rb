@@ -30,14 +30,15 @@ class ::Rundoc::CodeCommand
             output_dir: execution_context.output_dir,
             screenshots_dirname: execution_context.screenshots_dir,
             with_contents_dir: execution_context.with_contents_dir
-          )
+          ),
+          io: io
         ).to_md
 
         if render_result?
-          puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
+          io.puts "rundoc.require: Done executing #{@path.to_s.inspect}, putting contents into document"
           env[:before] << output
         else
-          puts "rundoc.require: Done executing #{@path.to_s.inspect}, quietly"
+          io.puts "rundoc.require: Done executing #{@path.to_s.inspect}, quietly"
         end
 
         ""

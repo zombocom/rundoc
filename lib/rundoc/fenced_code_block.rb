@@ -24,7 +24,8 @@ module Rundoc
     # @param code [String] the code block contents inside the fence.
     # @param context [Context::Execution] The details about where
     #        the code block came from.
-    def initialize(fence:, lang:, code:, context:)
+    def initialize(fence:, lang:, code:, context:, io: $stdout)
+      @io = io
       @fence = fence
       @lang = lang
       @code = code
@@ -57,7 +58,7 @@ module Rundoc
 
       while (item = @stack.pop)
         code_command = if item.is_a?(CodeCommand::Deferred)
-          item.build
+          item.build(io: @io)
         else
           item
         end

@@ -8,15 +8,14 @@ end
 
 class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
   def initialize(user_args:, **)
+    super(**)
     @line = user_args.line
-    @contents = ""
     @delegate = case @line.split(" ").first.downcase
     when "cd"
-      Cd.new(@line)
+      Cd.new(@line, io: io)
     else
       false
     end
-    super(**)
   end
 
   # predicate to over-write for failure support
@@ -45,16 +44,16 @@ class Rundoc::CodeCommand::BashRunner < Rundoc::CodeCommand
     cmd = "(#{cmd}) 2>&1"
     msg = "Running: $ '#{cmd}'"
     msg << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
-    puts msg
+    io.puts msg
 
     result = ""
-    IO.popen(cmd, "w+") do |io|
-      io << stdin if stdin
-      io.close_write
+    IO.popen(cmd, "w+") do |pipe|
+      pipe << stdin if stdin
+      pipe.close_write
 
-      until io.eof?
-        buffer = io.gets
-        puts "    #{buffer}"
+      until pipe.eof?
+        buffer = pipe.gets
+        io.puts "    #{buffer}"
 
         result << sanitize_escape_chars(buffer)
       end

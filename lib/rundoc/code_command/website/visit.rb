@@ -33,7 +33,8 @@ class Rundoc::CodeCommand::Website
         url: @url,
         height: @height,
         width: @width,
-        visible: @visible
+        visible: @visible,
+        io: io
       ).tap do |driver|
         Driver.add(@name, driver)
       end
@@ -47,7 +48,7 @@ class Rundoc::CodeCommand::Website
       message = "Visting: #{@url}"
       message << "and executing:\n#{contents}" unless contents.nil? || contents.empty?
 
-      puts message
+      io.puts message
 
       driver.visit(@url, max_attempts: @max_attempts) if @url
       driver.scroll(@scroll) if @scroll

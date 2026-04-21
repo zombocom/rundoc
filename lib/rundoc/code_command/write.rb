@@ -54,7 +54,7 @@ module Rundoc
       end
 
       def call(env = {})
-        puts "Writing to: '#{filename}'"
+        io.puts "Writing to: '#{filename}'"
         mkdir_p
         File.write(filename, contents)
         contents

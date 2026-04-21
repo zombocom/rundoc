@@ -1,6 +1,7 @@
 class Rundoc::CodeCommand::BashRunner
   class Cd < Rundoc::CodeCommand::BashRunner
-    def initialize(line)
+    def initialize(line, io: $stdout)
+      @io = io
       @line = line
     end
 
@@ -20,7 +21,7 @@ class Rundoc::CodeCommand::BashRunner
 
     def call(env)
       line = @line.sub("cd", "").strip
-      puts "running $ cd #{line}"
+      @io.puts "running $ cd #{line}"
 
       supress_chdir_warning do
         Dir.chdir(line)

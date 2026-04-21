@@ -33,7 +33,8 @@ class Minitest::Test
     contents,
     output_dir: nil,
     source_path: nil,
-    screenshots_dirname: nil
+    screenshots_dirname: nil,
+    io: StringIO.new
   )
     context = default_context(
       output_dir: output_dir,
@@ -42,7 +43,8 @@ class Minitest::Test
     )
     Rundoc::Document.new(
       contents,
-      context: context
+      context: context,
+      io: io
     )
   end
 

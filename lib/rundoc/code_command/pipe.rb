@@ -10,8 +10,8 @@ module Rundoc
 
     class PipeRunner < Rundoc::CodeCommand
       def initialize(user_args:, **)
-        @delegate = parse(user_args.line)
         super(**)
+        @delegate = parse(user_args.line)
       end
 
       # before: "",
@@ -20,7 +20,7 @@ module Rundoc
       #   [[cmd, output], [cmd, output]]
       def call(env = {})
         last_command = env[:commands].last
-        puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
+        io.puts "Piping: results of '#{last_command[:command]}' to '#{@delegate}'"
 
         @delegate.push(last_command[:output])
         @delegate.call(env)
@@ -39,14 +39,15 @@ module Rundoc
 
         # Unregistered keywords (e.g. `| tail -n 2`) aren't rundoc commands — treat them as bash
         if actual.runner_klass == Rundoc::CodeCommand::NoSuchCommand
-          actual = Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
+          Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
+        else
+          actual.build(io: io)
         end
-        actual
 
       # Since `| tail -n 2` does not start with a `$` assume any "naked" commands
       # are bash
       rescue Parslet::ParseFailed
-        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false)
+        Rundoc::CodeCommand::BashRunner.new(user_args: Rundoc::CodeCommand::BashArgs.new(code), render_command: false, render_result: false, io: io)
       end
     end
   end
