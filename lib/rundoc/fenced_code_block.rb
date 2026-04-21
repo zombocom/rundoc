@@ -57,11 +57,7 @@ module Rundoc
       env[:stack] = @stack
 
       while (item = @stack.pop)
-        code_command = if item.is_a?(CodeCommand::Deferred)
-          item.build(io: @io)
-        else
-          item
-        end
+        code_command = item.build(io: @io)
 
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""

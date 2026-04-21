@@ -267,16 +267,21 @@ module Rundoc
       code_command
     }
 
-    # The lines before a CodeCommand are rendered
-    # without running any code
     rule(raw_code: simple(:raw_code)) {
-      CodeCommand::Raw.new(raw_code)
+      deferred = CodeCommand::Deferred.new(args_instance: nil, runner_klass: CodeCommand::Raw)
+      deferred.render_command = false
+      deferred.render_result = true
+      deferred.push(raw_code.to_s)
+      deferred
     }
 
-    # Sometimes
     rule(raw_code: sequence(:raw_code)) {
-      hidden = raw_code.nil? || raw_code.empty?
-      CodeCommand::Raw.new(raw_code, visible: !hidden)
+      visible = !raw_code.nil? && !raw_code.empty?
+      deferred = CodeCommand::Deferred.new(args_instance: nil, runner_klass: CodeCommand::Raw)
+      deferred.render_command = false
+      deferred.render_result = visible
+      deferred.push(raw_code.map(&:to_s).join)
+      deferred
     }
   end
 end

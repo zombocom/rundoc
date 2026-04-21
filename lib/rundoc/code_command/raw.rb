@@ -12,9 +12,8 @@ module Rundoc
     #   :::>> $ echo "hi"   <- parsed as a code command
     #   ```
     class Raw < CodeCommand
-      def initialize(contents, visible: true)
-        @contents = contents
-        @render_result = visible
+      def initialize(user_args: nil, **)
+        super(**)
       end
 
       def call(env = {})
