@@ -12,7 +12,7 @@ class EmptyBinding
   end
 end
 
-class Rundoc::CodeCommand
+module Rundoc::CodeCommand
   RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
   RUNDOC_DEFAULT_ERB_BINDING = "default"
 

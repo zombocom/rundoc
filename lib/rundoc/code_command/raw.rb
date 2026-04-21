@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     # Wraps lines inside a fenced code block that are not rundoc commands.
     # These are rendered as-is without executing any code.
     #

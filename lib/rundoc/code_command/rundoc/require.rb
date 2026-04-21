@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ::Rundoc::CodeCommand
+module ::Rundoc::CodeCommand
   class RundocCommand
     class RequireArgs
       attr_reader :path

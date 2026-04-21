@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Rundoc::CodeCommand
+module Rundoc::CodeCommand
   class PrintTextArgs
     attr_reader :line
 

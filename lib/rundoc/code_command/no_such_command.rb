@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     class NoSuchCommand
       def initialize(user_args: nil, render_command: false, render_result: false, io: nil, contents: nil, **)
         @render_command = render_command

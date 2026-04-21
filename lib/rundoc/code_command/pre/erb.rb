@@ -2,7 +2,7 @@
 
 require_relative "../print/erb"
 
-class Rundoc::CodeCommand
+module Rundoc::CodeCommand
   class PreErbArgs
     attr_reader :line
 

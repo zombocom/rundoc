@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     # Hold enough information to construct commands, but don't yet
     #
     # Allows us to separate parse time constructs from runtime injectables

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ::Rundoc
-  class CodeCommand
+  module CodeCommand
     class RundocCommandArgs
       attr_reader :code
 
