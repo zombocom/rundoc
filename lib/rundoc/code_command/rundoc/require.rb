@@ -17,12 +17,7 @@ module ::Rundoc::CodeCommand
       def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
         @path = user_args.path
         @io = io
-        @render_command = render_command
         @render_result = render_result
-      end
-
-      def render_command?
-        @render_command
       end
 
       def render_result?

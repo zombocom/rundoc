@@ -43,16 +43,11 @@ module Rundoc
         @filename = user_args.path.to_s
         @io = io
         @render_command = render_command
-        @render_result = render_result
         @contents = contents.dup if contents && !contents.empty?
       end
 
       def render_command?
         @render_command
-      end
-
-      def render_result?
-        @render_result
       end
 
       def to_md(env)

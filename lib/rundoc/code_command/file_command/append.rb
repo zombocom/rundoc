@@ -23,16 +23,11 @@ class Rundoc::CodeCommand::FileCommand
       end
       @io = io
       @render_command = render_command
-      @render_result = render_result
       @contents = contents.dup if contents && !contents.empty?
     end
 
     def render_command?
       @render_command
-    end
-
-    def render_result?
-      @render_result
     end
 
     def to_md(env)
