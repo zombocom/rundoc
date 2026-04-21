@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ::Rundoc
-  class CodeCommand
+  module CodeCommand
     class RundocCommandArgs
       attr_reader :code
 
@@ -10,10 +10,13 @@ module ::Rundoc
       end
     end
 
-    class RundocCommandRunner < ::Rundoc::CodeCommand
-      def initialize(user_args:, **)
-        super(**)
-        @contents = user_args.code + @contents
+    class RundocCommandRunner
+      attr_reader :io, :contents
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
+        @io = io
+        @contents = contents.dup if contents && !contents.empty?
+        @contents = user_args.code + (@contents || +"")
       end
 
       def to_md(env = {})

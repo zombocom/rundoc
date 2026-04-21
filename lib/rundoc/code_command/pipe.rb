@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     class PipeArgs
       attr_reader :line
 
@@ -10,9 +10,11 @@ module Rundoc
       end
     end
 
-    class PipeRunner < Rundoc::CodeCommand
-      def initialize(user_args:, **)
-        super(**)
+    class PipeRunner
+      attr_reader :io
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
+        @io = io
         @delegate = parse(user_args.line)
       end
 

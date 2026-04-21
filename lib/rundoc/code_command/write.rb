@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     module FileUtil
       def filename
         files = Dir.glob(@filename)
@@ -25,9 +25,7 @@ module Rundoc
       end
     end
 
-    class WriteRunner < Rundoc::CodeCommand
-      # Newlines are stripped and re-added, this tells the project that
-      # we're intentionally wanting an extra newline
+    class WriteRunner
       NEWLINE = Object.new
       def NEWLINE.to_s
         ""
@@ -37,16 +35,24 @@ module Rundoc
         false
       end
 
-      include FileUtil
+      include Rundoc::CodeCommand::FileUtil
 
-      def initialize(user_args:, **)
+      attr_reader :io, :contents
+
+      def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
         @filename = user_args.path.to_s
-        super(**)
+        @io = io
+        @render_command = render_command
+        @contents = contents.dup if contents && !contents.empty?
+      end
+
+      def render_command?
+        @render_command
       end
 
       def to_md(env)
         if render_command?
-          if env[:commands].any? { |c| c[:object].not_hidden? }
+          if env[:commands].any? { |c| c[:visibility].not_hidden? }
             raise "must call write in its own code section"
           end
           env[:before] << "In file `#{filename}` write:"

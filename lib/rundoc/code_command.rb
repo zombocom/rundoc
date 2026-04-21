@@ -1,46 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  # Generic CodeCommand class to be inherited
-  #
-  class CodeCommand
-    attr_accessor :contents
-
-    attr_reader :io
-
-    def initialize(render_command:, render_result:, io:, contents: nil)
-      @io = io
-      @render_command = render_command
-      @render_result = render_result
-      @contents = contents.dup if contents && !contents.empty?
-    end
-
-    def render_result?
-      @render_result
-    end
-
-    def render_command?
-      @render_command
-    end
-
-    def hidden?
-      !render_command? && !render_result?
-    end
-
-    def not_hidden?
-      !hidden?
-    end
-
-    # Executes command to build project
-    # Is expected to return the result of the command
-    def call(env = {})
-      raise "not implemented on #{inspect}"
-    end
-
-    # the output of the command, i.e. `$ cat foo.txt`
-    def to_md(env = {})
-      raise "not implemented on #{inspect}"
-    end
+  module CodeCommand
   end
 end
 

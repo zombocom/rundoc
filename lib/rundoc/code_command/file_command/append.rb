@@ -9,21 +9,31 @@ class Rundoc::CodeCommand::FileCommand
     end
   end
 
-  class AppendRunner < Rundoc::CodeCommand
-    include FileUtil
+  class AppendRunner
+    NEWLINE = Rundoc::CodeCommand::WriteRunner::NEWLINE
 
-    def initialize(user_args:, **)
+    include Rundoc::CodeCommand::FileUtil
+
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @filename, line = user_args.filename.split("#")
       @line_number = if line
         Integer(line)
       end
-      super(**)
+      @io = io
+      @render_command = render_command
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
     end
 
     def to_md(env)
       return unless render_command?
 
-      if env[:commands].any? { |c| c[:object].not_hidden? }
+      if env[:commands].any? { |c| c[:visibility].not_hidden? }
         raise "Must call append in its own code section"
       end
 

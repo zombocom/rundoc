@@ -9,9 +9,7 @@ class Rundoc::CodeCommand::FileCommand
     end
   end
 
-  class RemoveRunner < Rundoc::CodeCommand
-    # Newlines are stripped and re-added, this tells the project that
-    # we're intentionally wanting an extra newline
+  class RemoveRunner
     NEWLINE = Object.new
     def NEWLINE.to_s
       ""
@@ -20,15 +18,18 @@ class Rundoc::CodeCommand::FileCommand
     def NEWLINE.empty?
       false
     end
-    include FileUtil
+    include Rundoc::CodeCommand::FileUtil
 
-    def initialize(user_args:, **)
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @filename = user_args.filename
-      super(**)
+      @io = io
+      @contents = contents.dup if contents && !contents.empty?
     end
 
     def to_md(env)
-      if env[:commands].any? { |c| c[:object].not_hidden? }
+      if env[:commands].any? { |c| c[:visibility].not_hidden? }
         raise "Must call remove in its own code section"
       end
 

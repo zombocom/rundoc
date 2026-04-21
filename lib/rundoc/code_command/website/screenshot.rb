@@ -10,12 +10,14 @@ class Rundoc::CodeCommand::Website
     end
   end
 
-  class ScreenshotRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class ScreenshotRunner
+    attr_reader :io
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @name = user_args.name
       @upload = user_args.upload
       @driver = nil
-      super(**)
+      @io = io
     end
 
     def driver
@@ -37,14 +39,6 @@ class Rundoc::CodeCommand::Website
       env[:before] << "![Screenshot of #{driver.current_url}](#{relative_filename})"
       ""
     end
-
-    # def hidden?
-    #   true
-    # end
-
-    # def not_hidden?
-    #   !hidden?
-    # end
   end
 end
 Rundoc.register_code_command(keyword: :"website.screenshot", args_klass: Rundoc::CodeCommand::Website::ScreenshotArgs, runner_klass: Rundoc::CodeCommand::Website::ScreenshotRunner)

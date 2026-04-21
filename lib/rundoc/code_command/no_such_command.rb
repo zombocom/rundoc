@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
-    class NoSuchCommand < Rundoc::CodeCommand
-      def initialize(user_args: nil, **)
-        super(**)
+  module CodeCommand
+    class NoSuchCommand
+      def initialize(user_args: nil, render_command: false, render_result: false, io: nil, contents: nil)
       end
 
       def call(env = {})

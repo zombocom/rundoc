@@ -15,8 +15,10 @@ class Rundoc::CodeCommand::Website
     end
   end
 
-  class VisitRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class VisitRunner
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @name = user_args.name
       @url = user_args.url
       @scroll = user_args.scroll
@@ -24,7 +26,8 @@ class Rundoc::CodeCommand::Website
       @width = user_args.width
       @visible = user_args.visible
       @max_attempts = user_args.max_attempts
-      super(**)
+      @io = io
+      @contents = contents.dup if contents && !contents.empty?
     end
 
     def driver
@@ -57,14 +60,6 @@ class Rundoc::CodeCommand::Website
       driver.safe_eval(contents, env)
 
       ""
-    end
-
-    def hidden?
-      true
-    end
-
-    def not_hidden?
-      !hidden?
     end
   end
 end

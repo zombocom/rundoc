@@ -9,11 +9,14 @@ class Rundoc::CodeCommand::Website
     end
   end
 
-  class NavigateRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class NavigateRunner
+    attr_reader :io, :contents
+
+    def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
       @name = user_args.name
       @driver = nil
-      super(**)
+      @io = io
+      @contents = contents.dup if contents && !contents.empty?
     end
 
     def driver
@@ -28,14 +31,6 @@ class Rundoc::CodeCommand::Website
       io.puts "website.navigate [#{@name}]: #{contents}"
       driver.safe_eval(contents, env)
       ""
-    end
-
-    def hidden?
-      true
-    end
-
-    def not_hidden?
-      !hidden?
     end
   end
 end

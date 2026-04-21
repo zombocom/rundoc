@@ -12,7 +12,7 @@ class EmptyBinding
   end
 end
 
-class Rundoc::CodeCommand
+module Rundoc::CodeCommand
   RUNDOC_ERB_BINDINGS = Hash.new { |h, k| h[k] = EmptyBinding.create }
   RUNDOC_DEFAULT_ERB_BINDING = "default"
 
@@ -25,11 +25,23 @@ class Rundoc::CodeCommand
     end
   end
 
-  class PrintERBRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class PrintERBRunner
+    attr_reader :contents
+
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @line = user_args.line
       @binding = RUNDOC_ERB_BINDINGS[user_args.binding_name]
-      super(**)
+      @render_command = render_command
+      @render_result = render_result
+      @contents = contents.dup if contents && !contents.empty?
+    end
+
+    def render_command?
+      @render_command
+    end
+
+    def render_result?
+      @render_result
     end
 
     def to_md(env)

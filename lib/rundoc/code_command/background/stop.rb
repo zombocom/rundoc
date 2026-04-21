@@ -9,11 +9,10 @@ class Rundoc::CodeCommand::Background
     end
   end
 
-  class StopRunner < Rundoc::CodeCommand
-    def initialize(user_args:, **)
+  class StopRunner
+    def initialize(user_args:, render_command:, render_result:, io: nil, contents: nil)
       @name = user_args.name
       @background = nil
-      super(**)
     end
 
     def background

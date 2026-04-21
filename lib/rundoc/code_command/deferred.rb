@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Rundoc
-  class CodeCommand
+  module CodeCommand
     # Hold enough information to construct commands, but don't yet
     #
     # Allows us to separate parse time constructs from runtime injectables
@@ -15,17 +15,14 @@ module Rundoc
 
       attr_reader :runner_klass
 
-      def initialize(args_instance:, runner_klass:)
+      def initialize(args_instance:, runner_klass:, always_hidden: false)
         @args_instance = args_instance
         @runner_klass = runner_klass
+        @always_hidden = always_hidden
       end
 
       def hidden?
-        if @built
-          @built.hidden?
-        else
-          !render_command? && !render_result?
-        end
+        !render_command? && !render_result?
       end
 
       def not_hidden?
@@ -39,13 +36,20 @@ module Rundoc
       alias_method :<<, :push
 
       def build(io: $stdout)
-        @built ||= @runner_klass.new(
-          user_args: @args_instance,
-          render_command: render_command,
-          render_result: render_result,
-          contents: @contents,
-          io: io
-        )
+        @built ||= begin
+          runner = @runner_klass.new(
+            user_args: @args_instance,
+            render_command: render_command,
+            render_result: render_result,
+            contents: @contents,
+            io: io
+          )
+          if @always_hidden
+            @render_command = false
+            @render_result = false
+          end
+          runner
+        end
       rescue UnknownCommand
         raise "No such command registered with rundoc #{keyword.inspect} for `#{keyword} #{original_args}`"
       end

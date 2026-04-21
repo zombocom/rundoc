@@ -15,7 +15,7 @@ module Rundoc
     def executed_commands
       raise "Nothing executed" unless @env[:commands].any?
 
-      @env[:commands].map { |c| c[:object] }
+      @env[:commands].map { |c| c[:visibility] }
     end
 
     # @param fence [String] the fence used to start the code block like "```".
@@ -55,18 +55,13 @@ module Rundoc
       env[:after] = []
       env[:context] = @context
       env[:stack] = @stack
-
       while (item = @stack.pop)
-        code_command = if item.is_a?(CodeCommand::Deferred)
-          item.build(io: @io)
-        else
-          item
-        end
+        code_command = item.build(io: @io)
 
         code_output = code_command.call(env) || ""
         code_line = code_command.to_md(env) || ""
-        result << code_line if code_command.render_command?
-        result << code_output if code_command.render_result?
+        result << code_line if item.render_command?
+        result << code_output if item.render_result?
 
         PARTIAL_RESULT.replace(result)
         PARTIAL_ENV.replace(env)
@@ -74,11 +69,12 @@ module Rundoc
         env[:commands] << {
           object: code_command,
           output: code_output,
-          command: code_line
+          command: code_line,
+          visibility: item
         }
       end
 
-      if env[:commands].any? { |c| c[:object].not_hidden? }
+      if env[:commands].any? { |c| c[:visibility].not_hidden? }
         @rendered = self.class.to_doc(result: result, env: env)
       end
       self
