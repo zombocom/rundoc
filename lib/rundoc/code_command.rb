@@ -12,7 +12,7 @@ module Rundoc
       @io = io
       @render_command = render_command
       @render_result = render_result
-      push(contents) if contents && !contents.empty?
+      @contents = contents.dup if contents && !contents.empty?
     end
 
     def render_result?
