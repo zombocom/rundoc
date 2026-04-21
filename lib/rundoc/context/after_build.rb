@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   module Context
     # Public interface for the `Rundoc.after_build` proc

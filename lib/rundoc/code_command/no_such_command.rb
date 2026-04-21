@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rundoc
   class CodeCommand
     class NoSuchCommand < Rundoc::CodeCommand

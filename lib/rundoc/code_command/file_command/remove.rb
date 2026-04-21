@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::FileCommand
   class RemoveArgs
     attr_reader :filename

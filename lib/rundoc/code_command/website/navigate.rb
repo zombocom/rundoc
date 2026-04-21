@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rundoc::CodeCommand::Website
   class NavigateArgs
     attr_reader :name
