@@ -688,11 +688,11 @@ class Rundoc::CodeCommand::LolArgs
 end
 ```
 
-The Runner class inherits from `Rundoc::CodeCommand` and receives the args instance via `user_args:`:
+The Runner class is namespaced under `Rundoc::CodeCommand` and receives the args instance via `user_args:`:
 
 ```ruby
-class Rundoc::CodeCommand::LolRunner < Rundoc::CodeCommand
-  def initialize(user_args:)
+class Rundoc::CodeCommand::LolRunner
+  def initialize(user_args:, **)
     @message = user_args.message
   end
 
