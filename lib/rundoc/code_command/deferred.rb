@@ -15,9 +15,10 @@ module Rundoc
 
       attr_reader :runner_klass
 
-      def initialize(args_instance:, runner_klass:)
+      def initialize(args_instance:, runner_klass:, always_hidden: false)
         @args_instance = args_instance
         @runner_klass = runner_klass
+        @always_hidden = always_hidden
       end
 
       def hidden?
@@ -43,8 +44,10 @@ module Rundoc
             contents: @contents,
             io: io
           )
-          @render_command = runner.render_command?
-          @render_result = runner.render_result?
+          if @always_hidden
+            @render_command = false
+            @render_result = false
+          end
           runner
         end
       rescue UnknownCommand

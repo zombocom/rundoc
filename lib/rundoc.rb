@@ -29,7 +29,8 @@ module Rundoc
 
     deferred = CodeCommand::Deferred.new(
       args_instance: user_args,
-      runner_klass: runner_klass
+      runner_klass: runner_klass,
+      always_hidden: always_hidden_commands[keyword]
     )
     deferred.original_args = original_args
     deferred.keyword = keyword
@@ -62,9 +63,14 @@ module Rundoc
     user_args.keys
   end
 
-  def register_code_command(keyword:, args_klass:, runner_klass:)
+  def register_code_command(keyword:, args_klass:, runner_klass:, always_hidden: false)
     user_args[keyword] = args_klass
     user_args_runner[keyword] = runner_klass
+    always_hidden_commands[keyword] = always_hidden
+  end
+
+  def always_hidden_commands
+    @always_hidden_commands ||= {}
   end
 
   def configure(&block)

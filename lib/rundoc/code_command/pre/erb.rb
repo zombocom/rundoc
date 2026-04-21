@@ -20,11 +20,9 @@ module Rundoc::CodeCommand
       @code = nil
       @command = nil
       @template = nil
-      @render_delegate_result = render_result
-      @render_delegate_command = render_command
+      @render_command = render_command
+      @render_result = render_result
       @io = io
-      @render_command = false
-      @render_result = false
       @contents = contents.dup if contents && !contents.empty?
     end
 
@@ -39,8 +37,8 @@ module Rundoc::CodeCommand
     def code
       @code ||= begin
         vis = +""
-        vis += @render_delegate_command ? ">" : "-"
-        vis += @render_delegate_result ? ">" : "-"
+        vis += render_command? ? ">" : "-"
+        vis += render_result? ? ">" : "-"
         code = [@line, @contents]
           .compact
           .reject(&:empty?)
@@ -72,4 +70,4 @@ module Rundoc::CodeCommand
     end
   end
 end
-Rundoc.register_code_command(keyword: :"pre.erb", args_klass: Rundoc::CodeCommand::PreErbArgs, runner_klass: Rundoc::CodeCommand::PreErbRunner)
+Rundoc.register_code_command(keyword: :"pre.erb", args_klass: Rundoc::CodeCommand::PreErbArgs, runner_klass: Rundoc::CodeCommand::PreErbRunner, always_hidden: true)
