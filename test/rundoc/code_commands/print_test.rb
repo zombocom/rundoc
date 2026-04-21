@@ -57,7 +57,7 @@ class PrintTest < Minitest::Test
       user_args: Rundoc::CodeCommand::PrintERBArgs.new,
       contents: %{<%= @foo = SecureRandom.hex(16) %>},
       render_command: true,
-      render_result: true,
+      render_result: true
     )
 
     assert_equal "", cmd.to_md(env)

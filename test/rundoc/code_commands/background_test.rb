@@ -23,14 +23,12 @@ class BackgroundTest < Minitest::Test
           user_args: Rundoc::CodeCommand::Background::WaitArgs.new(
             name: "cat",
             wait: "hello"
-          )
-        ).call
+          )).call
 
         Rundoc::CodeCommand::Background::Log::ClearRunner.new(render_command: false, render_result: false,
           user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(
             name: "cat"
-          )
-        ).call
+          )).call
 
         output = Rundoc::CodeCommand::Background::StdinWriteRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::StdinWriteArgs.new(
           "general kenobi",
@@ -86,7 +84,7 @@ class BackgroundTest < Minitest::Test
 
         assert_equal("foo", output.chomp)
 
-        log_clear = Rundoc::CodeCommand::Background::Log::ClearRunner.new(render_command: false, render_result: false,user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(name: "tail"))
+        log_clear = Rundoc::CodeCommand::Background::Log::ClearRunner.new(render_command: false, render_result: false, user_args: Rundoc::CodeCommand::Background::Log::ClearArgs.new(name: "tail"))
         output = log_clear.call
         assert_equal("", output)
 
