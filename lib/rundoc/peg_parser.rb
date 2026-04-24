@@ -6,6 +6,7 @@ module Rundoc
   class PegParser < Parslet::Parser
     rule(:spaces) { match('\s').repeat(1) }
     rule(:spaces?) { spaces.maybe }
+    rule(:horizontal_spaces) { match('[ \t]').repeat(1) }
     rule(:comma) { spaces? >> str(",") >> spaces? }
     rule(:digit) { match("[0-9]") }
     rule(:lparen) { str("(") >> spaces? }
@@ -89,7 +90,7 @@ module Rundoc
     }
 
     rule(:seattle_method) {
-      funcall >> spaces >>
+      funcall >> horizontal_spaces >>
         args.as(:args)
     }
 
