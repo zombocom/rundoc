@@ -4,7 +4,7 @@ module Rundoc::CodeCommand
   class PrintTextArgs
     attr_reader :line
 
-    def initialize(line)
+    def initialize(line = nil)
       @line = line
     end
   end

@@ -249,7 +249,8 @@ class PegParserTest < Minitest::Test
 
     actual = @transformer.apply(tree)
     assert_equal :rundoc, actual.keyword
-    assert_equal("email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`", actual.original_args)
+    assert_nil actual.original_args
+    assert_equal("email = ENV['HEROKU_EMAIL'] || `heroku auth:whoami`\n", actual.contents)
   end
 
   def test_rundoc_sub_commands_no_quotes
@@ -350,5 +351,20 @@ class PegParserTest < Minitest::Test
     actual = @transformer.apply(tree)
     assert_equal :"background.start", actual.keyword
     assert_equal ["rails server", {name: "server"}], actual.original_args
+  end
+
+  def test_no_args_preserves_newlines_in_stdin
+    input = <<~EOF.strip
+      :::>> rundoc
+      first = 1 # comment
+      second = 2
+    EOF
+
+    parser = Rundoc::PegParser.new.command_with_stdin
+    tree = parser.parse_with_debug(input)
+
+    actual = @transformer.apply(tree)
+    assert_equal :rundoc, actual.keyword
+    assert_equal "first = 1 # comment\nsecond = 2".strip, actual.contents.strip
   end
 end

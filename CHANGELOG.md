@@ -3,6 +3,7 @@
 - Added comment syntax. Use an octothorpe (`#`) after the visibility markers to comment out any commands and make them a no-op.
 - Changed: Minimum Ruby version is now 3.2 (Ruby 3.1 reached EOL in March 2025).
 - Changed: All code commands now use an Args + Runner class pattern. `register_code_command` now requires keyword arguments: `keyword:`, `args_klass:`, and `runner_klass:`.
+- Fix: `seattle_method` parser rule no longer matches across newlines. Previously, a command with no same-line arguments (e.g. `:::>> rundoc`) would consume the next line as its argument, losing the newline between content lines. (https://github.com/zombocom/rundoc/pull/118)
 
 ## 4.1.4
 
