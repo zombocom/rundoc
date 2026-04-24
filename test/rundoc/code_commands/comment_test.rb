@@ -32,6 +32,26 @@ class CommentTest < Minitest::Test
     end
   end
 
+  def test_smudged_comment
+    contents = <<~EOF
+      before
+
+      ```
+      :::>> #$ cat hello
+      ```
+
+      after
+    EOF
+
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        parsed = parse_contents(contents)
+        actual = strip_autogen_warning(parsed.to_md)
+        assert_equal "before\n\n\nafter\n", actual
+      end
+    end
+  end
+
   def test_bare_comment_is_noop
     contents = <<~EOF
       before

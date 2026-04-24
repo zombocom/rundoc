@@ -22,6 +22,12 @@ module Rundoc
       else
         user_args = args_klass.new(*args)
       end
+    elsif keyword.start_with?("#")
+      args_klass = Rundoc::CodeCommand::CommentArgs
+      runner_klass = Rundoc::CodeCommand::CommentRunner
+      remainder = keyword.to_s.delete_prefix("#")
+      comment_text = [remainder, args].compact.join(" ").strip
+      user_args = args_klass.new(comment_text.empty? ? nil : comment_text)
     else
       runner_klass = Rundoc::CodeCommand::NoSuchCommand
       user_args = nil
@@ -30,7 +36,7 @@ module Rundoc
     deferred = CodeCommand::Deferred.new(
       args_instance: user_args,
       runner_klass: runner_klass,
-      always_hidden: always_hidden_commands[keyword]
+      always_hidden: always_hidden_commands[keyword] || keyword.start_with?("#")
     )
     deferred.original_args = original_args
     deferred.keyword = keyword
