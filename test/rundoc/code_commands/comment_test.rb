@@ -2,14 +2,35 @@ require "test_helper"
 
 class CommentTest < Minitest::Test
   def test_comment_runner_call_returns_empty_string
+    io = StringIO.new
     runner = Rundoc::CodeCommand::CommentRunner.new(
       render_command: false,
       render_result: false,
-      io: StringIO.new,
+      io: io,
       user_args: Rundoc::CodeCommand::CommentArgs.new("$ cat hello")
     )
     assert_equal "", runner.call
     assert_equal "", runner.to_md
+    assert_equal "Skipping command (commented out): # $ cat hello\n", io.string
+  end
+
+  def test_comment_with_contents
+    io = StringIO.new
+    runner = Rundoc::CodeCommand::CommentRunner.new(
+      render_command: false,
+      render_result: false,
+      io: io,
+      user_args: Rundoc::CodeCommand::CommentArgs.new("$ tail -n 2"),
+      contents: "foo\nbar\nbaz\n"
+    )
+    assert_equal "", runner.call
+    expected = <<~EOF
+      Skipping command (commented out): # $ tail -n 2
+      foo
+      bar
+      baz
+    EOF
+    assert_equal expected.strip, io.string.strip
   end
 
   def test_comment_is_noop_in_document
