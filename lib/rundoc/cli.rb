@@ -134,6 +134,8 @@ module Rundoc
     end
 
     def call
+      build_success = false
+
       io.puts "## Running your docs"
       load_dotenv
       check_directories_empty!
@@ -174,7 +176,11 @@ module Rundoc
 
         on_success(output)
       end
+
+      build_success = true
     ensure
+      ensure_later_errors = Rundoc.run_ensure_later(io: io)
+
       # Stop any hanging background tasks
       Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
         next unless task.alive?
@@ -188,6 +194,10 @@ module Rundoc
           dir: execution_context.output_dir,
           description: "tmp working directory"
         )
+      end
+
+      if ensure_later_errors.any? && build_success
+        raise ensure_later_errors.first
       end
     end
 
