@@ -98,6 +98,7 @@ This will generate a project folder with your project in it, and a markdown `REA
   - [website.screenshot](#screenshots)
 - Configure RunDOC
   - [rundoc.configure](#configure)
+  - [rundoc.ensure_later](#ensure_later)
   - [rundoc](#configure) an alias for `rundoc.configure`
 - Import and compose documents
   - [rundoc.require](#compose-multiple-rundoc-documents)
@@ -682,6 +683,41 @@ Sometimes sensitive info like usernames, email addresses, or passwords may be in
     ```
 
 This command `filter_sensitive` can be called multiple times with different values. Since the config is in Ruby you could iterate over an array of sensitive data
+
+## Ensure Later
+
+Run a script on EVERY build (success and failure). Used to guarantee resources are cleaned up.
+
+- Arguments
+  - `dir:` The directory where the script will be run. Must be one of these values:
+    - `:cwd` The directory where the command is first invoked. If this directory does not exist when the `rundoc.ensure_later` is invoked, it will raise an error.
+    - `:rundoc_root` The tmp directory where the script is being executed. Useful if the directory where the `rundoc.ensure_later` is defined, is deleted by the rundoc script.
+
+For example:
+
+    ```
+    :::>> $ heroku create
+    :::-- rundoc
+    @app_name = run!("heroku info --json | jq -r '.app.name'").strip
+
+    def app_name
+      @app_name
+    end
+    ```
+
+    ```ruby
+    :::-- rundoc.ensure_later(dir: :cwd)
+    if run!("heroku apps").include?(app_name)
+      puts "Cleaning up web app #{app_name}"
+      run!("heroku apps:destroy #{app_name} --confirm #{app_name}")
+    else
+      puts "App `#{app_name}` already cleaned, nothing to do"
+    end
+    ```
+
+The output of this will not be included in the document. Multiple ensure blocks can be defined and will execute in the order of their definition. Since they'll be executed EVERY time, logic must handle both success and failure cases. This execution occurs before the temp directory is removed, and before any background task shutdown ensure blocks are triggered.
+
+If a build is successful, but an `ensure_later` block fails, the build will be considered a failure. A failure in one block will not stop the rest from executing.
 
 ## Writing a new command
 
