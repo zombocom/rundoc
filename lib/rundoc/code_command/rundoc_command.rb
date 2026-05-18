@@ -17,6 +17,7 @@ module ::Rundoc
         @io = io
         @contents = contents.dup if contents && !contents.empty?
         @contents = user_args.code + (@contents || +"")
+        @binding = RUNDOC_ERB_BINDINGS[RUNDOC_DEFAULT_ERB_BINDING]
       end
 
       def to_md(env = {})
@@ -25,7 +26,7 @@ module ::Rundoc
 
       def call(env = {})
         io.puts "Running: #{contents}"
-        eval(contents) # rubocop:disable Security/Eval
+        eval(contents, @binding) # rubocop:disable Security/Eval
         ""
       end
     end

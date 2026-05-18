@@ -5,6 +5,7 @@ module Rundoc
   end
 end
 
+require "rundoc/code_command/empty_binding"
 require "rundoc/code_command/deferred"
 require "rundoc/code_command/bash"
 require "rundoc/code_command/pipe"

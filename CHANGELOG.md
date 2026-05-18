@@ -1,5 +1,7 @@
 ## HEAD
 
+- Changed: The ruby context in `rundoc` and `rundoc.configure` commands is now the same binding as the default ERB evaluation. This means that methods can be defined in one and used in both.
+
 ## 5.0.0
 
 - Added comment syntax. Use an octothorpe (`#`) after the visibility markers to comment out any commands and make them a no-op.
