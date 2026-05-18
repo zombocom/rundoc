@@ -50,6 +50,57 @@ class IntegrationPrintTest < Minitest::Test
     end
   end
 
+  def test_rundoc_configure_defines_variable_accessible_from_erb
+    key = SecureRandom.hex
+    contents = <<~RUBY
+      ```
+      :::-- rundoc.configure
+      @shared_value = "#{key}"
+      ```
+
+      ```
+      :::-> print.erb
+      <%= @shared_value %>
+      ```
+    RUBY
+
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        parsed = parse_contents(contents)
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
+        assert_includes actual, key
+      end
+    end
+  end
+
+  def test_erb_defines_variable_accessible_from_rundoc_configure
+    key = SecureRandom.hex
+    contents = <<~RUBY
+      ```
+      :::-> print.erb
+      <% @from_erb = "#{key}" %>
+      ```
+
+      ```
+      :::-- rundoc.configure
+      @roundtripped = @from_erb + "_via_configure"
+      ```
+
+      ```
+      :::-> print.erb
+      <%= @roundtripped %>
+      ```
+    RUBY
+
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        parsed = parse_contents(contents)
+        actual = parsed.to_md.gsub(Rundoc::FencedCodeBlock::AUTOGEN_WARNING, "")
+        assert_includes actual, "#{key}_via_configure"
+      end
+    end
+  end
+
   def test_erb_in_block
     contents = <<~RUBY
       ```

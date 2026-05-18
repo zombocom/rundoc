@@ -98,6 +98,7 @@ This will generate a project folder with your project in it, and a markdown `REA
   - [website.screenshot](#screenshots)
 - Configure RunDOC
   - [rundoc.configure](#configure)
+  - [rundoc](#configure) an alias for `rundoc.configure`
 - Import and compose documents
   - [rundoc.require](#compose-multiple-rundoc-documents)
 
@@ -616,13 +617,37 @@ If you need to specify project specific environment variables create a file call
 
 ## Configure
 
-You can configure your docs in your docs use the `RunDOC` command
+You can configure your docs in your docs use the `RunDOC` command via `rundoc.configure` (or alias `rundoc`):
 
     ```
     :::-- rundoc.configure
     ```
 
 Note: Make sure you run this as a hidden command (with `-`).
+
+This will give you a Ruby codeblock that executes and gives you access to `Rundoc.configure do |config|` to configure things about your build (such as modifying your markdown document after successful builds).
+
+**Define and Re-use logic**
+
+Since it's **just ruby** :tm: you can also use it to define shared logic that can be re-used in ERB templates. For example:
+
+      ```
+      :::-- rundoc
+      def run!(command, quiet: false, error_on_fail: true)
+        puts "Running `#{command}`" unless quiet
+        output = `#{command}`
+        puts "Command `#{command}` output:\n#{output}" unless quiet
+        if error_on_fail && !$?.success?
+          raise "Error running #{command}. Output:\n#{output}"
+        end
+        output
+      end
+      ```
+
+      ```
+      :::-> print.erb
+      Hello <%= run!("heroku whoami") %>!
+      ```
 
 **After Build**
 
