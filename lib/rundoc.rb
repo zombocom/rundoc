@@ -97,6 +97,30 @@ module Rundoc
     yield self
   end
 
+  def ensure_later_blocks
+    @ensure_later_blocks ||= []
+  end
+
+  def add_ensure_later(dir:, code:, binding:)
+    ensure_later_blocks << {dir: dir, code: code, binding: binding}
+  end
+
+  def run_ensure_later(io:)
+    errors = []
+    ensure_later_blocks.each do |block|
+      io.puts "Running ensure_later block in #{block[:dir]}:\n#{block[:code]}"
+      Dir.chdir(block[:dir]) do
+        eval(block[:code], block[:binding]) # rubocop:disable Security/Eval
+      end
+    rescue => e
+      io.puts "ensure_later block failed in #{block[:dir]}: #{e.message}"
+      io.puts e.backtrace.join("\n")
+      errors << e
+    end
+    ensure_later_blocks.clear
+    errors
+  end
+
   def filter_sensitive(sensitive)
     raise "Expecting #{sensitive} to be a hash" unless sensitive.is_a?(Hash)
     @sensitive ||= {}
