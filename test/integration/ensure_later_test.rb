@@ -294,4 +294,42 @@ class IntegrationEnsureLaterTest < Minitest::Test
       end
     end
   end
+
+  def test_runs_on_failure_from_subdirectory
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        dir = Pathname(dir)
+        marker = dir.join("ensure_ran.txt")
+
+        source_path = dir.join("RUNDOC.md")
+        source_path.write <<~EOF
+          ```
+          :::>> $ mkdir myapp
+          :::>> $ cd myapp
+          ```
+
+          ```
+          :::-- rundoc.ensure_later(dir: :cwd)
+          File.write("#{marker}", "cleaned")
+          ```
+
+          ```
+          :::>> $ exit 1
+          ```
+        EOF
+
+        assert_raises do
+          Rundoc::CLI.new(
+            io: StringIO.new,
+            source_path: source_path,
+            on_success_dir: dir.join(SUCCESS_DIRNAME),
+            on_failure_dir: dir.join(FAILURE_DIRNAME)
+          ).call
+        end
+
+        assert marker.exist?, "ensure_later from subdirectory should run even on failure"
+        assert_equal "cleaned", marker.read
+      end
+    end
+  end
 end

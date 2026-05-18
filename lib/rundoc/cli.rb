@@ -135,6 +135,7 @@ module Rundoc
 
     def call
       build_success = false
+      ensure_later_errors = []
 
       io.puts "## Running your docs"
       load_dotenv
@@ -167,7 +168,11 @@ module Rundoc
           io: io
         )
         output = begin
-          parser.to_md
+          begin
+            parser.to_md
+          ensure
+            ensure_later_errors = Rundoc.run_ensure_later(io: io)
+          end
         rescue StandardError, SignalException => e
           io.puts "Received exception: #{e.inspect}, cleaning up before re-raise"
           on_fail
@@ -179,8 +184,6 @@ module Rundoc
 
       build_success = true
     ensure
-      ensure_later_errors = Rundoc.run_ensure_later(io: io)
-
       # Stop any hanging background tasks
       Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
         next unless task.alive?
