@@ -39,9 +39,16 @@ module Rundoc
       ).as(:number)
     }
 
+    rule(:symbol) {
+      str(":") >> (
+        match("[a-zA-Z_]") >> match("[a-zA-Z0-9_]").repeat
+      ).as(:symbol)
+    }
+
     rule(:value) {
       string |
         number |
+        symbol |
         str("true").as(true) |
         str("false").as(false) |
         str("nil").as(:nil)
@@ -175,6 +182,7 @@ module Rundoc
     rule(true => simple(:tr)) { true }
     rule(false => simple(:fa)) { false }
     rule(string: simple(:st)) { st.to_s }
+    rule(symbol: simple(:sy)) { sy.to_s.to_sym }
 
     rule(number: simple(:nb)) {
       /[eE.]/.match?(nb) ? Float(nb) : Integer(nb)
