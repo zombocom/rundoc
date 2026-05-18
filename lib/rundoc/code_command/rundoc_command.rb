@@ -37,3 +37,4 @@ Rundoc.register_code_command(keyword: :rundoc, args_klass: Rundoc::CodeCommand::
 Rundoc.register_code_command(keyword: :"rundoc.configure", args_klass: Rundoc::CodeCommand::RundocCommandArgs, runner_klass: Rundoc::CodeCommand::RundocCommandRunner)
 
 require "rundoc/code_command/rundoc/require"
+require "rundoc/code_command/rundoc/ensure_later"
