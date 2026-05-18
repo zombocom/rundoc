@@ -26,6 +26,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "aws-sdk-s3", "~> 1"
   gem.add_dependency "dotenv"
+  gem.add_dependency "cgi", ">= 0.3.6"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "mocha"
