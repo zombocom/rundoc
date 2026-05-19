@@ -7,7 +7,7 @@ class Rundoc::CodeCommand::BashRunner
       @line = line
     end
 
-    def supress_chdir_warning
+    def suppress_chdir_warning
       old_verbose = $VERBOSE
       $VERBOSE = nil
       yield
@@ -19,7 +19,7 @@ class Rundoc::CodeCommand::BashRunner
       line = @line.sub("cd", "").strip
       @io.puts "running $ cd #{line}"
 
-      supress_chdir_warning do
+      suppress_chdir_warning do
         Dir.chdir(line)
       end
 
