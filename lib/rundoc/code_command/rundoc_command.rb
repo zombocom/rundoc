@@ -26,7 +26,9 @@ module ::Rundoc
 
       def call(env = {})
         io.puts "Running: #{contents}"
-        eval(contents, @binding) # rubocop:disable Security/Eval
+        Rundoc.capture_stdout_stderr(io) do
+          eval(contents, @binding) # rubocop:disable Security/Eval
+        end
         ""
       end
     end

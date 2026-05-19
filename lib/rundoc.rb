@@ -110,7 +110,9 @@ module Rundoc
     ensure_later_blocks.each do |block|
       io.puts "Running ensure_later block in #{block[:dir]}:\n#{block[:code]}"
       Dir.chdir(block[:dir]) do
-        eval(block[:code], block[:binding]) # rubocop:disable Security/Eval
+        capture_stdout_stderr(io) do
+          eval(block[:code], block[:binding]) # rubocop:disable Security/Eval
+        end
       end
     rescue => e
       io.puts "ensure_later block failed in #{block[:dir]}: #{e.message}"
@@ -119,6 +121,17 @@ module Rundoc
     end
     ensure_later_blocks.clear
     errors
+  end
+
+  def capture_stdout_stderr(io)
+    old_stdout = $stdout
+    old_stderr = $stderr
+    $stdout = io
+    $stderr = io
+    yield
+  ensure
+    $stdout = old_stdout
+    $stderr = old_stderr
   end
 
   def filter_sensitive(sensitive)
