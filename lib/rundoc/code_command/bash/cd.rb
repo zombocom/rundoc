@@ -7,18 +7,12 @@ class Rundoc::CodeCommand::BashRunner
       @line = line
     end
 
-    # Ignore duplicate chdir warnings "warning: conflicting chdir during another chdir block"
     def supress_chdir_warning
-      old_stderr = $stderr
-      capture_stderr = StringIO.new
-      $stderr = capture_stderr
+      old_verbose = $VERBOSE
+      $VERBOSE = nil
       yield
     ensure
-      if old_stderr
-        $stderr = old_stderr
-        capture_string = capture_stderr.string
-        warn capture_string if capture_string.each_line.count > 1 || !capture_string.include?("conflicting chdir")
-      end
+      $VERBOSE = old_verbose
     end
 
     def call(env)
