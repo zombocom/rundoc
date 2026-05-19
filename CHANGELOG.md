@@ -1,5 +1,6 @@
 ## HEAD
 
+- Added: `rundoc.ensure_later(dir: :cwd)` command to register cleanup blocks that run on every build (success and failure). Useful for guaranteed resource teardown (e.g., destroying Heroku apps). Multiple blocks execute in order; failures in one block do not stop the rest.
 - Changed: The ruby context in `rundoc` and `rundoc.configure` commands is now the same binding as the default ERB evaluation. This means that methods can be defined in one and used in both.
 
 ## 5.0.0

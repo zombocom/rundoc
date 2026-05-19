@@ -134,6 +134,9 @@ module Rundoc
     end
 
     def call
+      build_success = false
+      ensure_later_errors = []
+
       io.puts "## Running your docs"
       load_dotenv
       check_directories_empty!
@@ -165,7 +168,11 @@ module Rundoc
           io: io
         )
         output = begin
-          parser.to_md
+          begin
+            parser.to_md
+          ensure
+            ensure_later_errors = Rundoc.run_ensure_later(io: io)
+          end
         rescue StandardError, SignalException => e
           io.puts "Received exception: #{e.inspect}, cleaning up before re-raise"
           on_fail
@@ -174,6 +181,8 @@ module Rundoc
 
         on_success(output)
       end
+
+      build_success = true
     ensure
       # Stop any hanging background tasks
       Rundoc::CodeCommand::Background::ProcessSpawn.tasks.each do |name, task|
@@ -188,6 +197,10 @@ module Rundoc
           dir: execution_context.output_dir,
           description: "tmp working directory"
         )
+      end
+
+      if ensure_later_errors.any? && build_success
+        raise ensure_later_errors.first
       end
     end
 

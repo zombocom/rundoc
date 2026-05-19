@@ -367,4 +367,29 @@ class PegParserTest < Minitest::Test
     assert_equal :rundoc, actual.keyword
     assert_equal "first = 1 # comment\nsecond = 2".strip, actual.contents.strip
   end
+
+  def test_symbol_value
+    input = %(:cwd)
+    parser = Rundoc::PegParser.new.symbol
+    tree = parser.parse_with_debug(input)
+    actual = @transformer.apply(tree)
+    assert_equal :cwd, actual
+  end
+
+  def test_symbol_in_named_args
+    input = %(dir: :cwd)
+    parser = Rundoc::PegParser.new.named_args
+    tree = parser.parse_with_debug(input)
+    actual = @transformer.apply(tree)
+    assert_equal({dir: :cwd}, actual)
+  end
+
+  def test_symbol_in_method_call
+    input = %(rundoc.ensure_later(dir: :cwd))
+    parser = Rundoc::PegParser.new.method_call
+    tree = parser.parse_with_debug(input)
+    actual = @transformer.apply(tree)
+    assert_equal :"rundoc.ensure_later", actual.keyword
+    assert_equal({dir: :cwd}, actual.original_args)
+  end
 end
