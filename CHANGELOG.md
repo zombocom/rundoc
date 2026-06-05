@@ -1,5 +1,7 @@
 ## HEAD
 
+- Added: `match:` and `match_first:` kwargs to `file.append` for locating the insertion point by content instead of line number. `match:` raises if the target is not unique; `match_first:` uses the first occurrence.
+- Added: `file.before` command with the same `match:` / `match_first:` kwargs. Inserts content before the matched line.
 - Changed: Shell commands now run under `bash -eo pipefail` instead of `/bin/sh`. This surfaces failures in pipelines and compound commands that were previously swallowed. See the README for details on SIGPIPE interactions.
 
 ## 6.0.0
