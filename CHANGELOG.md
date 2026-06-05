@@ -1,5 +1,7 @@
 ## HEAD
 
+- Changed: Shell commands now run under `bash -eo pipefail` instead of `/bin/sh`. This surfaces failures in pipelines and compound commands that were previously swallowed. See the README for details on SIGPIPE interactions.
+
 ## 6.0.0
 
 - Added: `rundoc.ensure_later(dir: :cwd)` command to register cleanup blocks that run on every build (success and failure). Useful for guaranteed resource teardown (e.g., destroying Heroku apps). Multiple blocks execute in order; failures in one block do not stop the rest.

@@ -259,6 +259,8 @@ However this command would fall on its face:
 
 These custom commands are kept to a minimum, and for the most part behave as you would expect them to. Write your docs as you normally would and check the output frequently.
 
+Shell commands run under `bash -eo pipefail` to catch silent failures in pipelines and compound commands. See [Bash Error Handling](#bash-error-handling) for details and SIGPIPE caveats.
+
 Running shell commands like this can be very powerful, you'll likely want more control of how you manipulate files in your project. To do this you can use the `file.` namespace:
 
 ## Dynamic command templating
@@ -718,6 +720,93 @@ For example:
 The output of this will not be included in the document. Multiple ensure blocks can be defined and will execute in the order of their definition. Since they'll be executed EVERY time, logic must handle both success and failure cases. This execution occurs before the temp directory is removed, and before any background task shutdown ensure blocks are triggered.
 
 If a build is successful, but an `ensure_later` block fails, the build will be considered a failure. A failure in one block will not stop the rest from executing.
+
+## Bash Error Handling
+
+### Bash `set -eo pipefail` explained
+
+Bash error behavior is configurable. Rundoc uses `set -eo pipefail` to catch common problems not caught by the default error mode.
+
+If a failing command is piped to a valid command, by default bash will "hide" the failure by returning a zero (success) exit code:
+
+```term
+$ bash -c "cat does-not-exist | head -n1"
+cat: does-not-exist: No such file or directory
+$ echo $?
+0
+```
+
+With `-o pipefail`, the pipeline reports the exit status of the last command that failed rather than the last command in the pipe. With `-e`, bash exits immediately when a command fails. Together, `-eo pipefail` ensures a failing command's exit status is not hidden. Here, the exit code `1` comes from `cat` failing to open a file that doesn't exist:
+
+```term
+$ bash -eo pipefail -c "cat does-not-exist | head -n1"
+cat: does-not-exist: No such file or directory
+$ echo $?
+1
+```
+
+A similar scenario is when multiple commands are given on one line separated by a semicolon. Without `-e`, bash continues past the failure:
+
+```term
+$ bash -c "cat does-not-exist; echo 'done'"
+cat: does-not-exist: No such file or directory
+done
+$ echo $?
+0
+```
+
+With `-e`, bash exits immediately after the failing command:
+
+```term
+$ bash -eo pipefail -c "cat does-not-exist; echo 'done'"
+cat: does-not-exist: No such file or directory
+$ echo $?
+1
+```
+
+These settings help prevent silent failures from slipping through your Rundoc scripts.
+
+### Bash SIGPIPE
+
+Tools like `head -n1` and `grep -m1 "value"` read only part of their input and then exit. When the upstream process next tries to write to the now-closed pipe, the kernel delivers a `SIGPIPE` signal to terminate it. This behavior is useful when the input is a never-ending stream but you only need a subset:
+
+```term
+$ bash -c 'yes "output" | head -n1'
+output
+$ echo $?
+0
+```
+
+However, this behavior negatively interacts with `set -eo pipefail`. Even though `head -n1` successfully produced its output and the command appears to run cleanly, `pipefail` reports the upstream process's SIGPIPE termination as a non-zero exit:
+
+```term
+$ bash -eo pipefail -c 'yes "output" | head -n1'
+output
+$ echo $?
+141
+```
+
+If the input is fully buffered (such as reading from a small file), `head` can finish before the writer needs to write again, so SIGPIPE is never triggered. That means `cat small-file.txt | head -n1` is reasonably safe, but this behavior can surface with larger files:
+
+```term
+$ tmpfile=$(mktemp)
+$ seq 1 200000 > "$tmpfile"
+$ bash -eo pipefail -c "cat $tmpfile | head -n1"
+1
+$ echo $?
+141
+```
+
+This SIGPIPE behavior can cause your rundoc script to exit early when you aren't expecting it.
+
+You can rewrite some commands to take a file directly. For example, `cat Gemfile | head -n 5` can be rewritten as `head -n 5 Gemfile` without SIGPIPE risk.
+
+Here are common commands that can trigger a SIGPIPE:
+
+- `head` with `-n <N>` or `-c <N>`
+- `grep` with `-m <N>` (max count)
+- `sed <N>q` (quit after N lines)
+- `awk` with `{exit}` — e.g., rewrite `awk '/^Start/ {flag=1} /^End/ {exit} flag'` without exit as `awk '/^Start/ {flag=1} /^End/ {flag=0} flag'`
 
 ## Writing a new command
 
