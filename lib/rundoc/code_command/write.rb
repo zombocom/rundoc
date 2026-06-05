@@ -75,4 +75,5 @@ Rundoc.register_code_command(keyword: :write, args_klass: Rundoc::CodeCommand::W
 Rundoc.register_code_command(keyword: :"file.write", args_klass: Rundoc::CodeCommand::WriteArgs, runner_klass: Rundoc::CodeCommand::WriteRunner)
 
 require "rundoc/code_command/file_command/append"
+require "rundoc/code_command/file_command/before"
 require "rundoc/code_command/file_command/remove"
