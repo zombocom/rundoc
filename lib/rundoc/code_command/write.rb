@@ -15,6 +15,44 @@ module Rundoc
         dir = File.expand_path("../", filename)
         FileUtils.mkdir_p(dir)
       end
+
+      def self.resolve_match_line(doc:, match_str:, filename:, unique:)
+        lines = doc.lines
+        matching_indices = lines.each_index.select { |i| lines[i].include?(match_str) }
+
+        if matching_indices.empty?
+          raise "Could not find match #{match_str.inspect} in #{filename}"
+        end
+
+        if unique && matching_indices.length != 1
+          raise "Expected 1 match for #{match_str.inspect} in #{filename} but found #{matching_indices.length}. Use match_first: if multiple matches are expected."
+        end
+
+        matching_indices.first + 1
+      end
+
+      def self.insert_contents_at_line(doc:, line_number:, contents:, filename:)
+        lines = doc.lines
+        if line_number > lines.count + 1
+          raise "Expected #{filename} to have at least #{line_number - 1} lines but only has #{lines.count}"
+        end
+
+        result = []
+        lines.each_with_index do |line, index|
+          if index.next == line_number
+            result << contents
+            result << "\n" unless contents.end_with?("\n")
+          end
+          result << line
+        end
+
+        if line_number == lines.count + 1
+          result << contents
+          result << "\n" unless contents.end_with?("\n")
+        end
+
+        result.join("")
+      end
     end
 
     class WriteArgs
