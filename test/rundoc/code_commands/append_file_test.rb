@@ -101,4 +101,87 @@ class AppendFileTest < Minitest::Test
       end
     end
   end
+
+  def test_appends_to_a_file_at_match
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        file = "Gemfile"
+        File.write(file, "source 'https://rubygems.org'\ngem 'rails', '4.0.0'\n")
+
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match: "gem 'rails'"),
+          contents: "gem 'pg'"
+        )
+        cc.call
+
+        expected = "source 'https://rubygems.org'\ngem 'pg'\ngem 'rails', '4.0.0'\n"
+        assert_equal expected, File.read(file)
+      end
+    end
+  end
+
+  def test_appends_to_a_file_at_match_first
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        file = "app.py"
+        File.write(file, "import os\nimport sys\nprint('hello')\n")
+
+        cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match_first: "import"),
+          contents: "import json"
+        )
+        cc.call
+
+        expected = "import json\nimport os\nimport sys\nprint('hello')\n"
+        assert_equal expected, File.read(file)
+      end
+    end
+  end
+
+  def test_appends_to_a_file_at_match_raises_when_not_found
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        file = "Gemfile"
+        File.write(file, "source 'https://rubygems.org'\n")
+
+        error = assert_raises(RuntimeError) do
+          cc = Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+            render_command: false,
+            render_result: false,
+            io: StringIO.new,
+            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match: "gem 'rails'"),
+            contents: "gem 'pg'"
+          )
+          cc.call
+        end
+        assert_match(/Could not find match/, error.message)
+      end
+    end
+  end
+
+  def test_appends_raises_when_match_and_line_number_both_used
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        file = "foo.rb"
+        File.write(file, "line one\nline two\n")
+
+        error = assert_raises(RuntimeError) do
+          Rundoc::CodeCommand::FileCommand::AppendRunner.new(
+            render_command: false,
+            render_result: false,
+            io: StringIO.new,
+            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}#2", match: "line two"),
+            contents: "inserted"
+          )
+        end
+        assert_match(/Cannot use both match: and #line_number/, error.message)
+      end
+    end
+  end
 end
