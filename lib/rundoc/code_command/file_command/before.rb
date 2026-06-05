@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Rundoc::CodeCommand::FileCommand
-  class AppendArgs
+  class BeforeArgs
     attr_reader :filename, :match, :match_first
 
     def initialize(filename, match: nil, match_first: nil)
@@ -13,13 +13,17 @@ class Rundoc::CodeCommand::FileCommand
         raise "Cannot use both match: and match_first:"
       end
 
+      if @match.nil? && @match_first.nil?
+        raise "file.before requires match: or match_first:"
+      end
+
       if (@match || @match_first)&.empty?
         raise "match value cannot be empty"
       end
     end
   end
 
-  class AppendRunner
+  class BeforeRunner
     NEWLINE = Rundoc::CodeCommand::WriteRunner::NEWLINE
 
     include Rundoc::CodeCommand::FileUtil
@@ -27,79 +31,36 @@ class Rundoc::CodeCommand::FileCommand
     attr_reader :io, :contents
 
     def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
+      @filename = user_args.filename
       @match = user_args.match
       @match_first = user_args.match_first
-
-      @filename, line = user_args.filename.split("#")
-      @line_number = if line
-        Integer(line)
-      end
-
-      if match_string && @line_number
-        raise "Cannot use both match: and #line_number"
-      end
-
       @io = io
       @render_command = render_command
       @contents = contents.dup if contents && !contents.empty?
-    end
-
-    def match_string
-      @match || @match_first
     end
 
     def render_command?
       @render_command
     end
 
+    def match_string
+      @match || @match_first
+    end
+
     def to_md(env)
       return unless render_command?
 
       if env[:commands].any? { |c| c[:visibility].not_hidden? }
-        raise "Must call append in its own code section"
+        raise "Must call file.before in its own code section"
       end
 
-      env[:before] << if match_string
-        "In file `#{filename}`, on line matching `#{match_string}`, add:"
-      elsif @line_number
-        "In file `#{filename}`, on line #{@line_number} add:"
-      else
-        "At the end of `#{filename}` add:"
-      end
+      env[:before] << "In file `#{filename}`, before `#{match_string}`, add:"
       env[:before] << NEWLINE
       nil
     end
 
-    def last_char_of(string)
-      string[-1, 1]
-    end
-
     def ends_in_newline?(string)
-      last_char_of(string) == "\n"
-    end
-
-    def concat_with_newline(str1, str2)
-      result = +""
-      result << str1
-      result << "\n" unless ends_in_newline?(result)
-      result << str2
-      result << "\n" unless ends_in_newline?(result)
-      result
-    end
-
-    def insert_contents_into_at_line(doc)
-      lines = doc.lines
-      raise "Expected #{filename} to have at least #{@line_number} but only has #{lines.count}" if lines.count < @line_number
-      result = []
-      lines.each_with_index do |line, index|
-        line_number = index.next
-        if line_number == @line_number
-          result << contents
-          result << "\n" unless ends_in_newline?(contents)
-        end
-        result << line
-      end
-      result.flatten.join("")
+      string[-1, 1] == "\n"
     end
 
     def insert_contents_before_match(doc)
@@ -130,20 +91,11 @@ class Rundoc::CodeCommand::FileCommand
     def call(env = {})
       mkdir_p
       doc = File.read(filename)
-      if match_string
-        doc = insert_contents_before_match(doc)
-      elsif @line_number
-        io.puts "Writing to: '#{filename}' line #{@line_number} with: #{contents.inspect}"
-        doc = insert_contents_into_at_line(doc)
-      else
-        io.puts "Appending to file: '#{filename}' with: #{contents.inspect}"
-        doc = concat_with_newline(doc, contents)
-      end
-
+      doc = insert_contents_before_match(doc)
       File.write(filename, doc)
       contents
     end
   end
 end
 
-Rundoc.register_code_command(keyword: :"file.append", args_klass: Rundoc::CodeCommand::FileCommand::AppendArgs, runner_klass: Rundoc::CodeCommand::FileCommand::AppendRunner)
+Rundoc.register_code_command(keyword: :"file.before", args_klass: Rundoc::CodeCommand::FileCommand::BeforeArgs, runner_klass: Rundoc::CodeCommand::FileCommand::BeforeRunner)
