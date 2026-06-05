@@ -44,52 +44,24 @@ class Rundoc::CodeCommand::FileCommand
       nil
     end
 
-    def ends_in_newline?(string)
-      string[-1, 1] == "\n"
-    end
-
-    def insert_contents_before_match(doc)
-      lines = doc.lines
-      matching_indices = lines.each_index.select { |i| lines[i].include?(match_string) }
-
-      if matching_indices.empty?
-        raise "Could not find match #{match_string.inspect} in #{filename}"
-      end
-
-      if @match && matching_indices.length != 1
-        raise "Expected 1 match for #{match_string.inspect} in #{filename} but found #{matching_indices.length}. Use match_first: if multiple matches are expected."
-      end
-
-      target = matching_indices.first
-      io.puts "Inserting at line #{target + 1} before #{match_string.inspect} in '#{filename}' with: #{contents.inspect}"
-      result = []
-      lines.each_with_index do |line, index|
-        if index == target
-          result << contents
-          result << "\n" unless ends_in_newline?(contents)
-        end
-        result << line
-      end
-      result.join("")
-    end
-
     def call(env = {})
       mkdir_p
       doc = File.read(filename)
       if match_string
-        doc = insert_contents_before_match(doc)
+        line = Rundoc::CodeCommand::FileUtil.resolve_match_line(
+          doc: doc, match_str: match_string, filename: filename, unique: !!@match
+        )
+        io.puts "Inserting at line #{line} before #{match_string.inspect} in '#{filename}' with: #{contents.inspect}"
       elsif @line_number
-        io.puts "Writing to: '#{filename}' before line #{@line_number} with: #{contents.inspect}"
-        doc = Rundoc::CodeCommand::FileUtil.insert_contents_at_line(
-          doc: doc, line_number: @line_number, contents: contents, filename: filename
-        )
+        line = @line_number
+        io.puts "Writing to: '#{filename}' before line #{line} with: #{contents.inspect}"
       else
+        line = 1
         io.puts "Prepending to file: '#{filename}' with: #{contents.inspect}"
-        doc = Rundoc::CodeCommand::FileUtil.insert_contents_at_line(
-          doc: doc, line_number: 1, contents: contents, filename: filename
-        )
       end
-
+      doc = Rundoc::CodeCommand::FileUtil.insert_contents_at_line(
+        doc: doc, line_number: line, contents: contents, filename: filename
+      )
       File.write(filename, doc)
       contents
     end

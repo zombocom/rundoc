@@ -117,7 +117,7 @@ class AppendFileTest < Minitest::Test
         )
         cc.call
 
-        expected = "source 'https://rubygems.org'\ngem 'pg'\ngem 'rails', '4.0.0'\n"
+        expected = "source 'https://rubygems.org'\ngem 'rails', '4.0.0'\ngem 'pg'\n"
         assert_equal expected, File.read(file)
       end
     end
@@ -138,7 +138,7 @@ class AppendFileTest < Minitest::Test
         )
         cc.call
 
-        expected = "import json\nimport os\nimport sys\nprint('hello')\n"
+        expected = "import os\nimport json\nimport sys\nprint('hello')\n"
         assert_equal expected, File.read(file)
       end
     end
