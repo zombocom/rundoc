@@ -15,7 +15,7 @@ class BeforeFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::BeforeArgs.new(file, match: "// Cleanup after server close"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "// Cleanup after server close"),
           contents: "pool.end()"
         )
         cc.call
@@ -42,7 +42,7 @@ class BeforeFileTest < Minitest::Test
             render_command: false,
             render_result: false,
             io: StringIO.new,
-            user_args: Rundoc::CodeCommand::FileCommand::BeforeArgs.new(file, match: "marker"),
+            user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "marker"),
             contents: "inserted"
           )
           cc.call
@@ -63,7 +63,7 @@ class BeforeFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::BeforeArgs.new(file, match_first: "import"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match_first: "import"),
           contents: "import json"
         )
         cc.call
@@ -85,7 +85,7 @@ class BeforeFileTest < Minitest::Test
             render_command: false,
             render_result: false,
             io: StringIO.new,
-            user_args: Rundoc::CodeCommand::FileCommand::BeforeArgs.new(file, match: "not here"),
+            user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "not here"),
             contents: "inserted"
           )
           cc.call
@@ -97,23 +97,37 @@ class BeforeFileTest < Minitest::Test
 
   def test_before_raises_when_match_value_is_empty_string
     error = assert_raises(RuntimeError) do
-      Rundoc::CodeCommand::FileCommand::BeforeArgs.new("file.txt", match: "")
+      Rundoc::CodeCommand::FileCommand::InsertArgs.new("file.txt", match: "")
     end
     assert_match(/match value cannot be empty/, error.message)
   end
 
   def test_before_raises_when_both_match_and_match_first
     error = assert_raises(RuntimeError) do
-      Rundoc::CodeCommand::FileCommand::BeforeArgs.new("file.txt", match: "a", match_first: "b")
+      Rundoc::CodeCommand::FileCommand::InsertArgs.new("file.txt", match: "a", match_first: "b")
     end
     assert_match(/Cannot use both match: and match_first:/, error.message)
   end
 
-  def test_before_raises_when_neither_match_nor_match_first
-    error = assert_raises(RuntimeError) do
-      Rundoc::CodeCommand::FileCommand::BeforeArgs.new("file.txt")
+  def test_before_prepends_to_head_when_no_match_or_line
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        file = "app.txt"
+        File.write(file, "line one\nline two\n")
+
+        cc = Rundoc::CodeCommand::FileCommand::BeforeRunner.new(
+          render_command: false,
+          render_result: false,
+          io: StringIO.new,
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file),
+          contents: "line zero"
+        )
+        cc.call
+
+        expected = "line zero\nline one\nline two\n"
+        assert_equal expected, File.read(file)
+      end
     end
-    assert_match(/file\.before requires match: or match_first:/, error.message)
   end
 
   def test_before_to_md_output
@@ -126,7 +140,7 @@ class BeforeFileTest < Minitest::Test
           render_command: true,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::BeforeArgs.new(file, match: "marker"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "marker"),
           contents: "inserted"
         )
 

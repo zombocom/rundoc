@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Rundoc::CodeCommand::FileCommand
-  class AppendArgs
-    attr_reader :filename, :match, :match_first
+  class InsertArgs
+    attr_reader :filename, :match, :match_first, :line_number
 
     def initialize(filename, match: nil, match_first: nil)
-      @filename = filename
+      @filename, line = filename.split("#")
+      @line_number = Integer(line) if line
       @match = match
       @match_first = match_first
 
@@ -16,6 +17,14 @@ class Rundoc::CodeCommand::FileCommand
       if (@match || @match_first)&.empty?
         raise "match value cannot be empty"
       end
+
+      if match_string && @line_number
+        raise "Cannot use both match: and #line_number"
+      end
+    end
+
+    def match_string
+      @match || @match_first
     end
   end
 
@@ -27,18 +36,10 @@ class Rundoc::CodeCommand::FileCommand
     attr_reader :io, :contents
 
     def initialize(user_args:, render_command:, render_result:, io:, contents: nil)
+      @filename = user_args.filename
       @match = user_args.match
       @match_first = user_args.match_first
-
-      @filename, line = user_args.filename.split("#")
-      @line_number = if line
-        Integer(line)
-      end
-
-      if match_string && @line_number
-        raise "Cannot use both match: and #line_number"
-      end
-
+      @line_number = user_args.line_number
       @io = io
       @render_command = render_command
       @contents = contents.dup if contents && !contents.empty?
@@ -146,4 +147,4 @@ class Rundoc::CodeCommand::FileCommand
   end
 end
 
-Rundoc.register_code_command(keyword: :"file.append", args_klass: Rundoc::CodeCommand::FileCommand::AppendArgs, runner_klass: Rundoc::CodeCommand::FileCommand::AppendRunner)
+Rundoc.register_code_command(keyword: :"file.append", args_klass: Rundoc::CodeCommand::FileCommand::InsertArgs, runner_klass: Rundoc::CodeCommand::FileCommand::AppendRunner)

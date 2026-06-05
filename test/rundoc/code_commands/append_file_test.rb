@@ -11,7 +11,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file),
           contents: "bar"
         )
         cc.call
@@ -25,7 +25,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file),
           contents: "baz"
         )
         cc.call
@@ -53,7 +53,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}##{line}"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new("#{file}##{line}"),
           contents: "gem 'pg'"
         )
         cc.call
@@ -73,7 +73,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new("file-*.txt"),
           contents: "some text"
         )
         cc.call
@@ -93,7 +93,7 @@ class AppendFileTest < Minitest::Test
             render_command: false,
             render_result: false,
             io: StringIO.new,
-            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("file-*.txt"),
+            user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new("file-*.txt"),
             contents: "some text"
           )
           cc.call
@@ -112,7 +112,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match: "gem 'rails'"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "gem 'rails'"),
           contents: "gem 'pg'"
         )
         cc.call
@@ -133,7 +133,7 @@ class AppendFileTest < Minitest::Test
           render_command: false,
           render_result: false,
           io: StringIO.new,
-          user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match_first: "import"),
+          user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match_first: "import"),
           contents: "import json"
         )
         cc.call
@@ -155,7 +155,7 @@ class AppendFileTest < Minitest::Test
             render_command: false,
             render_result: false,
             io: StringIO.new,
-            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new(file, match: "gem 'rails'"),
+            user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new(file, match: "gem 'rails'"),
             contents: "gem 'pg'"
           )
           cc.call
@@ -176,7 +176,7 @@ class AppendFileTest < Minitest::Test
             render_command: false,
             render_result: false,
             io: StringIO.new,
-            user_args: Rundoc::CodeCommand::FileCommand::AppendArgs.new("#{file}#2", match: "line two"),
+            user_args: Rundoc::CodeCommand::FileCommand::InsertArgs.new("#{file}#2", match: "line two"),
             contents: "inserted"
           )
         end

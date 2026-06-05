@@ -1,28 +1,6 @@
 # frozen_string_literal: true
 
 class Rundoc::CodeCommand::FileCommand
-  class BeforeArgs
-    attr_reader :filename, :match, :match_first
-
-    def initialize(filename, match: nil, match_first: nil)
-      @filename = filename
-      @match = match
-      @match_first = match_first
-
-      if @match && @match_first
-        raise "Cannot use both match: and match_first:"
-      end
-
-      if @match.nil? && @match_first.nil?
-        raise "file.before requires match: or match_first:"
-      end
-
-      if (@match || @match_first)&.empty?
-        raise "match value cannot be empty"
-      end
-    end
-  end
-
   class BeforeRunner
     NEWLINE = Rundoc::CodeCommand::WriteRunner::NEWLINE
 
@@ -34,17 +12,18 @@ class Rundoc::CodeCommand::FileCommand
       @filename = user_args.filename
       @match = user_args.match
       @match_first = user_args.match_first
+      @line_number = user_args.line_number
       @io = io
       @render_command = render_command
       @contents = contents.dup if contents && !contents.empty?
     end
 
-    def render_command?
-      @render_command
-    end
-
     def match_string
       @match || @match_first
+    end
+
+    def render_command?
+      @render_command
     end
 
     def to_md(env)
@@ -54,7 +33,13 @@ class Rundoc::CodeCommand::FileCommand
         raise "Must call file.before in its own code section"
       end
 
-      env[:before] << "In file `#{filename}`, before `#{match_string}`, add:"
+      env[:before] << if match_string
+        "In file `#{filename}`, before `#{match_string}`, add:"
+      elsif @line_number
+        "In file `#{filename}`, before line #{@line_number}, add:"
+      else
+        "At the beginning of `#{filename}` add:"
+      end
       env[:before] << NEWLINE
       nil
     end
@@ -91,11 +76,24 @@ class Rundoc::CodeCommand::FileCommand
     def call(env = {})
       mkdir_p
       doc = File.read(filename)
-      doc = insert_contents_before_match(doc)
+      if match_string
+        doc = insert_contents_before_match(doc)
+      elsif @line_number
+        io.puts "Writing to: '#{filename}' before line #{@line_number} with: #{contents.inspect}"
+        doc = Rundoc::CodeCommand::FileUtil.insert_contents_at_line(
+          doc: doc, line_number: @line_number, contents: contents, filename: filename
+        )
+      else
+        io.puts "Prepending to file: '#{filename}' with: #{contents.inspect}"
+        doc = Rundoc::CodeCommand::FileUtil.insert_contents_at_line(
+          doc: doc, line_number: 1, contents: contents, filename: filename
+        )
+      end
+
       File.write(filename, doc)
       contents
     end
   end
 end
 
-Rundoc.register_code_command(keyword: :"file.before", args_klass: Rundoc::CodeCommand::FileCommand::BeforeArgs, runner_klass: Rundoc::CodeCommand::FileCommand::BeforeRunner)
+Rundoc.register_code_command(keyword: :"file.before", args_klass: Rundoc::CodeCommand::FileCommand::InsertArgs, runner_klass: Rundoc::CodeCommand::FileCommand::BeforeRunner)
