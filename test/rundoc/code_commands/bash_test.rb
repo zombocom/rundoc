@@ -25,6 +25,29 @@ class BashTest < Minitest::Test
     end
   end
 
+  def test_pipefail_catches_early_failure
+    command = "false | true"
+    bash = Rundoc::CodeCommand::BashRunner.new(
+      render_command: false,
+      render_result: false,
+      io: StringIO.new,
+      user_args: Rundoc::CodeCommand::BashArgs.new(command)
+    )
+    error = assert_raises(RuntimeError) { bash.call }
+    assert_match(/exited with non zero status/, error.message)
+  end
+
+  def test_pipefail_allows_fail_ok
+    command = "false | true"
+    bash = Rundoc::CodeCommand::BashRunnerFailOk.new(
+      render_command: false,
+      render_result: false,
+      io: StringIO.new,
+      user_args: Rundoc::CodeCommand::BashArgs.new(command)
+    )
+    bash.call
+  end
+
   def test_stdin
     command = "tail -n 2"
     bash = Rundoc::CodeCommand::BashRunner.new(
