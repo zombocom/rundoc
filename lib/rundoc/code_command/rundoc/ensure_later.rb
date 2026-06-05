@@ -22,7 +22,7 @@ module ::Rundoc::CodeCommand
       end
 
       def to_s
-        @dir
+        @dir.to_s
       end
     end
 

@@ -332,4 +332,34 @@ class IntegrationEnsureLaterTest < Minitest::Test
       end
     end
   end
+
+  def test_log_output_shows_dir_mode_name
+    Dir.mktmpdir do |dir|
+      Dir.chdir(dir) do
+        dir = Pathname(dir)
+
+        source_path = dir.join("RUNDOC.md")
+        source_path.write <<~EOF
+          ```
+          :::-- rundoc.ensure_later(dir: :cwd)
+          puts "hello"
+          ```
+
+          ```
+          :::>> $ echo "hello"
+          ```
+        EOF
+
+        io = StringIO.new
+        Rundoc::CLI.new(
+          io: io,
+          source_path: source_path,
+          on_success_dir: dir.join(SUCCESS_DIRNAME)
+        ).call
+
+        output = io.string
+        assert_includes output, "Registering ensure_later block (dir: cwd => /"
+      end
+    end
+  end
 end
