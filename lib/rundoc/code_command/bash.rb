@@ -45,13 +45,18 @@ class Rundoc::CodeCommand::BashRunner
   end
 
   def shell(cmd, stdin = nil)
-    cmd = "(#{cmd}) 2>&1"
     msg = "Running: $ '#{cmd}'"
     msg << " with stdin: '#{stdin.inspect}'" if stdin && !stdin.empty?
     io.puts msg
 
     result = +""
-    IO.popen(cmd, "w+") do |pipe|
+    # -e: Abort on first failure in compound commands (e.g. `bundle install; echo done`)
+    #     so the exit status reflects the real failure, not a trailing success.
+    # -o pipefail: Report the first failure in a pipeline (e.g. `git push | tee log`)
+    #     instead of only the last command's exit status.
+    # -u (nounset) is intentionally omitted: tutorial commands routinely
+    #     reference environment variables that may not be set.
+    IO.popen(["bash", "-eo", "pipefail", "-c", cmd, err: [:child, :out]], "w+") do |pipe|
       pipe << stdin if stdin
       pipe.close_write
 
