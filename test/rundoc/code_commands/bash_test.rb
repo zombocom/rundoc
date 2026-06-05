@@ -25,6 +25,30 @@ class BashTest < Minitest::Test
     end
   end
 
+  def test_pipefail_catches_early_failure
+    command = "false | true"
+    bash = Rundoc::CodeCommand::BashRunner.new(
+      render_command: false,
+      render_result: false,
+      io: StringIO.new,
+      user_args: Rundoc::CodeCommand::BashArgs.new(command)
+    )
+    error = assert_raises(RuntimeError) { bash.call }
+    assert_match(/exited with non zero status/, error.message)
+  end
+
+  def test_errexit_catches_compound_command_failure
+    command = "false; echo done"
+    bash = Rundoc::CodeCommand::BashRunner.new(
+      render_command: false,
+      render_result: false,
+      io: StringIO.new,
+      user_args: Rundoc::CodeCommand::BashArgs.new(command)
+    )
+    error = assert_raises(RuntimeError) { bash.call }
+    assert_match(/exited with non zero status/, error.message)
+  end
+
   def test_stdin
     command = "tail -n 2"
     bash = Rundoc::CodeCommand::BashRunner.new(
